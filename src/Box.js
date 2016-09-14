@@ -4,6 +4,22 @@ import {
 } from 'react-native';
 
 class Box extends React.Component {
+  constructor(props) {
+    console.log('PROPS', props);
+    super(props);
+    this.state = {
+      position: {
+        x: props.position.x,
+        y: props.position.y
+      },
+      velocity: {
+        x: props.velocity.x,
+        y: props.velocity.y
+      }
+    }
+    this.setState = this.setState.bind(this);
+  }
+
   render() {
     return (
       <View
@@ -30,27 +46,50 @@ class Box extends React.Component {
   }
 
   componentWillMount() {
-    this.setState({
-      position: {
-        x: this.props.position.x,
-        y: this.props.position.y
-      }
-    });
+    // this.setState({
+    //   position: {
+    //     x: this.props.position.x,
+    //     y: this.props.position.y
+    //   },
+    //   velocity: {
+    //     x: this.props.velocity.x,
+    //     y: this.props.velocity.y
+    //   }
+    // });
   }
 
   componentDidMount() {
-    this.update = setInterval(() => {
-      this.setState({
-        position: {
-          x: this.state.position.x > 0 && this.state.position.x + this.state.width < this.props.container.width ? this.state.position.x + this.props.velocity.x : this.state.position.x,
-          y: this.state.position.y + this.props.velocity.y
-        }
-      }, () => console.log('log', this.props.container.width));
-    }, 17);
+    console.log('COMPONENTDIDMOUNT', this.state);
+    // this.getNextVelocity();
+    this.update = setInterval(() => this.getNextVelocity(), 17); // have to use arrow functions here
   }
 
   componentWillUnmount() {
     clearInterval(this.update);
+  }
+
+  getNextVelocity() {
+    console.log('STATE', this.state);
+    let nextVelocity = {
+      x: this.state.velocity.x,
+      y: this.state.velocity.y
+    }
+    this.setState({
+      velocity: {
+        x: nextVelocity.x,
+        y: nextVelocity.y
+      }
+    }, this.moveToNewPosition)
+  }
+
+  moveToNewPosition() {
+    console.log('moveToNewPosition');
+    this.setState({
+      position: {
+        x: this.state.position.x + this.state.velocity.x,
+        y: this.state.position.y + this.state.velocity.y
+      }
+    });
   }
 }
 
