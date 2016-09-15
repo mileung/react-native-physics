@@ -38,10 +38,18 @@ export default class Main extends React.Component {
             height: this.state.container.height
           }}
           position={{x: 50, y: 100}}
-          velocity={{x: 5, y: 1}}
+          velocity={{x: -55, y: 50}}
+          bounce={{x: 0.9, y: 0.9}}
+          collideScreenBounds={true}
         >
           <Text>Hello World</Text>
         </Box>
+        {/*<Box
+          height={60}
+          width={200}
+          outline={true}
+          position={{x: 60, y: 500}}
+        />*/}
       </View>
     );
   }

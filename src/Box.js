@@ -5,19 +5,20 @@ import {
 
 class Box extends React.Component {
   constructor(props) {
-    console.log('PROPS', props);
+    // console.log('PROPS', props);
     super(props);
-    this.state = {
-      position: {
-        x: props.position.x,
-        y: props.position.y
-      },
-      velocity: {
-        x: props.velocity.x,
-        y: props.velocity.y
-      }
-    }
-    this.setState = this.setState.bind(this);
+    // this.state = {
+    //   position: {
+    //     x: props.position.x,
+    //     y: props.position.y
+    //   },
+    //   velocity: {
+    //     x: props.velocity.x,
+    //     y: props.velocity.y
+    //   }
+    // }
+    // this.setState = this.setState.bind(this);
+    this.getNextVelocity = this.getNextVelocity.bind(this);
   }
 
   render() {
@@ -46,22 +47,25 @@ class Box extends React.Component {
   }
 
   componentWillMount() {
-    // this.setState({
-    //   position: {
-    //     x: this.props.position.x,
-    //     y: this.props.position.y
-    //   },
-    //   velocity: {
-    //     x: this.props.velocity.x,
-    //     y: this.props.velocity.y
-    //   }
-    // });
+    this.setState({
+      position: {
+        x: this.props.position.x,
+        y: this.props.position.y
+      },
+      velocity: {
+        x: this.props.velocity.x,
+        y: this.props.velocity.y
+      },
+      acceleration: {
+        x: this.props.acceleration.x,
+        y: this.props.acceleration.y
+      }
+    });
   }
 
   componentDidMount() {
-    console.log('COMPONENTDIDMOUNT', this.state);
-    // this.getNextVelocity();
-    this.update = setInterval(() => this.getNextVelocity(), 17); // have to use arrow functions here
+    // console.log('COMPONENTDIDMOUNT', this.state);
+    this.update = setInterval(this.getNextVelocity, 17); // have to use arrow functions here
   }
 
   componentWillUnmount() {
@@ -69,11 +73,22 @@ class Box extends React.Component {
   }
 
   getNextVelocity() {
-    console.log('STATE', this.state);
+    // console.log('STATE:', this.state);
     let nextVelocity = {
       x: this.state.velocity.x,
       y: this.state.velocity.y
     }
+
+    if (this.props.collideScreenBounds) {
+      if ((this.state.position.x <= 0 && this.state.velocity.x < 0) || (this.state.position.x + this.state.width >= this.props.container.width && this.state.velocity.x > 0)) {
+        nextVelocity.x *= -this.props.bounce.x;
+        // console.log('NEXTVELOCITY', nextVelocity.x);
+      }
+      if ((this.state.position.y <= 0 && this.state.velocity.y < 0) || (this.state.position.y + this.state.height >= this.props.container.height && this.state.velocity.y > 0)) {
+        nextVelocity.y *= -this.props.bounce.y;
+      }
+    }
+
     this.setState({
       velocity: {
         x: nextVelocity.x,
@@ -83,7 +98,6 @@ class Box extends React.Component {
   }
 
   moveToNewPosition() {
-    console.log('moveToNewPosition');
     this.setState({
       position: {
         x: this.state.position.x + this.state.velocity.x,
