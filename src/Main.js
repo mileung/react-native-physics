@@ -5,6 +5,7 @@ import {
   Text
 } from 'react-native'
 import Box from './Box';
+import RandomBox from './RandomBox'
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -29,27 +30,20 @@ export default class Main extends React.Component {
           });
         }}
       >
+        {/*{new Array(25).fill(0).map((v, i) => <RandomBox key={i} />)}*/}
         <Box
-          //height={50}
-          //width={50}
+          width={200}
+          height={100}
           outline={true}
+          collideScreenBounds={true}
+          acceleration={{y: 1}}
+          position={{x: 10, y: 0}}
+          bounce={{x: 0.1, y: 0.1}}
           container={{
             width: this.state.container.width,
             height: this.state.container.height
           }}
-          position={{x: 50, y: 100}}
-          velocity={{x: -55, y: 50}}
-          bounce={{x: 0.9, y: 0.9}}
-          collideScreenBounds={true}
-        >
-          <Text>Hello World</Text>
-        </Box>
-        {/*<Box
-          height={60}
-          width={200}
-          outline={true}
-          position={{x: 60, y: 500}}
-        />*/}
+        />
       </View>
     );
   }

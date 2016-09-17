@@ -47,18 +47,19 @@ class Box extends React.Component {
   }
 
   componentWillMount() {
+    console.log('PROPS!!', this.props.velocity);
     this.setState({
       position: {
-        x: this.props.position.x,
-        y: this.props.position.y
+        x: this.props.position.x || 0,
+        y: this.props.position.y || 0
       },
       velocity: {
-        x: this.props.velocity.x,
-        y: this.props.velocity.y
+        x: this.props.velocity.x || 0,
+        y: this.props.velocity.y || 0
       },
       acceleration: {
-        x: this.props.acceleration.x,
-        y: this.props.acceleration.y
+        x: this.props.acceleration.x || 0,
+        y: this.props.acceleration.y || 0
       }
     });
   }
@@ -79,20 +80,31 @@ class Box extends React.Component {
       y: this.state.velocity.y
     }
 
+    let nextAcceleration = {
+      x: this.state.acceleration.x,
+      y: this.state.acceleration.y
+    }
+
     if (this.props.collideScreenBounds) {
       if ((this.state.position.x <= 0 && this.state.velocity.x < 0) || (this.state.position.x + this.state.width >= this.props.container.width && this.state.velocity.x > 0)) {
         nextVelocity.x *= -this.props.bounce.x;
+        nextAcceleration.x = 0;
         // console.log('NEXTVELOCITY', nextVelocity.x);
       }
       if ((this.state.position.y <= 0 && this.state.velocity.y < 0) || (this.state.position.y + this.state.height >= this.props.container.height && this.state.velocity.y > 0)) {
         nextVelocity.y *= -this.props.bounce.y;
+        nextAcceleration.y = 0;
       }
     }
 
     this.setState({
       velocity: {
-        x: nextVelocity.x,
-        y: nextVelocity.y
+        x: nextVelocity.x + nextAcceleration.x,
+        y: nextVelocity.y + nextAcceleration.y
+      },
+      acceleration: {
+        x: nextAcceleration.x,
+        y: nextAcceleration.y
       }
     }, this.moveToNewPosition)
   }
@@ -167,6 +179,10 @@ Box.defaultProps = {
   anchor: {
     x: 0.5,
     y: 0.5
+  },
+  bounce: {
+    x: 0,
+    y: 0
   },
   outline: false,
   outlineColor: 'red',
