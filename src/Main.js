@@ -36,9 +36,9 @@ export default class Main extends React.Component {
           height={100}
           outline={true}
           collideScreenBounds={true}
-          acceleration={{y: 1}}
-          position={{x: 10, y: 0}}
-          bounce={{x: 0.1, y: 0.1}}
+          gravity={{y: 10}}
+          bounce={{y: 0.4}}
+          position={{x: 100, y: 50}}
           container={{
             width: this.state.container.width,
             height: this.state.container.height

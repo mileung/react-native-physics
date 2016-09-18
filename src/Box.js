@@ -47,7 +47,6 @@ class Box extends React.Component {
   }
 
   componentWillMount() {
-    console.log('PROPS!!', this.props.velocity);
     this.setState({
       position: {
         x: this.props.position.x || 0,
@@ -58,8 +57,12 @@ class Box extends React.Component {
         y: this.props.velocity.y || 0
       },
       acceleration: {
-        x: this.props.acceleration.x || 0,
-        y: this.props.acceleration.y || 0
+        x: this.props.acceleration.x / 60 || 0,
+        y: this.props.acceleration.y / 60 || 0
+      },
+      gravity: {
+        x: this.props.gravity.x / 60 || 0,
+        y: this.props.gravity.y / 60 || 0
       }
     });
   }
@@ -85,26 +88,52 @@ class Box extends React.Component {
       y: this.state.acceleration.y
     }
 
+    let nextGravity = {
+      x: this.state.gravity.x,
+      y: this.state.gravity.y
+    }
+
     if (this.props.collideScreenBounds) {
       if ((this.state.position.x <= 0 && this.state.velocity.x < 0) || (this.state.position.x + this.state.width >= this.props.container.width && this.state.velocity.x > 0)) {
         nextVelocity.x *= -this.props.bounce.x;
         nextAcceleration.x = 0;
+        this.setState({
+          acceleration: {
+            x: 0,
+            y: this.state.acceleration.y
+          }
+        });
         // console.log('NEXTVELOCITY', nextVelocity.x);
       }
       if ((this.state.position.y <= 0 && this.state.velocity.y < 0) || (this.state.position.y + this.state.height >= this.props.container.height && this.state.velocity.y > 0)) {
         nextVelocity.y *= -this.props.bounce.y;
         nextAcceleration.y = 0;
+        this.setState({
+          acceleration: {
+            x: this.state.acceleration.x,
+            y: 0
+          }
+        });
+      }
+      if ((this.state.position.x <= 0 || (this.state.position.x + this.state.width >= this.props.container.width)) && !this.state.acceleration.x) {
+        nextGravity.x = 0;
+      }
+      if ((this.state.position.y <= 0 || (this.state.position.y + this.state.height >= this.props.container.height)) && !this.state.acceleration.y) {
+        nextGravity.y = 0;
       }
     }
 
+    // if (!this.state.acceleration.x) {
+    //   nextGravity.x = 0;
+    // }
+    // if (!this.state.acceleration.y) {
+    //   nextGravity.y = 0;
+    // }
+
     this.setState({
       velocity: {
-        x: nextVelocity.x + nextAcceleration.x,
-        y: nextVelocity.y + nextAcceleration.y
-      },
-      acceleration: {
-        x: nextAcceleration.x,
-        y: nextAcceleration.y
+        x: nextVelocity.x + nextAcceleration.x + nextGravity.x,
+        y: nextVelocity.y + nextAcceleration.y + nextGravity.y
       }
     }, this.moveToNewPosition)
   }
