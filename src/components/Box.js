@@ -72,10 +72,16 @@ class Box extends React.Component {
   componentDidMount() {
     // console.log('COMPONENTDIDMOUNT', this.state);
     this.update = setInterval(this.getNextVelocity, 17); // have to use arrow functions here
+    // console.log('PROPS', this.props);
   }
 
   componentWillUnmount() {
     clearInterval(this.update);
+  }
+
+  componentWillUpdate(props) {
+    // console.log('PROPS', props.container);
+
   }
 
   getNextVelocity() {
@@ -95,7 +101,7 @@ class Box extends React.Component {
       y: this.state.gravity.y
     }
 
-    if (this.props.collideScreenBounds) {
+    if (this.props.collideWithContainer) {
       if ((this.state.position.x <= 0 && this.state.velocity.x < 0) || (this.state.position.x + this.state.width >= this.props.container.width && this.state.velocity.x > 0)) {
         nextVelocity.x *= -this.state.bounce.x;
         nextAcceleration.x = 0;
@@ -170,9 +176,7 @@ Box.propTypes = {
     x: React.PropTypes.number,
     y: React.PropTypes.number
   }),
-  outline: React.PropTypes.bool,
-  outlineColor: React.PropTypes.string,
-  collideScreenBounds: React.PropTypes.bool,
+  collideWithContainer: React.PropTypes.bool,
   height: React.PropTypes.number,
   width: React.PropTypes.number,
   interactWith: React.PropTypes.array
@@ -180,6 +184,7 @@ Box.propTypes = {
 
 Box.defaultProps = {
   physics: true,
+  container: {},
   position: {},
   gravity: {},
   velocity: {},
@@ -188,7 +193,7 @@ Box.defaultProps = {
   anchor: {},
   bounce: {},
   outline: false,
-  collideScreenBounds: false,
+  collideWithContainer: false,
   height: null,
   width: null,
 };

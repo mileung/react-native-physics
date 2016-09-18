@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Dimensions
 } from 'react-native';
-import Box from './Box'
+import Box from './components/Box'
 
 export default () => {
   let { width, height } = Dimensions.get('window');
