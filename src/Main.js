@@ -37,7 +37,7 @@ export default class Main extends React.Component {
           outline={true}
           collideScreenBounds={true}
           gravity={{y: 10}}
-          bounce={{y: 0.4}}
+          bounce={{y: Math.random()}}
           position={{x: 100, y: 50}}
           container={{
             width: this.state.container.width,

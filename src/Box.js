@@ -5,31 +5,20 @@ import {
 
 class Box extends React.Component {
   constructor(props) {
-    // console.log('PROPS', props);
     super(props);
-    // this.state = {
-    //   position: {
-    //     x: props.position.x,
-    //     y: props.position.y
-    //   },
-    //   velocity: {
-    //     x: props.velocity.x,
-    //     y: props.velocity.y
-    //   }
-    // }
-    // this.setState = this.setState.bind(this);
     this.getNextVelocity = this.getNextVelocity.bind(this);
   }
 
   render() {
+    let { outline, height, width, position, children } = this.props;
     return (
       <View
         style={{
           position: 'absolute',
-          borderWidth: this.props.outline ? 1 : 0,
-          borderColor: this.props.outlineColor,
-          height: this.props.height || this.state.height,
-          width: this.props.width || this.state.width,
+          borderWidth: outline ? 1 : 0,
+          borderColor: outline === true ? 'red' : outline ? outline : null,
+          height: height || this.state.height,
+          width: width || this.state.width,
           left: this.state.position.x,
           top: this.state.position.y,
         }}
@@ -41,28 +30,41 @@ class Box extends React.Component {
           });
         }}
       >
-        {this.props.children}
+        {children}
       </View>
     );
   }
 
   componentWillMount() {
+    let { position, velocity, acceleration, gravity, bounce, drag, anchor } = this.props;
     this.setState({
       position: {
-        x: this.props.position.x || 0,
-        y: this.props.position.y || 0
+        x: position.x || 0,
+        y: position.y || 0
       },
       velocity: {
-        x: this.props.velocity.x || 0,
-        y: this.props.velocity.y || 0
+        x: velocity.x || 0,
+        y: velocity.y || 0
       },
       acceleration: {
-        x: this.props.acceleration.x / 60 || 0,
-        y: this.props.acceleration.y / 60 || 0
+        x: acceleration.x / 60 || 0,
+        y: acceleration.y / 60 || 0
       },
       gravity: {
-        x: this.props.gravity.x / 60 || 0,
-        y: this.props.gravity.y / 60 || 0
+        x: gravity.x / 60 || 0,
+        y: gravity.y / 60 || 0
+      },
+      bounce: {
+        x: bounce.x || 0,
+        y: bounce.y || 0
+      },
+      drag: {
+        x: drag.x || 0,
+        y: drag.y || 0
+      },
+      anchor: {
+        x: anchor.x || 0,
+        y: anchor.y || 0
       }
     });
   }
@@ -95,7 +97,7 @@ class Box extends React.Component {
 
     if (this.props.collideScreenBounds) {
       if ((this.state.position.x <= 0 && this.state.velocity.x < 0) || (this.state.position.x + this.state.width >= this.props.container.width && this.state.velocity.x > 0)) {
-        nextVelocity.x *= -this.props.bounce.x;
+        nextVelocity.x *= -this.state.bounce.x;
         nextAcceleration.x = 0;
         this.setState({
           acceleration: {
@@ -106,7 +108,7 @@ class Box extends React.Component {
         // console.log('NEXTVELOCITY', nextVelocity.x);
       }
       if ((this.state.position.y <= 0 && this.state.velocity.y < 0) || (this.state.position.y + this.state.height >= this.props.container.height && this.state.velocity.y > 0)) {
-        nextVelocity.y *= -this.props.bounce.y;
+        nextVelocity.y *= -this.state.bounce.y;
         nextAcceleration.y = 0;
         this.setState({
           acceleration: {
@@ -122,13 +124,6 @@ class Box extends React.Component {
         nextGravity.y = 0;
       }
     }
-
-    // if (!this.state.acceleration.x) {
-    //   nextGravity.x = 0;
-    // }
-    // if (!this.state.acceleration.y) {
-    //   nextGravity.y = 0;
-    // }
 
     this.setState({
       velocity: {
@@ -185,36 +180,14 @@ Box.propTypes = {
 
 Box.defaultProps = {
   physics: true,
-  position: {
-    x: 0,
-    y: 0
-  },
-  gravity: {
-    x: 0,
-    y: 0
-  },
-  velocity: {
-    x: 0,
-    y: 0
-  },
-  acceleration: {
-    x: 0,
-    y: 0
-  },
-  drag: {
-    x: 0,
-    y: 0
-  },
-  anchor: {
-    x: 0.5,
-    y: 0.5
-  },
-  bounce: {
-    x: 0,
-    y: 0
-  },
+  position: {},
+  gravity: {},
+  velocity: {},
+  acceleration: {},
+  drag: {},
+  anchor: {},
+  bounce: {},
   outline: false,
-  outlineColor: 'red',
   collideScreenBounds: false,
   height: null,
   width: null,
