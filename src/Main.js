@@ -47,7 +47,7 @@ export default class Main extends React.Component {
       //   />
       // </View>
       <Container style={styles.container}>
-        <Box
+        {/*<Box
           width={200}
           height={100}
           outline={true}
@@ -76,7 +76,16 @@ export default class Main extends React.Component {
             bounce={{y: Math.random()}}
             position={{x: 220, y: 50}}
           />
-        </Container>
+        </Container>*/}
+        <Box
+          drag={{y: 0.1}}
+          velocity={{y: 10}}
+          width={100}
+          height={100}
+          outline={'blue'}
+          position={{x: 100, y: 10}}
+          collideWithContainer={true}
+        />
       </Container>
     );
   }

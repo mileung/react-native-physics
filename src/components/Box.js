@@ -50,6 +50,10 @@ class Box extends React.Component {
         x: acceleration.x / 60 || 0,
         y: acceleration.y / 60 || 0
       },
+      drag: {
+        x: drag.x || 0,
+        y: drag.y || 0
+      },
       gravity: {
         x: gravity.x / 60 || 0,
         y: gravity.y / 60 || 0
@@ -57,10 +61,6 @@ class Box extends React.Component {
       bounce: {
         x: bounce.x || 0,
         y: bounce.y || 0
-      },
-      drag: {
-        x: drag.x || 0,
-        y: drag.y || 0
       },
       anchor: {
         x: anchor.x || 0,
@@ -87,13 +87,18 @@ class Box extends React.Component {
   getNextVelocity() {
     // console.log('STATE:', this.state);
     let nextVelocity = {
-      x: this.state.velocity.x,
-      y: this.state.velocity.y
+      x: Math.abs(this.state.velocity.x) > 0.1 ? this.state.velocity.x : 0,
+      y: Math.abs(this.state.velocity.y) > 0.1 ? this.state.velocity.y : 0
+    }
+
+    let nextDrag = {
+      x: nextVelocity.x === 0 ? 0 : nextVelocity.x > 0 ? -this.state.drag.x : nextVelocity.x < 0 ? this.state.drag.x : 0,
+      y: nextVelocity.y === 0 ? 0 : nextVelocity.y > 0 ? -this.state.drag.y : nextVelocity.y < 0 ? this.state.drag.y : 0
     }
 
     let nextAcceleration = {
-      x: this.state.acceleration.x,
-      y: this.state.acceleration.y
+      x: this.state.acceleration.x + nextDrag.x,
+      y: this.state.acceleration.y + nextDrag.y
     }
 
     let nextGravity = {
@@ -130,6 +135,8 @@ class Box extends React.Component {
         nextGravity.y = 0;
       }
     }
+
+    console.log('YYY', nextVelocity.y);
 
     this.setState({
       velocity: {
