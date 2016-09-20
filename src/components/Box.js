@@ -87,8 +87,8 @@ class Box extends React.Component {
   getNextVelocity() {
     // console.log('STATE:', this.state);
     let nextVelocity = {
-      x: Math.abs(this.state.velocity.x) > 0.1 ? this.state.velocity.x : 0,
-      y: Math.abs(this.state.velocity.y) > 0.1 ? this.state.velocity.y : 0
+      x: Math.abs(this.state.velocity.x) > 0.05 ? this.state.velocity.x : 0,
+      y: Math.abs(this.state.velocity.y) > 0.05 ? this.state.velocity.y : 0
     }
 
     let nextDrag = {
