@@ -86,57 +86,58 @@ class Box extends React.Component {
 
   getNextVelocity() {
     // console.log('STATE:', this.state);
+    let { velocity, drag, acceleration, gravity, bounce, position, height, width } = this.state;
     let nextVelocity = {
-      x: Math.abs(this.state.velocity.x) > 0.05 ? this.state.velocity.x : 0,
-      y: Math.abs(this.state.velocity.y) > 0.05 ? this.state.velocity.y : 0
+      x: Math.abs(velocity.x) > 0.05 ? velocity.x : 0,
+      y: Math.abs(velocity.y) > 0.05 ? velocity.y : 0
     }
 
     let nextDrag = {
-      x: nextVelocity.x === 0 ? 0 : nextVelocity.x > 0 ? -this.state.drag.x : nextVelocity.x < 0 ? this.state.drag.x : 0,
-      y: nextVelocity.y === 0 ? 0 : nextVelocity.y > 0 ? -this.state.drag.y : nextVelocity.y < 0 ? this.state.drag.y : 0
+      x: nextVelocity.x === 0 ? 0 : nextVelocity.x > 0 ? -drag.x : nextVelocity.x < 0 ? drag.x : 0,
+      y: nextVelocity.y === 0 ? 0 : nextVelocity.y > 0 ? -drag.y : nextVelocity.y < 0 ? drag.y : 0
     }
 
     let nextAcceleration = {
-      x: this.state.acceleration.x + nextDrag.x,
-      y: this.state.acceleration.y + nextDrag.y
+      x: acceleration.x + nextDrag.x,
+      y: acceleration.y + nextDrag.y
     }
 
     let nextGravity = {
-      x: this.state.gravity.x,
-      y: this.state.gravity.y
+      x: Math.abs(gravity.x) >= Math.abs(nextVelocity.x) ? gravity.x * 0.8 : gravity.x,
+      y: Math.abs(gravity.y) >= Math.abs(nextVelocity.y) ? gravity.y * 0.8 : gravity.y
     }
 
     if (this.props.collideWithContainer) {
-      if ((this.state.position.x <= 0 && this.state.velocity.x < 0) || (this.state.position.x + this.state.width >= this.props.container.width && this.state.velocity.x > 0)) {
-        nextVelocity.x *= -this.state.bounce.x;
+      if ((position.x <= 0 && velocity.x < 0) || (position.x + width >= this.props.container.width && velocity.x > 0)) {
+        nextVelocity.x *= -bounce.x;
         nextAcceleration.x = 0;
         this.setState({
           acceleration: {
             x: 0,
-            y: this.state.acceleration.y
+            y: acceleration.y
           }
         });
         // console.log('NEXTVELOCITY', nextVelocity.x);
       }
-      if ((this.state.position.y <= 0 && this.state.velocity.y < 0) || (this.state.position.y + this.state.height >= this.props.container.height && this.state.velocity.y > 0)) {
-        nextVelocity.y *= -this.state.bounce.y;
+      if ((position.y <= 0 && velocity.y < 0) || (position.y + height >= this.props.container.height && velocity.y > 0)) {
+        nextVelocity.y *= -bounce.y;
         nextAcceleration.y = 0;
         this.setState({
           acceleration: {
-            x: this.state.acceleration.x,
+            x: acceleration.x,
             y: 0
           }
         });
       }
-      if ((this.state.position.x <= 0 || (this.state.position.x + this.state.width >= this.props.container.width)) && !this.state.acceleration.x) {
+      if ((position.x <= 0 || (position.x + width >= this.props.container.width)) && !acceleration.x) {
         nextGravity.x = 0;
       }
-      if ((this.state.position.y <= 0 || (this.state.position.y + this.state.height >= this.props.container.height)) && !this.state.acceleration.y) {
+      if ((position.y <= 0 || (position.y + height >= this.props.container.height)) && !acceleration.y) {
         nextGravity.y = 0;
       }
     }
 
-    console.log('YYY', nextVelocity.y);
+    console.log('YYY', nextGravity.y);
 
     this.setState({
       velocity: {

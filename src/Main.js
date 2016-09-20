@@ -79,13 +79,13 @@ export default class Main extends React.Component {
         </Container>*/}
         <Box
           //drag={{y: 0.1}}
-          velocity={{y: -10}}
-          gravity={{y: 10}}
-          bounce={{y: 0.9}}
+          velocity={{y: 10}}
+          gravity={{y: 30}}
+          bounce={{y: 0.5}}
           width={100}
           height={100}
           outline={'blue'}
-          position={{x: 100, y: 510}}
+          position={{x: 100, y: 10}}
           collideWithContainer={true}
         />
       </Container>
