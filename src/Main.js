@@ -80,7 +80,7 @@ export default class Main extends React.Component {
         <Box
           //drag={{y: 0.1}}
           velocity={{y: 10}}
-          gravity={{y: 30}}
+          gravity={{y: 100}}
           bounce={{y: 0.5}}
           width={100}
           height={100}

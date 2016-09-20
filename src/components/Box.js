@@ -70,9 +70,7 @@ class Box extends React.Component {
   }
 
   componentDidMount() {
-    // console.log('COMPONENTDIDMOUNT', this.state);
-    this.update = setInterval(this.getNextVelocity, 17); // have to use arrow functions here
-    // console.log('PROPS', this.props);
+    this.update = setInterval(this.getNextVelocity, 17);
   }
 
   componentWillUnmount() {
@@ -80,7 +78,6 @@ class Box extends React.Component {
   }
 
   componentWillUpdate(props) {
-    // console.log('PROPS', props.container);
 
   }
 
@@ -88,40 +85,32 @@ class Box extends React.Component {
     // console.log('STATE:', this.state);
     let { velocity, drag, acceleration, gravity, bounce, position, height, width } = this.state;
     let nextVelocity = {
-      x: Math.abs(velocity.x) > 0.05 ? velocity.x : 0,
-      y: Math.abs(velocity.y) > 0.05 ? velocity.y : 0
+      x: velocity.x,
+      y: velocity.y
     }
 
     let nextDrag = {
-      x: nextVelocity.x === 0 ? 0 : nextVelocity.x > 0 ? -drag.x : nextVelocity.x < 0 ? drag.x : 0,
-      y: nextVelocity.y === 0 ? 0 : nextVelocity.y > 0 ? -drag.y : nextVelocity.y < 0 ? drag.y : 0
+      x: nextVelocity.x === 0 || drag.x === 0 ? 0 : nextVelocity.x > 0 ? -drag.x : nextVelocity.x < 0 ? drag.x : 0,
+      y: nextVelocity.y === 0 || drag.y === 0 ? 0 : nextVelocity.y > 0 ? -drag.y : nextVelocity.y < 0 ? drag.y : 0
     }
 
     let nextAcceleration = {
-      x: acceleration.x + nextDrag.x,
-      y: acceleration.y + nextDrag.y
-    }
-
-    let nextGravity = {
-      x: Math.abs(gravity.x) >= Math.abs(nextVelocity.x) ? gravity.x * 0.8 : gravity.x,
-      y: Math.abs(gravity.y) >= Math.abs(nextVelocity.y) ? gravity.y * 0.8 : gravity.y
+      x: acceleration.x + nextDrag.x + gravity.x,
+      y: acceleration.y + nextDrag.y + gravity.y
     }
 
     if (this.props.collideWithContainer) {
       if ((position.x <= 0 && velocity.x < 0) || (position.x + width >= this.props.container.width && velocity.x > 0)) {
         nextVelocity.x *= -bounce.x;
-        nextAcceleration.x = 0;
         this.setState({
           acceleration: {
             x: 0,
             y: acceleration.y
           }
         });
-        // console.log('NEXTVELOCITY', nextVelocity.x);
       }
       if ((position.y <= 0 && velocity.y < 0) || (position.y + height >= this.props.container.height && velocity.y > 0)) {
         nextVelocity.y *= -bounce.y;
-        nextAcceleration.y = 0;
         this.setState({
           acceleration: {
             x: acceleration.x,
@@ -129,29 +118,40 @@ class Box extends React.Component {
           }
         });
       }
-      if ((position.x <= 0 || (position.x + width >= this.props.container.width)) && !acceleration.x) {
-        nextGravity.x = 0;
-      }
-      if ((position.y <= 0 || (position.y + height >= this.props.container.height)) && !acceleration.y) {
-        nextGravity.y = 0;
-      }
     }
-
-    console.log('YYY', nextGravity.y);
+    console.log('ZZZ', position.y);
 
     this.setState({
       velocity: {
-        x: nextVelocity.x + nextAcceleration.x + nextGravity.x,
-        y: nextVelocity.y + nextAcceleration.y + nextGravity.y
+        x: nextVelocity.x + nextAcceleration.x,
+        y: nextVelocity.y + nextAcceleration.y
       }
     }, this.moveToNewPosition)
   }
 
   moveToNewPosition() {
+    let nextPosition = {
+      x: this.state.position.x + this.state.velocity.x,
+      y: this.state.position.y + this.state.velocity.y
+    }
+
+    if (this.props.collideWithContainer) {
+      if (nextPosition.x < 0) {
+        nextPosition.x = 0;
+      } else if (nextPosition.x + this.state.width > this.props.container.width) {
+        nextPosition.x = this.props.container.width - this.state.width;
+      }
+      if (nextPosition.y < 0) {
+        nextPosition.y = 0;
+      } else if (nextPosition.y + this.state.height > this.props.container.height) {
+        nextPosition.y = this.props.container.height - this.state.height;
+      }
+    }
+
     this.setState({
       position: {
-        x: this.state.position.x + this.state.velocity.x,
-        y: this.state.position.y + this.state.velocity.y
+        x: nextPosition.x,
+        y: nextPosition.y
       }
     });
   }
