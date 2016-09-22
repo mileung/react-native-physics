@@ -2,11 +2,13 @@ import React from 'react';
 import {
   View,
   StyleSheet,
-  Text
+  Text,
+  Dimensions
 } from 'react-native'
 import Container from './components/Container';
 import Box from './components/Box';
-import RandomBox from './RandomBox'
+
+let { width, height } = Dimensions.get('window');
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -48,44 +50,21 @@ export default class Main extends React.Component {
       // </View>
       <Container style={styles.container}>
         {/*<Box
-          width={200}
-          height={100}
-          outline={true}
+          width={Math.round(100 * Math.random())}
+          height={Math.round(100 * Math.random())}
+          outline={"#" + Math.random().toString(16).slice(2, 8)}
+          position={{x: Math.round(width * Math.random()), y: Math.round(height * Math.random())}}
+          gravity={{x: 200 - Math.round(400 * Math.random()), y: 200 - Math.round(400 * Math.random())}}
+          bounce={{x: Math.random(), y: Math.random()}}
           collideWithContainer={true}
-          gravity={{y: 10}}
-          bounce={{y: Math.random()}}
-          position={{x: 100, y: 50}}
-        />
-        <Text>Test</Text>
-        <Container style={{top: 200, height: 300, borderWidth: 1}}>
-          <Box
-            width={100}
-            height={100}
-            outline={'green'}
-            collideWithContainer={true}
-            gravity={{y: 10}}
-            bounce={{y: Math.random()}}
-            position={{x: 80, y: 50}}
-          />
-          <Box
-            width={100}
-            height={100}
-            outline={'blue'}
-            collideWithContainer={true}
-            gravity={{y: 10, x: -5}}
-            bounce={{y: Math.random()}}
-            position={{x: 220, y: 50}}
-          />
-        </Container>*/}
+        />*/}
         <Box
-          //drag={{y: 0.1}}
-          velocity={{y: 10}}
-          gravity={{y: 100}}
-          bounce={{y: 0.5}}
-          width={100}
-          height={100}
-          outline={'blue'}
-          position={{x: 100, y: 10}}
+          width={Math.round(100 * Math.random())}
+          height={Math.round(100 * Math.random())}
+          outline={"#" + Math.random().toString(16).slice(2, 8)}
+          position={{x: Math.round(width * Math.random()), y: Math.round(height * Math.random())}}
+          gravity={{x: 200 - Math.round(400 * Math.random()), y: 50}}
+          bounce={{x: 1, y: 0}}
           collideWithContainer={true}
         />
       </Container>

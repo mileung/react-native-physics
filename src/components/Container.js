@@ -26,6 +26,7 @@ export default class Container extends React.Component {
         }}
       >
         {React.Children.map(this.props.children, child => {
+          console.log('CHILD!!', child);
           if (child.type !== Box) {
             return child;
           }

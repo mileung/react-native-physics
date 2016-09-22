@@ -77,13 +77,10 @@ class Box extends React.Component {
     clearInterval(this.update);
   }
 
-  componentWillUpdate(props) {
-
-  }
-
   getNextVelocity() {
     // console.log('STATE:', this.state);
     let { velocity, drag, acceleration, gravity, bounce, position, height, width } = this.state;
+
     let nextVelocity = {
       x: velocity.x,
       y: velocity.y
@@ -99,9 +96,12 @@ class Box extends React.Component {
       y: acceleration.y + nextDrag.y + gravity.y
     }
 
+    nextVelocity.x += nextAcceleration.x;
+    nextVelocity.y += nextAcceleration.y;
+
     if (this.props.collideWithContainer) {
       if ((position.x <= 0 && velocity.x < 0) || (position.x + width >= this.props.container.width && velocity.x > 0)) {
-        nextVelocity.x *= -bounce.x;
+        nextVelocity.x = velocity.x * -bounce.x;
         this.setState({
           acceleration: {
             x: 0,
@@ -110,7 +110,7 @@ class Box extends React.Component {
         });
       }
       if ((position.y <= 0 && velocity.y < 0) || (position.y + height >= this.props.container.height && velocity.y > 0)) {
-        nextVelocity.y *= -bounce.y;
+        nextVelocity.y = velocity.y * -bounce.y;
         this.setState({
           acceleration: {
             x: acceleration.x,
@@ -119,32 +119,33 @@ class Box extends React.Component {
         });
       }
     }
-    console.log('ZZZ', position.y);
 
     this.setState({
       velocity: {
-        x: nextVelocity.x + nextAcceleration.x,
-        y: nextVelocity.y + nextAcceleration.y
+        x: nextVelocity.x,
+        y: nextVelocity.y
       }
     }, this.moveToNewPosition)
   }
 
   moveToNewPosition() {
+    let { position, velocity, width, height } = this.state;
+    let { collideWithContainer, container } = this.props;
     let nextPosition = {
-      x: this.state.position.x + this.state.velocity.x,
-      y: this.state.position.y + this.state.velocity.y
+      x: position.x + velocity.x,
+      y: position.y + velocity.y
     }
 
-    if (this.props.collideWithContainer) {
+    if (collideWithContainer) {
       if (nextPosition.x < 0) {
         nextPosition.x = 0;
-      } else if (nextPosition.x + this.state.width > this.props.container.width) {
-        nextPosition.x = this.props.container.width - this.state.width;
+      } else if (nextPosition.x + width > container.width) {
+        nextPosition.x = container.width - width;
       }
       if (nextPosition.y < 0) {
         nextPosition.y = 0;
-      } else if (nextPosition.y + this.state.height > this.props.container.height) {
-        nextPosition.y = this.props.container.height - this.state.height;
+      } else if (nextPosition.y + height > container.height) {
+        nextPosition.y = container.height - height;
       }
     }
 
