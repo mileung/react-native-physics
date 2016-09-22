@@ -26,7 +26,6 @@ export default class Container extends React.Component {
         }}
       >
         {React.Children.map(this.props.children, child => {
-          console.log('CHILD!!', child);
           if (child.type !== Box) {
             return child;
           }
@@ -41,7 +40,6 @@ export default class Container extends React.Component {
     );
   }
   componentWillMount() {
-    console.log('CHILDREN', this.props.style.height);
     this.setState({
       width: this.props.style.width,
       height: this.props.style.height

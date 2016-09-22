@@ -39,32 +39,32 @@ class Box extends React.Component {
     let { position, velocity, acceleration, gravity, bounce, drag, anchor } = this.props;
     this.setState({
       position: {
-        x: position.x || 0,
-        y: position.y || 0
+        x: position.x,
+        y: position.y
       },
       velocity: {
-        x: velocity.x || 0,
-        y: velocity.y || 0
+        x: velocity.x,
+        y: velocity.y
       },
       acceleration: {
-        x: acceleration.x / 60 || 0,
-        y: acceleration.y / 60 || 0
+        x: acceleration.x / 60,
+        y: acceleration.y / 60
       },
       drag: {
-        x: drag.x || 0,
-        y: drag.y || 0
+        x: drag.x,
+        y: drag.y
       },
       gravity: {
-        x: gravity.x / 60 || 0,
-        y: gravity.y / 60 || 0
+        x: gravity.x / 60,
+        y: gravity.y / 60
       },
       bounce: {
-        x: bounce.x || 0,
-        y: bounce.y || 0
+        x: bounce.x,
+        y: bounce.y
       },
       anchor: {
-        x: anchor.x || 0,
-        y: anchor.y || 0
+        x: anchor.x,
+        y: anchor.y
       }
     });
   }
@@ -80,6 +80,7 @@ class Box extends React.Component {
   getNextVelocity() {
     // console.log('STATE:', this.state);
     let { velocity, drag, acceleration, gravity, bounce, position, height, width } = this.state;
+    let { collideWithContainer, container } = this.props;
 
     let nextVelocity = {
       x: velocity.x,
@@ -95,13 +96,13 @@ class Box extends React.Component {
       x: acceleration.x + nextDrag.x + gravity.x,
       y: acceleration.y + nextDrag.y + gravity.y
     }
-
+    // console.log('nextAcceleration', nextAcceleration.x);
     nextVelocity.x += nextAcceleration.x;
     nextVelocity.y += nextAcceleration.y;
 
-    if (this.props.collideWithContainer) {
-      if ((position.x <= 0 && velocity.x < 0) || (position.x + width >= this.props.container.width && velocity.x > 0)) {
-        nextVelocity.x = velocity.x * -bounce.x;
+    if (collideWithContainer) {
+      if ((position.x <= 0 && velocity.x < 0) || (position.x + width >= container.width && velocity.x > 0)) {
+        nextVelocity.x = velocity.x * -bounce.x + gravity.x;
         this.setState({
           acceleration: {
             x: 0,
@@ -109,8 +110,8 @@ class Box extends React.Component {
           }
         });
       }
-      if ((position.y <= 0 && velocity.y < 0) || (position.y + height >= this.props.container.height && velocity.y > 0)) {
-        nextVelocity.y = velocity.y * -bounce.y;
+      if ((position.y <= 0 && velocity.y < 0) || (position.y + height >= container.height && velocity.y > 0)) {
+        nextVelocity.y = velocity.y * -bounce.y + gravity.y;
         this.setState({
           acceleration: {
             x: acceleration.x,
@@ -119,6 +120,7 @@ class Box extends React.Component {
         });
       }
     }
+    console.log('NEXTVELOCITY.Y', nextVelocity.y);
 
     this.setState({
       velocity: {
@@ -129,8 +131,9 @@ class Box extends React.Component {
   }
 
   moveToNewPosition() {
-    let { position, velocity, width, height } = this.state;
+    let { position, velocity, width, height, bounce } = this.state;
     let { collideWithContainer, container } = this.props;
+
     let nextPosition = {
       x: position.x + velocity.x,
       y: position.y + velocity.y
@@ -193,14 +196,14 @@ Box.propTypes = {
 
 Box.defaultProps = {
   physics: true,
-  container: {},
-  position: {},
-  gravity: {},
-  velocity: {},
-  acceleration: {},
-  drag: {},
-  anchor: {},
-  bounce: {},
+  container: {x: 0, y: 0},
+  position: {x: 0, y: 0},
+  gravity: {x: 0, y: 0},
+  velocity: {x: 0, y: 0},
+  acceleration: {x: 0, y: 0},
+  drag: {x: 0, y: 0},
+  anchor: {x: 0, y: 0},
+  bounce: {x: 0, y: 0},
   outline: false,
   collideWithContainer: false,
   height: null,
