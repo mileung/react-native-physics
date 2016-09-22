@@ -120,7 +120,6 @@ class Box extends React.Component {
         });
       }
     }
-    console.log('NEXTVELOCITY.Y', nextVelocity.y);
 
     this.setState({
       velocity: {

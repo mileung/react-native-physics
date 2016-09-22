@@ -3,7 +3,8 @@ import {
   View,
   StyleSheet,
   Text,
-  Dimensions
+  Dimensions,
+  TouchableWithoutFeedback
 } from 'react-native'
 import Container from './components/Container';
 import Box from './components/Box';
@@ -21,26 +22,47 @@ export default class Main extends React.Component {
     }
   }
   render() {
+    console.log('render!');
     return (
-      <Container style={styles.container}>
-        {new Array(1).fill(0).map((v, i) => {
-          return (
-            <Box
-              key={i}
-              width={Math.round(100 * Math.random())}
-              height={Math.round(100 * Math.random())}
-              outline={"#" + Math.random().toString(16).slice(2, 8)}
-              //position={{x: Math.round(width * Math.random()), y: Math.round(height * Math.random())}}
-              position={{x: 500, y: 500}}
-              //gravity={{x: 200 - Math.round(400 * Math.random()), y: 200 - Math.round(400 * Math.random())}}
-              gravity={{x: -10, y: -10}}
-              bounce={{x: 0.9, y: 0.9}}
-              collideWithContainer={true}
-            />
-          );
-        })}
-      </Container>
+      <TouchableWithoutFeedback onPress={() => this.reset()}>
+        <View style={styles.container}>
+          <Container style={styles.container}>
+            {this.state.boxes}
+          </Container>
+        </View>
+      </TouchableWithoutFeedback>
     );
+  }
+
+  componentWillMount() {
+    this.createBoxes();
+  }
+
+  reset() {
+    this.setState({
+      boxes: null
+    }, this.createBoxes);
+  }
+
+  createBoxes() {
+    this.setState({
+      boxes: new Array(10).fill(0).map((v, i) => {
+        return (
+          <Box
+            key={i}
+            width={Math.round(25 + 75 * Math.random())}
+            height={Math.round(25 + 75 * Math.random())}
+            outline={"#" + Math.random().toString(16).slice(2, 8)}
+            position={{x: Math.round(width * Math.random()), y: Math.round(height * Math.random())}}
+            gravity={{x: 100 - Math.round(200 * Math.random()), y: 100 - Math.round(200 * Math.random())}}
+            bounce={{x: Math.random(), y: Math.random()}}
+            collideWithContainer={true}
+          >
+            {/*<Text style={{fontSize: 40 * Math.random() + 10}}>Hello</Text>*/}
+          </Box>
+        );
+      })
+    });
   }
 }
 
