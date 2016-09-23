@@ -3,6 +3,8 @@ import {
   View
 } from 'react-native';
 
+let sixtieth = 1 / 60;
+
 class Box extends React.Component {
   constructor(props) {
     super(props);
@@ -39,38 +41,39 @@ class Box extends React.Component {
     let { position, velocity, acceleration, gravity, bounce, drag, anchor } = this.props;
     this.setState({
       position: {
-        x: position.x,
-        y: position.y
+        x: position.x || 0,
+        y: position.y || 0
       },
       velocity: {
-        x: velocity.x,
-        y: velocity.y
+        x: velocity.x || 0,
+        y: velocity.y || 0
       },
       acceleration: {
-        x: acceleration.x / 60,
-        y: acceleration.y / 60
+        x: acceleration.x / 60 || 0,
+        y: acceleration.y / 60 || 0
       },
       drag: {
-        x: drag.x,
-        y: drag.y
+        x: drag.x || 0,
+        y: drag.y || 0
       },
       gravity: {
-        x: gravity.x / 60,
-        y: gravity.y / 60
+        x: gravity.x / 60 || 0,
+        y: gravity.y / 60 || 0
       },
       bounce: {
-        x: bounce.x,
-        y: bounce.y
+        x: bounce.x || 0,
+        y: bounce.y || 0
       },
       anchor: {
-        x: anchor.x,
-        y: anchor.y
+        x: anchor.x || 0,
+        y: anchor.y || 0
       }
     });
   }
 
   componentDidMount() {
-    this.update = setInterval(this.getNextVelocity, 17);
+    setTimeout(() => this.setReboundRate(), 0.00000000000000001);
+    // this.setReboundRate();
   }
 
   componentWillUnmount() {
@@ -79,7 +82,7 @@ class Box extends React.Component {
 
   getNextVelocity() {
     // console.log('STATE:', this.state);
-    let { velocity, drag, acceleration, gravity, bounce, position, height, width } = this.state;
+    let { velocity, drag, acceleration, gravity, bounce, position, height, width, reboundRate } = this.state;
     let { collideWithContainer, container } = this.props;
 
     let nextVelocity = {
@@ -92,9 +95,19 @@ class Box extends React.Component {
       y: nextVelocity.y === 0 || drag.y === 0 ? 0 : nextVelocity.y > 0 ? -drag.y : nextVelocity.y < 0 ? drag.y : 0
     }
 
+    // let nextGravity = {
+    //   x: position.x + gravity.x < 0 && velocity.x < 0 ? position.x : position.x + gravity.x + width > container.width && velocity.x > 0 ? container.width - (position.x + width) : gravity.x,
+    //   y: position.y + gravity.y < 0 && velocity.y < 0 ? position.y : position.y + gravity.y + height > container.height && velocity.y > 0 ? container.height - (position.y + height) : gravity.y
+    // }
+
+    let nextGravity = {
+      x: gravity.x,
+      y: gravity.y
+    }
+
     let nextAcceleration = {
-      x: acceleration.x + nextDrag.x + gravity.x,
-      y: acceleration.y + nextDrag.y + gravity.y
+      x: acceleration.x + nextDrag.x,
+      y: acceleration.y + nextDrag.y
     }
     // console.log('nextAcceleration', nextAcceleration.x);
     nextVelocity.x += nextAcceleration.x;
@@ -102,7 +115,7 @@ class Box extends React.Component {
 
     if (collideWithContainer) {
       if ((position.x <= 0 && velocity.x < 0) || (position.x + width >= container.width && velocity.x > 0)) {
-        nextVelocity.x = velocity.x * -bounce.x + gravity.x;
+        nextVelocity.x = velocity.x * -reboundRate.x;
         this.setState({
           acceleration: {
             x: 0,
@@ -111,7 +124,7 @@ class Box extends React.Component {
         });
       }
       if ((position.y <= 0 && velocity.y < 0) || (position.y + height >= container.height && velocity.y > 0)) {
-        nextVelocity.y = velocity.y * -bounce.y + gravity.y;
+        nextVelocity.y = velocity.y * -reboundRate.y;
         this.setState({
           acceleration: {
             x: acceleration.x,
@@ -120,6 +133,9 @@ class Box extends React.Component {
         });
       }
     }
+
+    nextVelocity.x += nextGravity.x;
+    nextVelocity.y += nextGravity.y;
 
     this.setState({
       velocity: {
@@ -157,6 +173,53 @@ class Box extends React.Component {
         y: nextPosition.y
       }
     });
+  }
+
+  setReboundRate() {
+    let { velocity, drag, acceleration, gravity, bounce, position, height, width } = this.state;
+    let { collideWithContainer, container } = this.props;
+    console.log('CONTAINER', container);
+    this.update = setInterval(this.getNextVelocity, 1000 / 60 * 1);
+    let totalAcceleration = {
+      x: acceleration.x + gravity.x,
+      y: acceleration.y + gravity.y
+    }
+    let drop = {
+      width: {
+        inital: totalAcceleration.x < 0 ? position.x : container.width - position.x,
+        second: totalAcceleration.x < 0 ? position.x * bounce.x : (container.width - position.x) * bounce.x
+      },
+      height: {
+        inital: totalAcceleration.x < 0 ? position.y : container.height - position.y,
+        second: totalAcceleration.x < 0 ? position.y * bounce.y : (container.height - position.y) * bounce.y
+      }
+    }
+    // console.log('DROP', drop);
+    // Yes, I realize there's a lot of code that can be removed here, but it's easier to read
+    // because it's all part of a physics equation that I mashed together.
+    // distance dropped = 0.5 x gravity x time^2
+    // velocity = gravity x acceleration totalAcceleration
+    // so totalAcceleration * Math.sqrt(drop.width.inital / (0.5 * totalAcceleration.x)) is
+    // really gravity x time, giving you the velocity at impact.
+    let impactVelocity = {
+      x: {
+        inital: totalAcceleration.x * Math.sqrt(drop.width.inital / (0.5 * totalAcceleration.x)),
+        second: totalAcceleration.x * Math.sqrt(drop.width.second / (0.5 * totalAcceleration.x))
+      },
+      y: {
+        inital: totalAcceleration.y * Math.sqrt(drop.height.inital / (0.5 * totalAcceleration.y)),
+        second: totalAcceleration.y * Math.sqrt(drop.height.second / (0.5 * totalAcceleration.y))
+      }
+    }
+    // console.log('IMPACTVELOCITY', impactVelocity);
+    let reboundRate = {
+      x: impactVelocity.x.second / impactVelocity.x.inital || 0,
+      y: impactVelocity.y.second / impactVelocity.y.inital || 0
+    };
+
+    console.log('reboundRate', reboundRate);
+
+    this.setState({reboundRate});
   }
 }
 

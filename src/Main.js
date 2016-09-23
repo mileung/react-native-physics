@@ -22,12 +22,20 @@ export default class Main extends React.Component {
     }
   }
   render() {
-    console.log('render!');
     return (
       <TouchableWithoutFeedback onPress={() => this.reset()}>
         <View style={styles.container}>
           <Container style={styles.container}>
-            {this.state.boxes}
+            {/*{this.state.boxes}*/}
+            <Box
+              width={100}
+              height={100}
+              outline={true}
+              position={{x: 200, y: 50}}
+              gravity={{y: 100}}
+              bounce={{y: 1}}
+              collideWithContainer={true}
+            />
           </Container>
         </View>
       </TouchableWithoutFeedback>
@@ -39,9 +47,9 @@ export default class Main extends React.Component {
   }
 
   reset() {
-    this.setState({
-      boxes: null
-    }, this.createBoxes);
+    // this.setState({
+    //   boxes: null
+    // }, this.createBoxes);
   }
 
   createBoxes() {

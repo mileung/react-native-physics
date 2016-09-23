@@ -20,8 +20,8 @@ export default class Container extends React.Component {
         onLayout={e => {
           let { width, height } = e.nativeEvent.layout;
           this.setState({
-            width: width,
-            height: height
+            width,
+            height
           });
         }}
       >
