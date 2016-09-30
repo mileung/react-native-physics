@@ -67,6 +67,10 @@ class Box extends React.Component {
       anchor: {
         x: anchor.x || 0,
         y: anchor.y || 0
+      },
+      elastic: {
+        x: bounce.x === 1,
+        y: bounce.y === 1
       }
     });
   }
@@ -82,7 +86,7 @@ class Box extends React.Component {
 
   getNextVelocity() {
     // console.log('STATE:', this.state);
-    let { velocity, drag, acceleration, gravity, bounce, position, height, width, reboundRate } = this.state;
+    let { velocity, drag, acceleration, gravity, bounce, position, height, width, reboundRate, elastic } = this.state;
     let { collideWithContainer, container } = this.props;
 
     let nextVelocity = {
@@ -100,6 +104,11 @@ class Box extends React.Component {
     //   y: position.y + gravity.y < 0 && velocity.y < 0 ? position.y : position.y + gravity.y + height > container.height && velocity.y > 0 ? container.height - (position.y + height) : gravity.y
     // }
 
+    let rebound = {
+      x: false,
+      y: false
+    }
+
     let nextGravity = {
       x: gravity.x,
       y: gravity.y
@@ -113,9 +122,12 @@ class Box extends React.Component {
     nextVelocity.x += nextAcceleration.x;
     nextVelocity.y += nextAcceleration.y;
 
+    nextVelocity.x += elastic.x ? nextGravity.x : 0;
+    nextVelocity.y += elastic.y ? nextGravity.y : 0;
     if (collideWithContainer) {
       if ((position.x <= 0 && velocity.x < 0) || (position.x + width >= container.width && velocity.x > 0)) {
         nextVelocity.x = velocity.x * -reboundRate.x;
+        // rebound.x = true;
         this.setState({
           acceleration: {
             x: 0,
@@ -125,6 +137,7 @@ class Box extends React.Component {
       }
       if ((position.y <= 0 && velocity.y < 0) || (position.y + height >= container.height && velocity.y > 0)) {
         nextVelocity.y = velocity.y * -reboundRate.y;
+        // rebound.y = true;
         this.setState({
           acceleration: {
             x: acceleration.x,
@@ -134,8 +147,8 @@ class Box extends React.Component {
       }
     }
 
-    nextVelocity.x += nextGravity.x;
-    nextVelocity.y += nextGravity.y;
+    nextVelocity.x += elastic.x ? 0 : nextGravity.x;
+    nextVelocity.y += elastic.y ? 0 : nextGravity.y;
 
     this.setState({
       velocity: {
@@ -146,7 +159,7 @@ class Box extends React.Component {
   }
 
   moveToNewPosition() {
-    let { position, velocity, width, height, bounce } = this.state;
+    let { position, velocity, width, height, bounce, elastic } = this.state;
     let { collideWithContainer, container } = this.props;
 
     let nextPosition = {
@@ -155,15 +168,19 @@ class Box extends React.Component {
     }
 
     if (collideWithContainer) {
-      if (nextPosition.x < 0) {
-        nextPosition.x = 0;
-      } else if (nextPosition.x + width > container.width) {
-        nextPosition.x = container.width - width;
+      if (!elastic.x) {
+        if (nextPosition.x < 0) {
+          nextPosition.x = 0;
+        } else if (nextPosition.x + width > container.width) {
+          nextPosition.x = container.width - width;
+        }
       }
-      if (nextPosition.y < 0) {
-        nextPosition.y = 0;
-      } else if (nextPosition.y + height > container.height) {
-        nextPosition.y = container.height - height;
+      if (!elastic.y) {
+        if (nextPosition.y < 0) {
+          nextPosition.y = 0;
+        } else if (nextPosition.y + height > container.height) {
+          nextPosition.y = container.height - height;
+        }
       }
     }
 
@@ -178,7 +195,6 @@ class Box extends React.Component {
   setReboundRate() {
     let { velocity, drag, acceleration, gravity, bounce, position, height, width } = this.state;
     let { collideWithContainer, container } = this.props;
-    console.log('CONTAINER', container);
     this.update = setInterval(this.getNextVelocity, 1000 / 60 * 1);
     let totalAcceleration = {
       x: acceleration.x + gravity.x,
@@ -194,11 +210,10 @@ class Box extends React.Component {
         second: totalAcceleration.x < 0 ? position.y * bounce.y : (container.height - position.y) * bounce.y
       }
     }
-    // console.log('DROP', drop);
     // Yes, I realize there's a lot of code that can be removed here, but it's easier to read
     // because it's all part of a physics equation that I mashed together.
     // distance dropped = 0.5 x gravity x time^2
-    // velocity = gravity x acceleration totalAcceleration
+    // velocity = gravity x acceleration
     // so totalAcceleration * Math.sqrt(drop.width.inital / (0.5 * totalAcceleration.x)) is
     // really gravity x time, giving you the velocity at impact.
     let impactVelocity = {
