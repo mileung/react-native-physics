@@ -33,7 +33,9 @@ export default class Container extends React.Component {
             container: {
               width: this.state.width,
               height: this.state.height
-            }
+            },
+            interactWith: 1,
+            onUpdate: this.onBoxUpdate
           });
         })}
       </View>
@@ -44,5 +46,8 @@ export default class Container extends React.Component {
       width: this.props.style.width,
       height: this.props.style.height
     });
+  }
+  onBoxUpdate() {
+    console.log('hi');
   }
 }

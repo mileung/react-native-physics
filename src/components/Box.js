@@ -161,7 +161,7 @@ class Box extends React.Component {
 
   moveToNewPosition() {
     let { position, velocity, width, height, bounce, elastic } = this.state;
-    let { collideWithContainer, container } = this.props;
+    let { collideWithContainer, container, interactWith } = this.props;
 
     let nextPosition = {
       x: position.x + velocity.x,
@@ -190,13 +190,19 @@ class Box extends React.Component {
         x: nextPosition.x,
         y: nextPosition.y
       }
+    }, () => {
+      if (interactWith) {
+        this.updateParentContainer();
+      }
     });
   }
-
+  updateParentContainer() {
+    this.props.onUpdate()
+  }
   setReboundRate() {
     let { velocity, drag, acceleration, gravity, bounce, position, height, width } = this.state;
     let { collideWithContainer, container } = this.props;
-    this.update = setInterval(this.getNextVelocity, 1000 / 60 * 20);
+    this.update = setInterval(this.getNextVelocity, 1000 / 60 * 1);
     let totalAcceleration = {
       x: acceleration.x + gravity.x,
       y: acceleration.y + gravity.y
@@ -269,9 +275,8 @@ Box.propTypes = {
   collideWithContainer: React.PropTypes.bool,
   height: React.PropTypes.number,
   width: React.PropTypes.number,
-  interactWith: React.PropTypes.array
+  // interactWith: React.PropTypes.array
 };
-
 Box.defaultProps = {
   physics: true,
   container: {x: 0, y: 0},
