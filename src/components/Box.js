@@ -38,7 +38,8 @@ class Box extends React.Component {
   }
 
   componentWillMount() {
-    let { position, velocity, acceleration, gravity, bounce, drag, anchor } = this.props;
+    let { position, velocity, acceleration, gravity, bounce, drag, anchor, interactWith } = this.props;
+    console.log('interactWith', interactWith);
     this.setState({
       position: {
         x: position.x || 0,
@@ -195,7 +196,7 @@ class Box extends React.Component {
   setReboundRate() {
     let { velocity, drag, acceleration, gravity, bounce, position, height, width } = this.state;
     let { collideWithContainer, container } = this.props;
-    this.update = setInterval(this.getNextVelocity, 1000 / 60 * 1);
+    this.update = setInterval(this.getNextVelocity, 1000 / 60 * 20);
     let totalAcceleration = {
       x: acceleration.x + gravity.x,
       y: acceleration.y + gravity.y
