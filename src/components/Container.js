@@ -34,7 +34,7 @@ export default class Container extends React.Component {
               width: this.state.width,
               height: this.state.height
             },
-            interactWith: 1,
+            interactWith: child.props.interactWith ? this.props.children[1] : null,
             onUpdate: this.onBoxUpdate
           });
         })}
@@ -46,8 +46,9 @@ export default class Container extends React.Component {
       width: this.props.style.width,
       height: this.props.style.height
     });
+    // console.log('children', this.props.children);
   }
   onBoxUpdate() {
-    console.log('hi');
+    // console.log('hi');
   }
 }

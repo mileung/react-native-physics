@@ -34,14 +34,12 @@ export default class Main extends React.Component {
               position={{x: 200, y: 10 || 567}}
               gravity={{y: 10}}
               //velocity={{y: -100}}
-              bounce={{y: 0.99}}
+              bounce={{y: 0.3}}
               collideWithContainer={true}
-              interactWith={this.refs['platform']}
-              ref={ref => this.box = ref}
+              interactWith="platform"
             />
             <Box
               ref="platform"
-              interactWith={this.box}
               width={300}
               height={10}
               outline={true}
@@ -55,6 +53,10 @@ export default class Main extends React.Component {
 
   componentWillMount() {
     this.createBoxes();
+  }
+
+  componentDidMount() {
+    // console.log('refs', this.refs.platform);
   }
 
   reset() {

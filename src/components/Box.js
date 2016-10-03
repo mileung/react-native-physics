@@ -3,8 +3,6 @@ import {
   View
 } from 'react-native';
 
-let sixtieth = 1 / 60;
-
 class Box extends React.Component {
   constructor(props) {
     super(props);
@@ -38,8 +36,7 @@ class Box extends React.Component {
   }
 
   componentWillMount() {
-    let { position, velocity, acceleration, gravity, bounce, drag, anchor, interactWith } = this.props;
-    console.log('interactWith', interactWith);
+    let { position, velocity, acceleration, gravity, bounce, drag, anchor } = this.props;
     this.setState({
       position: {
         x: position.x || 0,
@@ -77,8 +74,11 @@ class Box extends React.Component {
   }
 
   componentDidMount() {
+    let { interactWith } = this.props;
     setTimeout(() => this.setReboundRate(), 0.00000000000000001);
     // this.setReboundRate();
+    console.log('interactWith!', interactWith ? interactWith.props : null);
+
   }
 
   componentWillUnmount() {
@@ -238,8 +238,6 @@ class Box extends React.Component {
       x: impactVelocity.x.second / impactVelocity.x.inital || 0,
       y: impactVelocity.y.second / impactVelocity.y.inital || 0
     };
-
-    console.log('reboundRate', reboundRate);
 
     this.setState({reboundRate});
   }
