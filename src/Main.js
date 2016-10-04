@@ -32,14 +32,14 @@ export default class Main extends React.Component {
               height={100}
               outline={true}
               position={{x: 200, y: 10 || 567}}
-              gravity={{y: 10}}
+              gravity={{y: 100}}
               //velocity={{y: -100}}
-              bounce={{y: 0.3}}
+              bounce={{y: 0.1}}
               collideWithContainer={true}
               interactWith="platform"
             />
             <Box
-              ref="platform"
+              key="platform"
               width={300}
               height={10}
               outline={true}

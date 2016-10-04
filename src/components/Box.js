@@ -77,12 +77,18 @@ class Box extends React.Component {
     let { interactWith } = this.props;
     setTimeout(() => this.setReboundRate(), 0.00000000000000001);
     // this.setReboundRate();
-    console.log('interactWith!', interactWith ? interactWith.props : null);
+    // console.log('interactWith!', interactWith ? interactWith.props : null);
 
   }
 
   componentWillUnmount() {
     clearInterval(this.update);
+  }
+
+  componentWillUpdate() {
+    if (this.props.interactWith) {
+      console.log('props', this.props.interactWith.props);
+    }
   }
 
   getNextVelocity() {

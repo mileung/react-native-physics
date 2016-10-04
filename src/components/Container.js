@@ -42,10 +42,25 @@ export default class Container extends React.Component {
     );
   }
   componentWillMount() {
+    let { children } = this.props;
+    let childrenWithKeys = {};
+    let childrenWhoInteract = {};
+    for (let index in children) {
+      let child = children[index];
+      if (child.key) {
+        childrenWithKeys[child.key] = child;
+      }
+      if (child.props.interactWith) {
+        console.log('CHILD', child);
+        childrenWhoInteract[child.key] = child;
+      }
+    }
     this.setState({
+      childrenWithKeys,
+      childrenWhoInteract,
       width: this.props.style.width,
       height: this.props.style.height
-    });
+    }, () => console.log('state', this.state));
     // console.log('children', this.props.children);
   }
   onBoxUpdate() {
