@@ -75,9 +75,9 @@ class Box extends React.Component {
 
   componentDidMount() {
     let { interactWith } = this.props;
-    setTimeout(() => this.setReboundRate(), 0.00000000000000001);
+    setTimeout(() => this.setReboundRate(), 0.0000000000000000000001);
     // this.setReboundRate();
-    // console.log('interactWith!', interactWith ? interactWith.props : null);
+    console.log('interactWith!', interactWith ? interactWith.props : null);
 
   }
 
@@ -86,15 +86,19 @@ class Box extends React.Component {
   }
 
   componentWillUpdate() {
-    if (this.props.interactWith) {
-      console.log('props', this.props.interactWith.props);
-    }
+    // let { interactWith } = this.props;
+    // if (interactWith) {
+    //   console.log('props', interactWith.props);
+    //   this.setState({
+    //     interactWith
+    //   });
+    // }
   }
 
   getNextVelocity() {
     // console.log('STATE:', this.state);
     let { velocity, drag, acceleration, gravity, bounce, position, height, width, reboundRate, elastic } = this.state;
-    let { collideWithContainer, container } = this.props;
+    let { collideWithContainer, container, interactWith } = this.props;
 
     let nextVelocity = {
       x: velocity.x,
@@ -152,6 +156,29 @@ class Box extends React.Component {
           }
         });
       }
+    }
+
+    if (interactWith) {
+    //   if ((position.x <= 0 && velocity.x < 0) || (position.x + width >= interactWith.props.width && velocity.x > 0)) {
+    //     nextVelocity.x = velocity.x * -reboundRate.x;
+    //     // rebound.x = true;
+    //     this.setState({
+    //       acceleration: {
+    //         x: 0,
+    //         y: acceleration.y
+    //       }
+    //     });
+    //   }
+    //   if ((position.y <= 0 && velocity.y < 0) || (position.y + height >= interactWith.props.height && velocity.y > 0)) {
+    //     nextVelocity.y = velocity.y * -reboundRate.y;
+    //     // rebound.y = true;
+    //     this.setState({
+    //       acceleration: {
+    //         x: acceleration.x,
+    //         y: 0
+    //       }
+    //     });
+    //   }
     }
 
     nextVelocity.x += elastic.x ? 0 : nextGravity.x;

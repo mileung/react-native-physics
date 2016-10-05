@@ -60,7 +60,7 @@ export default class Container extends React.Component {
       childrenWhoInteract,
       width: this.props.style.width,
       height: this.props.style.height
-    }, () => console.log('state', this.state));
+    });
     // console.log('children', this.props.children);
   }
   onBoxUpdate() {
