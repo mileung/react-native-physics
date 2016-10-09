@@ -34,7 +34,7 @@ export default class Main extends React.Component {
               position={{x: 200, y: 10 || 567}}
               gravity={{y: 100}}
               //velocity={{y: -100}}
-              bounce={{y: 0.1}}
+              bounce={{y: 0.9}}
               collideWithContainer={true}
               interactWith="platform"
             />
