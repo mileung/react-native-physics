@@ -161,7 +161,7 @@ class Box extends React.Component {
     }
 
     if (interactWith) {
-    console.log('INTERACTWITH', interactWith.props);
+    // console.log('INTERACTWITH', interactWith.props);
       // if ((position.x <= 0 && velocity.x < 0) || (position.x + width >= interactWith.props.width && velocity.x > 0)) {
       //   nextVelocity.x = velocity.x * -reboundRate.x;
       //   // rebound.x = true;
@@ -182,7 +182,7 @@ class Box extends React.Component {
       //     }
       //   });
       // }
-      if (velocity.y > 0 && position.y + height > interactWith.props.position.y) {
+      if (velocity.y > 0 && position.y + height >= interactWith.props.position.y) {
         nextVelocity.y = velocity.y * -reboundRate.y;
         this.setState({
           acceleration: {
@@ -206,6 +206,7 @@ class Box extends React.Component {
 
   moveToNewPosition() {
     let { position, velocity, width, height, bounce, elastic } = this.state;
+    console.log('VELOCITY', velocity);
     let { collideWithContainer, container, interactWith } = this.props;
 
     let nextPosition = {
@@ -226,6 +227,16 @@ class Box extends React.Component {
           nextPosition.y = 0;
         } else if (nextPosition.y + height > container.height) {
           nextPosition.y = container.height - height;
+        }
+      }
+    }
+
+    if (interactWith) {
+      if (!elastic.y) {
+        if (velocity.y > 0 && nextPosition.y + height > interactWith.props.position.y) {
+          nextPosition.y = interactWith.props.position.y - height;
+        } else if (true) {
+
         }
       }
     }
@@ -264,7 +275,7 @@ class Box extends React.Component {
     }
     // Yes, I realize there's a lot of code that can be removed here, but it's easier to read
     // because it's all part of a physics equation that I mashed together.
-    // distance dropped = 0.5 x gravity x time^2
+    // distance traveled when dropped from rest = 0.5 x gravity x time^2
     // velocity = gravity x acceleration
     // so totalAcceleration * Math.sqrt(drop.width.inital / (0.5 * totalAcceleration.x)) is
     // really gravity x time, giving you the velocity at impact.
