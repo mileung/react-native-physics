@@ -78,7 +78,6 @@ class Box extends React.Component {
   componentDidMount() {
     let { interactWith } = this.props;
     setTimeout(() => this.setReboundRate(), 0.0000000000000000000001);
-    // this.setReboundRate();
     console.log('interactWith!', interactWith ? interactWith.props : null);
 
   }
@@ -88,13 +87,7 @@ class Box extends React.Component {
   }
 
   componentWillUpdate() {
-    // let { interactWith } = this.props;
-    // if (interactWith) {
-    //   console.log('props', interactWith.props);
-    //   this.setState({
-    //     interactWith
-    //   });
-    // }
+
   }
 
   getNextVelocity() {
@@ -106,32 +99,23 @@ class Box extends React.Component {
       x: velocity.x,
       y: velocity.y
     }
-
     let nextDrag = {
       x: nextVelocity.x === 0 || drag.x === 0 ? 0 : nextVelocity.x > 0 ? -drag.x : nextVelocity.x < 0 ? drag.x : 0,
       y: nextVelocity.y === 0 || drag.y === 0 ? 0 : nextVelocity.y > 0 ? -drag.y : nextVelocity.y < 0 ? drag.y : 0
     }
-
-    // let nextGravity = {
-    //   x: position.x + gravity.x < 0 && velocity.x < 0 ? position.x : position.x + gravity.x + width > container.width && velocity.x > 0 ? container.width - (position.x + width) : gravity.x,
-    //   y: position.y + gravity.y < 0 && velocity.y < 0 ? position.y : position.y + gravity.y + height > container.height && velocity.y > 0 ? container.height - (position.y + height) : gravity.y
-    // }
-
     let rebound = {
       x: false,
       y: false
     }
-
     let nextGravity = {
       x: gravity.x,
       y: gravity.y
     }
-
     let nextAcceleration = {
       x: acceleration.x + nextDrag.x,
       y: acceleration.y + nextDrag.y
     }
-    // console.log('nextAcceleration', nextAcceleration.x);
+
     nextVelocity.x += nextAcceleration.x;
     nextVelocity.y += nextAcceleration.y;
 
@@ -140,7 +124,6 @@ class Box extends React.Component {
     if (collideWithContainer) {
       if ((position.x <= 0 && velocity.x < 0) || (position.x + width >= container.width && velocity.x > 0)) {
         nextVelocity.x = velocity.x * -reboundRate.x;
-        // rebound.x = true;
         this.setState({
           acceleration: {
             x: 0,
@@ -150,7 +133,6 @@ class Box extends React.Component {
       }
       if ((position.y <= 0 && velocity.y < 0) || (position.y + height >= container.height && velocity.y > 0)) {
         nextVelocity.y = velocity.y * -reboundRate.y;
-        // rebound.y = true;
         this.setState({
           acceleration: {
             x: acceleration.x,

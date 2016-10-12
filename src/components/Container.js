@@ -14,9 +14,18 @@ export default class Container extends React.Component {
     };
   }
   render() {
+    let { style, outline } = this.props;
     return (
       <View
-        style={[this.props.style, {width: this.state.width, height: this.state.height}]}
+        style={[
+          style,
+          {
+            width: this.state.width,
+            height: this.state.height,
+            borderWidth: outline ? 1 : 0,
+            borderColor: outline === true ? 'red' : outline ? outline : null,
+          }
+        ]}
         onLayout={e => {
           let { width, height } = e.nativeEvent.layout;
           this.setState({
