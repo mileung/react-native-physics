@@ -31,8 +31,8 @@ export default class Main extends React.Component {
               width={100}
               height={100}
               outline={true}
-              position={{x: 200, y: 10 || 567}}
-              gravity={{y: 100}}
+              position={{x: 200, y: 400 || 567}}
+              gravity={{y: -100}}
               //velocity={{y: -100}}
               bounce={{y: 0.9}}
               collideWithContainer={true}
@@ -40,10 +40,10 @@ export default class Main extends React.Component {
             />
             <Box
               key="platform"
-              width={300}
-              height={10}
+              width={10}
+              height={310}
               outline={true}
-              position={{x: 50, y: 500}}
+              position={{x: 50, y: 300}}
             />
           </Container>
         </View>
