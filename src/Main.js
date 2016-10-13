@@ -27,23 +27,41 @@ export default class Main extends React.Component {
         <View style={styles.container}>
           <Container style={styles.container}>
             {/*{this.state.boxes}*/}
+            {/*<Box
+              width={100}
+              height={100}
+              outline={true}
+              position={{x: 0, y: 400 || 567}}
+              gravity={{x: 100}}
+              //velocity={{y: -100}}
+              bounce={{x: 0.9, y: 0.9}}
+              collideWithContainer={true}
+              interactWith="platform"
+            />*/}
             <Box
               width={100}
               height={100}
               outline={true}
-              position={{x: 200, y: 400 || 567}}
+              position={{x: 0, y: 0 || 567}}
               gravity={{y: -100}}
               //velocity={{y: -100}}
-              bounce={{y: 0.9}}
+              bounce={{x: 0.9, y: 0.9}}
               collideWithContainer={true}
               interactWith="platform"
             />
-            <Box
+            {/*<Box
               key="platform"
               width={10}
               height={310}
               outline={true}
-              position={{x: 50, y: 300}}
+              position={{x: 300, y: 300}}
+            />*/}
+            <Box
+              key="platform"
+              width={310}
+              height={10}
+              outline={true}
+              position={{x: 50, y: 100}}
             />
           </Container>
         </View>

@@ -153,12 +153,31 @@ class Box extends React.Component {
             }
           });
         }
-        else if (velocity.y < 0 && position.y <= interactWith.props.position.y + interactWith.props.height) {
+        else if (gravity.y < 0 && velocity.y < 0 && position.y <= interactWith.props.position.y + interactWith.props.height) {
           nextVelocity.y = velocity.y * -reboundRate.y;
           this.setState({
             acceleration: {
               x: acceleration.x,
               y: 0
+            }
+          });
+        }
+      }
+      if (position.y + height > interactWith.props.position.y && position.y < interactWith.props.position.y + interactWith.props.height) {
+        if (velocity.x > 0 && position.x + width >= interactWith.props.position.x && position.x < interactWith.props.position.x) {
+          nextVelocity.x = velocity.x * -reboundRate.x;
+          this.setState({
+            acceleration: {
+              x: 0,
+              y: acceleration.y
+            }
+          });
+        } else if (gravity.x < 0 && velocity.x < 0 && position.x <= interactWith.props.position.x + interactWith.props.width) {
+          nextVelocity.x = velocity.x * -reboundRate.x;
+          this.setState({
+            acceleration: {
+              x: 0,
+              y: acceleration.y
             }
           });
         }
@@ -212,6 +231,15 @@ class Box extends React.Component {
           }
         }
       }
+      if (!elastic.x) {
+        if (position.y + height > interactWith.props.position.y && position.y < interactWith.props.position.y + interactWith.props.height) {
+          if (velocity.x > 0 && nextPosition.x + width >= interactWith.props.position.x && position.x <= interactWith.props.position.x) {
+            nextPosition.x = interactWith.props.position.x - width;
+          } else if (velocity.x < 0 && nextPosition.x <= interactWith.props.position.x + interactWith.props.width && position.x + width >= interactWith.props.position.x + interactWith.props.width) {
+            nextPosition.x = interactWith.props.position.x + interactWith.props.width;
+          }
+        }
+      }
     }
 
     this.setState({
@@ -254,21 +282,21 @@ class Box extends React.Component {
     // really gravity x time, giving you the velocity at impact.
     let impactVelocity = {
       x: {
-        inital: totalAcceleration.x * Math.sqrt(drop.width.inital / (0.5 * totalAcceleration.x)),
-        second: totalAcceleration.x * Math.sqrt(drop.width.second / (0.5 * totalAcceleration.x))
+        inital: totalAcceleration.x * Math.sqrt(Math.abs(drop.width.inital / (0.5 * totalAcceleration.x))),
+        second: totalAcceleration.x * Math.sqrt(Math.abs(drop.width.second / (0.5 * totalAcceleration.x)))
       },
       y: {
-        inital: totalAcceleration.y * Math.sqrt(drop.height.inital / (0.5 * totalAcceleration.y)),
-        second: totalAcceleration.y * Math.sqrt(drop.height.second / (0.5 * totalAcceleration.y))
+        inital: totalAcceleration.y * Math.sqrt(Math.abs(drop.height.inital / (0.5 * totalAcceleration.y))),
+        second: totalAcceleration.y * Math.sqrt(Math.abs(drop.height.second / (0.5 * totalAcceleration.y)))
       }
     }
-    // console.log('IMPACTVELOCITY', impactVelocity);
     let reboundRate = {
       x: impactVelocity.x.second / impactVelocity.x.inital || 0,
       y: impactVelocity.y.second / impactVelocity.y.inital || 0
     };
 
     this.setState({reboundRate});
+    console.log('REBOUNDRATE', reboundRate);
   }
 }
 
