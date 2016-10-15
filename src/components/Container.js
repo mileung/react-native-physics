@@ -43,7 +43,7 @@ export default class Container extends React.Component {
               width: this.state.width,
               height: this.state.height
             },
-            interactWith: child.props.interactWith ? this.props.children[1] : null,
+            interactWith: child.props.interactWith ? child.props.interactWith.map(interactee => this.state.childrenWithKeys[interactee]) : null, // child.props.interactWith ? this.state.childrenWithKeys[child.props.interactWith[0]] : null,
             onUpdate: this.onBoxUpdate
           });
         })}
@@ -64,9 +64,10 @@ export default class Container extends React.Component {
       if (child.key) {
         childrenWithKeys[child.key] = child;
       }
-      if (child.props.interactWith) {
-        childrenWhoInteract[child.key] = child;
-      }
+      // if (child.props.interactWith) {
+      //   childrenWhoInteract[child.key] = child;
+      //   console.log('CHILDRENWHOINTERACT', childrenWhoInteract);
+      // }
     }
     this.setState({
       childrenWithKeys,

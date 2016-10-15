@@ -78,7 +78,7 @@ class Box extends React.Component {
   componentDidMount() {
     let { interactWith } = this.props;
     setTimeout(() => this.setReboundRate(), 0.0000000000000000000001);
-    console.log('interactWith!', interactWith ? interactWith.props : null);
+    console.log('interactWith!', interactWith ? interactWith : null);
 
   }
 
@@ -143,43 +143,46 @@ class Box extends React.Component {
     }
 
     if (interactWith) {
-      if (position.x + width > interactWith.props.position.x && position.x < interactWith.props.position.x + interactWith.props.width) {
-        if (velocity.y > 0 && position.y + height >= interactWith.props.position.y && position.y < interactWith.props.position.y) {
-          nextVelocity.y = velocity.y * -reboundRate.y;
-          this.setState({
-            acceleration: {
-              x: acceleration.x,
-              y: 0
-            }
-          });
+      for (let i = 0; i < interactWith.length; i++) {
+        let interactee = interactWith[i];
+        if (position.x + width > interactee.props.position.x && position.x < interactee.props.position.x + interactee.props.width) {
+          if (velocity.y > 0 && position.y + height >= interactee.props.position.y && position.y < interactee.props.position.y) {
+            nextVelocity.y = velocity.y * -reboundRate.y;
+            this.setState({
+              acceleration: {
+                x: acceleration.x,
+                y: 0
+              }
+            });
+          }
+          else if (gravity.y < 0 && velocity.y < 0 && position.y <= interactee.props.position.y + interactee.props.height) {
+            nextVelocity.y = velocity.y * -reboundRate.y;
+            this.setState({
+              acceleration: {
+                x: acceleration.x,
+                y: 0
+              }
+            });
+          }
         }
-        else if (gravity.y < 0 && velocity.y < 0 && position.y <= interactWith.props.position.y + interactWith.props.height) {
-          nextVelocity.y = velocity.y * -reboundRate.y;
-          this.setState({
-            acceleration: {
-              x: acceleration.x,
-              y: 0
-            }
-          });
-        }
-      }
-      if (position.y + height > interactWith.props.position.y && position.y < interactWith.props.position.y + interactWith.props.height) {
-        if (velocity.x > 0 && position.x + width >= interactWith.props.position.x && position.x < interactWith.props.position.x) {
-          nextVelocity.x = velocity.x * -reboundRate.x;
-          this.setState({
-            acceleration: {
-              x: 0,
-              y: acceleration.y
-            }
-          });
-        } else if (gravity.x < 0 && velocity.x < 0 && position.x <= interactWith.props.position.x + interactWith.props.width) {
-          nextVelocity.x = velocity.x * -reboundRate.x;
-          this.setState({
-            acceleration: {
-              x: 0,
-              y: acceleration.y
-            }
-          });
+        if (position.y + height > interactee.props.position.y && position.y < interactee.props.position.y + interactee.props.height) {
+          if (velocity.x > 0 && position.x + width >= interactee.props.position.x && position.x < interactee.props.position.x) {
+            nextVelocity.x = velocity.x * -reboundRate.x;
+            this.setState({
+              acceleration: {
+                x: 0,
+                y: acceleration.y
+              }
+            });
+          } else if (gravity.x < 0 && velocity.x < 0 && position.x <= interactee.props.position.x + interactee.props.width) {
+            nextVelocity.x = velocity.x * -reboundRate.x;
+            this.setState({
+              acceleration: {
+                x: 0,
+                y: acceleration.y
+              }
+            });
+          }
         }
       }
     }
@@ -222,21 +225,24 @@ class Box extends React.Component {
     }
 
     if (interactWith) {
-      if (!elastic.y) {
-        if (position.x + width > interactWith.props.position.x && position.x < interactWith.props.position.x + interactWith.props.width) {
-          if (velocity.y > 0 && nextPosition.y + height >= interactWith.props.position.y && position.y <= interactWith.props.position.y) {
-            nextPosition.y = interactWith.props.position.y - height;
-          } else if (velocity.y < 0 && nextPosition.y <= interactWith.props.position.y + interactWith.props.height && position.y + height >= interactWith.props.position.y + interactWith.props.height) {
-            nextPosition.y = interactWith.props.position.y + interactWith.props.height;
+      for (let i = 0; i< interactWith.length; i++) {
+        let interactee = interactWith[i];
+        if (!elastic.y) {
+          if (position.x + width > interactee.props.position.x && position.x < interactee.props.position.x + interactee.props.width) {
+            if (velocity.y > 0 && nextPosition.y + height >= interactee.props.position.y && position.y <= interactee.props.position.y) {
+              nextPosition.y = interactee.props.position.y - height;
+            } else if (velocity.y < 0 && nextPosition.y <= interactee.props.position.y + interactee.props.height && position.y + height >= interactee.props.position.y + interactee.props.height) {
+              nextPosition.y = interactee.props.position.y + interactee.props.height;
+            }
           }
         }
-      }
-      if (!elastic.x) {
-        if (position.y + height > interactWith.props.position.y && position.y < interactWith.props.position.y + interactWith.props.height) {
-          if (velocity.x > 0 && nextPosition.x + width >= interactWith.props.position.x && position.x <= interactWith.props.position.x) {
-            nextPosition.x = interactWith.props.position.x - width;
-          } else if (velocity.x < 0 && nextPosition.x <= interactWith.props.position.x + interactWith.props.width && position.x + width >= interactWith.props.position.x + interactWith.props.width) {
-            nextPosition.x = interactWith.props.position.x + interactWith.props.width;
+        if (!elastic.x) {
+          if (position.y + height > interactee.props.position.y && position.y < interactee.props.position.y + interactee.props.height) {
+            if (velocity.x > 0 && nextPosition.x + width >= interactee.props.position.x && position.x <= interactee.props.position.x) {
+              nextPosition.x = interactee.props.position.x - width;
+            } else if (velocity.x < 0 && nextPosition.x <= interactee.props.position.x + interactee.props.width && position.x + width >= interactee.props.position.x + interactee.props.width) {
+              nextPosition.x = interactee.props.position.x + interactee.props.width;
+            }
           }
         }
       }
@@ -296,7 +302,6 @@ class Box extends React.Component {
     };
 
     this.setState({reboundRate});
-    console.log('REBOUNDRATE', reboundRate);
   }
 }
 
