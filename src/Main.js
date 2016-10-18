@@ -27,52 +27,30 @@ export default class Main extends React.Component {
         <View style={styles.container}>
           <Container style={styles.container}>
             {/*{this.state.boxes}*/}
-            {/*<Box
-              width={100}
-              height={100}
-              outline={true}
-              position={{x: 0, y: 400 || 567}}
-              gravity={{x: 100}}
-              //velocity={{y: -100}}
-              bounce={{x: 0.9, y: 0.9}}
-              collideWithContainer={true}
-              interactWith="platform"
-            />*/}
-            <Box
-              width={100}
-              height={100}
-              outline={true}
-              position={{x: -30, y: 567}}
-              gravity={{y: -100}}
-              //velocity={{y: -100}}
-              bounce={{x: 0.9, y: 0.9}}
-              // collideWithContainer={true}
-              interactWith={["platform"]}
-            />
-            {/*<Box
-              key="platform"
-              width={10}
-              height={310}
-              outline={true}
-              position={{x: 300, y: 300}}
-            />*/}
-            <Box
-              key="platform"
-              width={310}
-              height={10}
-              outline={true}
-              position={{x: 50, y: 100}}
-            />
             <Box
               width={100}
               height={100}
               outline={true}
               position={{x: 200, y: 300}}
-              gravity={{y: -100}}
-              //velocity={{y: -100}}
+              gravity={{y: -20}}
               bounce={{x: 0.9, y: 0.9}}
-              // collideWithContainer={true}
-              interactWith={["platform"]}
+              interactWith={["asteroid"]}
+            />
+            <Box
+              key="asteroid"
+              width={30}
+              height={30}
+              outline={true}
+              position={{x: 200, y: 0}}
+              bounce={{x: 0.9, y: 0.9}}
+              velocity={{y: 10}}
+            />
+            <Box
+              key="platform"
+              width={310}
+              height={10}
+              outline={true}
+              position={{x: 50, y: 650}}
             />
           </Container>
         </View>

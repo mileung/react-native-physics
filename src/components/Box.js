@@ -3,7 +3,7 @@ import {
   View
 } from 'react-native';
 
-let timePerFrame = 1000 / 60 * 1;
+let timePerFrame = 1000 / 60 * 10;
 
 class Box extends React.Component {
   constructor(props) {
@@ -145,45 +145,49 @@ class Box extends React.Component {
     if (interactWith) {
       for (let i = 0; i < interactWith.length; i++) {
         let interactee = interactWith[i];
-        if (position.x + width > interactee.props.position.x && position.x < interactee.props.position.x + interactee.props.width) {
-          if (velocity.y > 0 && position.y + height >= interactee.props.position.y && position.y < interactee.props.position.y) {
-            nextVelocity.y = velocity.y * -reboundRate.y;
-            this.setState({
-              acceleration: {
-                x: acceleration.x,
-                y: 0
-              }
-            });
-          }
-          else if (gravity.y < 0 && velocity.y < 0 && position.y <= interactee.props.position.y + interactee.props.height) {
-            nextVelocity.y = velocity.y * -reboundRate.y;
-            this.setState({
-              acceleration: {
-                x: acceleration.x,
-                y: 0
-              }
-            });
-          }
-        }
-        if (position.y + height > interactee.props.position.y && position.y < interactee.props.position.y + interactee.props.height) {
-          if (velocity.x > 0 && position.x + width >= interactee.props.position.x && position.x < interactee.props.position.x) {
-            nextVelocity.x = velocity.x * -reboundRate.x;
-            this.setState({
-              acceleration: {
-                x: 0,
-                y: acceleration.y
-              }
-            });
-          } else if (gravity.x < 0 && velocity.x < 0 && position.x <= interactee.props.position.x + interactee.props.width) {
-            nextVelocity.x = velocity.x * -reboundRate.x;
-            this.setState({
-              acceleration: {
-                x: 0,
-                y: acceleration.y
-              }
-            });
-          }
-        }
+        console.log('INTERACTEE', interactee.props.position.y);
+        // if (position.x + width > interactee.props.position.x && position.x < interactee.props.position.x + interactee.props.width) {
+        //   if (velocity.y > 0 && position.y + height >= interactee.props.position.y && position.y < interactee.props.position.y) {
+        //     nextVelocity.y = velocity.y * -reboundRate.y;
+        //     console.log('1', interactee.key);
+        //     this.setState({
+        //       acceleration: {
+        //         x: acceleration.x,
+        //         y: 0
+        //       }
+        //     });
+        //   } else if (gravity.y < 0 && velocity.y < 0 && position.y <= interactee.props.position.y + interactee.props.height) {
+        //     nextVelocity.y = velocity.y * -reboundRate.y;
+        //     console.log('2', interactee.key);
+        //     this.setState({
+        //       acceleration: {
+        //         x: acceleration.x,
+        //         y: 0
+        //       }
+        //     });
+        //   }
+        // }
+        // if (position.y + height > interactee.props.position.y && position.y < interactee.props.position.y + interactee.props.height) {
+        //   if (velocity.x > 0 && position.x + width >= interactee.props.position.x && position.x < interactee.props.position.x) {
+        //     nextVelocity.x = velocity.x * -reboundRate.x;
+        //     console.log('3', interactee.key);
+        //     this.setState({
+        //       acceleration: {
+        //         x: 0,
+        //         y: acceleration.y
+        //       }
+        //     });
+        //   } else if (gravity.x < 0 && velocity.x < 0 && position.x <= interactee.props.position.x + interactee.props.width) {
+        //     nextVelocity.x = velocity.x * -reboundRate.x;
+        //     console.log('4', interactee.key);
+        //     this.setState({
+        //       acceleration: {
+        //         x: 0,
+        //         y: acceleration.y
+        //       }
+        //     });
+        //   }
+        // }
       }
     }
 
