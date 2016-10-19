@@ -6,6 +6,7 @@ import {
 import { createStore } from 'redux';
 import rootReducer from '../reducers/index.js';
 import { Provider } from 'react-redux';
+import { v4 } from 'uuid';
 import Box from './Box';
 
 let store = createStore(rootReducer)
@@ -49,8 +50,8 @@ export default class Container extends React.Component {
                 width: this.state.width,
                 height: this.state.height
               },
-              interactWith: child.props.interactWith ? child.props.interactWith.map(interactee => this.state.childrenWithKeys[interactee]) : null, // child.props.interactWith ? this.state.childrenWithKeys[child.props.interactWith[0]] : null,
-              onUpdate: this.onBoxUpdate
+              // interactWith: child.props.interactWith ? child.props.interactWith.map(interactee => this.state.childrenWithKeys[interactee]) : null, // child.props.interactWith ? this.state.childrenWithKeys[child.props.interactWith[0]] : null,
+              id: child.props.id ? child.props.id : v4()
             });
           })}
         </View>
@@ -59,32 +60,29 @@ export default class Container extends React.Component {
   }
   componentWillMount() {
     let { children } = this.props;
-    console.log('CHILDREN', children.constructor);
-    if (children.constructor !== Array) {
-      children = [children];
-    }
-    let childrenWithKeys = {};
-    let childrenWhoInteract = {};
-    for (let index in children) {
-      let child = children[index];
-      console.log('CHILD', child);
-      if (child.key) {
-        childrenWithKeys[child.key] = child;
-      }
-      // if (child.props.interactWith) {
-      //   childrenWhoInteract[child.key] = child;
-      //   console.log('CHILDRENWHOINTERACT', childrenWhoInteract);
-      // }
-    }
+    // console.log('CHILDREN', children.constructor);
+    // if (children.constructor !== Array) {
+    //   children = [children];
+    // }
+    // let childrenWithKeys = {};
+    // let childrenWhoInteract = {};
+    // for (let index in children) {
+    //   let child = children[index];
+    //   console.log('CHILD', child);
+    //   if (child.key) {
+    //     childrenWithKeys[child.key] = child;
+    //   }
+    //   // if (child.props.interactWith) {
+    //   //   childrenWhoInteract[child.key] = child;
+    //   //   console.log('CHILDRENWHOINTERACT', childrenWhoInteract);
+    //   // }
+    // }
     this.setState({
-      childrenWithKeys,
-      childrenWhoInteract,
+      // childrenWithKeys,
+      // childrenWhoInteract,
       width: this.props.style.width,
       height: this.props.style.height
     });
     // console.log('children', this.props.children);
-  }
-  onBoxUpdate() {
-    // console.log('hi');
   }
 }

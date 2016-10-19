@@ -37,7 +37,7 @@ export default class Main extends React.Component {
               interactWith={["asteroid"]}
             />
             <Box
-              key="asteroid"
+              id="asteroid"
               width={30}
               height={30}
               outline={true}
@@ -46,7 +46,7 @@ export default class Main extends React.Component {
               velocity={{y: 10}}
             />
             <Box
-              key="platform"
+              id="platform"
               width={310}
               height={10}
               outline={true}

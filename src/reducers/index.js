@@ -11,21 +11,22 @@ const rootReducer = combineReducers({
 });
 
 function setBoxReducer(state = {}, action) {
+  // console.log('ACTION', action);
   switch (action.type) {
     case SET_POSITION:
       return {
         ...state,
-        [action.interactee]: {
-          ...inner[action.interactee],
-          position: action.position
+        [action.payload.interactee]: {
+          ...state[action.payload.interactee],
+          position: action.payload.position
         }
       };
     case SET_VELOCITY:
       return {
         ...state,
-        [action.interactee]: {
-          ...inner[action.interactee],
-          velocity: action.velocity
+        [action.payload.interactee]: {
+          ...state[action.payload.interactee],
+          velocity: action.payload.velocity
         }
       };
     default:

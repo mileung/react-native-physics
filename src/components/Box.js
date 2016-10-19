@@ -83,8 +83,6 @@ class Box extends React.Component {
   componentDidMount() {
     let { interactWith } = this.props;
     setTimeout(() => this.setReboundRate(), 0.0000000000000000000001);
-    console.log('interactWith!', interactWith ? interactWith : null);
-
   }
 
   componentWillUnmount() {
@@ -147,7 +145,7 @@ class Box extends React.Component {
       }
     }
 
-    if (interactWith) {
+    if (false) {
       for (let i = 0; i < interactWith.length; i++) {
         let interactee = interactWith[i];
         console.log('INTERACTEE', interactee.props.position.y);
@@ -193,9 +191,11 @@ class Box extends React.Component {
         //     });
         //   }
         // }
+        // console.log('interactees', this.props.interactees);
       }
     }
-
+    console.log('interactees', this.props.interactees);
+    this.props.setPosition(this.props.id, this.state.position);
     nextVelocity.x += elastic.x ? 0 : nextGravity.x;
     nextVelocity.y += elastic.y ? 0 : nextGravity.y;
 
@@ -233,7 +233,7 @@ class Box extends React.Component {
       }
     }
 
-    if (interactWith) {
+    if (false) {
       for (let i = 0; i< interactWith.length; i++) {
         let interactee = interactWith[i];
         if (!elastic.y) {
@@ -262,14 +262,7 @@ class Box extends React.Component {
         x: nextPosition.x,
         y: nextPosition.y
       }
-    }, () => {
-      if (interactWith) {
-        this.updateParentContainer();
-      }
     });
-  }
-  updateParentContainer() {
-    this.props.onUpdate()
   }
   setReboundRate() {
     let { velocity, drag, acceleration, gravity, bounce, position, height, width } = this.state;
