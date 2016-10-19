@@ -2,17 +2,23 @@ const SET_POSITION = 'SET_POSITION'
 const SET_VELOCITY = 'SET_VELOCITY'
 
 
-function setPosition(position) {
+function setPosition(interactee, position) {
   return {
     type: SET_POSITION,
-    payload: position
+    payload: {
+      interactee,
+      position
+    }
   };
 }
 
-function setVelocity(velocity) {
+function setVelocity(interactee, velocity) {
   return {
     type: SET_VELOCITY,
-    payload: velocity
+    payload: {
+      interactee,
+      velocity
+    }
   };
 }
 

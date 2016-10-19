@@ -1,8 +1,13 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import {
   View
 } from 'react-native';
-
+import {
+  setPosition,
+  setVelocity
+} from '../actions/index';
 let timePerFrame = 1000 / 60 * 10;
 
 class Box extends React.Component {
@@ -357,4 +362,18 @@ Box.defaultProps = {
   width: null,
 };
 
-export default Box;
+
+function mapStateToProps(state) {
+  return {
+    interactees: state.interactees
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    setPosition,
+    setVelocity
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Box);

@@ -4,25 +4,30 @@ import {
   SET_VELOCITY,
   setPosition,
   setVelocity
-} from '../action/index.js';
+} from '../actions/index.js';
 
 const rootReducer = combineReducers({
-  state: (state = {}) => state
+  interactees: setBoxReducer
 });
 
-function setPositionReducer(state = {x: 0, y: 0}, action) {
+function setBoxReducer(state = {}, action) {
   switch (action.type) {
     case SET_POSITION:
-      return action.payload;
-    default:
-      return state;
-  }
-}
-
-function setVelocityReducer(state = {x: 0, y: 0}, action) {
-  switch (action.type) {
+      return {
+        ...state,
+        [action.interactee]: {
+          ...inner[action.interactee],
+          position: action.position
+        }
+      };
     case SET_VELOCITY:
-      return action.payload;
+      return {
+        ...state,
+        [action.interactee]: {
+          ...inner[action.interactee],
+          velocity: action.velocity
+        }
+      };
     default:
       return state;
   }
