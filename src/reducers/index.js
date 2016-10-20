@@ -2,15 +2,17 @@ import { combineReducers } from 'redux';
 import {
   SET_POSITION,
   SET_VELOCITY,
+  CREATE_BOX,
   setPosition,
-  setVelocity
+  setVelocity,
+  createBox
 } from '../actions/index.js';
 
 const rootReducer = combineReducers({
-  interactees: setBoxReducer
+  interactees: updateBoxReducer
 });
 
-function setBoxReducer(state = {}, action) {
+function updateBoxReducer(state = null, action) {
   // console.log('ACTION', action);
   switch (action.type) {
     case SET_POSITION:
@@ -29,10 +31,14 @@ function setBoxReducer(state = {}, action) {
           velocity: action.payload.velocity
         }
       };
+    case CREATE_BOX:
+      return {
+        ...state,
+        [action.payload.interactee]: action.payload.box
+      };
     default:
       return state;
   }
 }
-
 
 export default rootReducer;

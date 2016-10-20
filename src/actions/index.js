@@ -1,5 +1,6 @@
-const SET_POSITION = 'SET_POSITION'
-const SET_VELOCITY = 'SET_VELOCITY'
+const SET_POSITION = 'SET_POSITION';
+const SET_VELOCITY = 'SET_VELOCITY';
+const CREATE_BOX = 'CREATE_BOX';
 
 
 function setPosition(interactee, position) {
@@ -22,9 +23,21 @@ function setVelocity(interactee, velocity) {
   };
 }
 
+function createBox(interactee, box) {
+  return {
+    type: CREATE_BOX,
+    payload: {
+      interactee,
+      box
+    }
+  };
+}
+
 export {
   SET_POSITION,
   SET_VELOCITY,
+  CREATE_BOX,
   setPosition,
-  setVelocity
+  setVelocity,
+  createBox
 };

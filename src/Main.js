@@ -34,9 +34,10 @@ export default class Main extends React.Component {
               position={{x: 200, y: 300}}
               gravity={{y: -20}}
               bounce={{x: 0.9, y: 0.9}}
-              interactWith={["asteroid"]}
+              // interactWith={["asteroid"]}
+              collideWithContainer={true}
             />
-            <Box
+            {/* <Box
               id="asteroid"
               width={30}
               height={30}
@@ -51,7 +52,7 @@ export default class Main extends React.Component {
               height={10}
               outline={true}
               position={{x: 50, y: 650}}
-            />
+            /> */}
           </Container>
         </View>
       </TouchableWithoutFeedback>
