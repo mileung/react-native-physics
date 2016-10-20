@@ -2,7 +2,6 @@ import React from 'react';
 import { View } from 'react-native';
 import { createStore, bindActionCreators } from 'redux';
 import rootReducer from '../reducers/index.js';
-import { createBox } from '../actions/index';
 import { Provider, connect } from 'react-redux';
 import { v4 } from 'uuid';
 import Box from './Box';
@@ -43,7 +42,6 @@ export default class Container extends React.Component {
             if (child.type !== Box) {
               return child;
             }
-            console.count('child');
             return React.cloneElement(child, {
               container: {
                 width: this.state.width,
@@ -64,11 +62,3 @@ export default class Container extends React.Component {
     });
   }
 }
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    createBox
-  });
-}
-
-// export default connect(null, mapDispatchToProps)(Container);

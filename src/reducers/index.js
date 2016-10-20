@@ -1,20 +1,24 @@
 import { combineReducers } from 'redux';
 import {
+  CREATE_BOX,
   SET_POSITION,
   SET_VELOCITY,
-  CREATE_BOX,
-  setPosition,
-  setVelocity,
-  createBox
+  SET_BOX_SIZE,
+  SET_REBOUND_RATE
 } from '../actions/index.js';
 
 const rootReducer = combineReducers({
-  interactees: updateBoxReducer
+  boxes: updateBoxReducer
 });
 
 function updateBoxReducer(state = null, action) {
   // console.log('ACTION', action);
   switch (action.type) {
+    case CREATE_BOX:
+      return {
+        ...state,
+        [action.payload.interactee]: action.payload.box
+      };
     case SET_POSITION:
       return {
         ...state,
@@ -31,10 +35,22 @@ function updateBoxReducer(state = null, action) {
           velocity: action.payload.velocity
         }
       };
-    case CREATE_BOX:
+    case SET_BOX_SIZE:
       return {
         ...state,
-        [action.payload.interactee]: action.payload.box
+        [action.payload.interactee]: {
+          ...state[action.payload.interactee],
+          height: action.payload.height,
+          width: action.payload.width
+        }
+      };
+    case SET_REBOUND_RATE:
+      return {
+        ...state,
+        [action.payload.interactee]: {
+          ...state[action.payload.interactee],
+          reboundRate: action.payload.reboundRate
+        }
       };
     default:
       return state;

@@ -1,14 +1,15 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { v4 } from 'uuid';
 import {
   View
 } from 'react-native';
 import {
+  createBox,
   setPosition,
   setVelocity,
-  createBox
+  setBoxSize,
+  setReboundRate
 } from '../actions/index';
 
 let timePerFrame = 1000 / 60 * 1;
@@ -20,14 +21,12 @@ class Box extends React.Component {
   }
 
   render() {
-
-    if (!this.props.interactees) {
+    if (!this.props.boxes) {
       return null;
     }
-    // console.log('THIS.PROPS.INTERACTEES', this.props.interactees);
 
-    let { outline, height, width, children } = this.props;
-    // let { position, velocity } = this.props.interactees[this.props.id];
+    let { children } = this.props;
+    let { position, outline, height, width } = this.props.boxes[this.state.id];
 
     return (
       <View
@@ -35,17 +34,14 @@ class Box extends React.Component {
           position: 'absolute',
           borderWidth: outline ? 1 : 0,
           borderColor: outline === true ? 'red' : outline ? outline : null,
-          height: height || this.state.height,
-          width: width || this.state.width,
-          left: 1 || position.x,
-          top: 1 || position.y,
+          height: height,
+          width: width,
+          left: position.x || 0,
+          top: position.y || 0,
         }}
         onLayout={e => {
           let { width, height } = e.nativeEvent.layout;
-          this.setState({
-            height: height,
-            width: width
-          });
+          this.props.setBoxSize(this.state.id, width, height);
         }}
       >
         {children}
@@ -89,21 +85,22 @@ class Box extends React.Component {
     //     y: bounce.y === 1
     //   }
     // });
-    console.log('THIS.PROPS.ID', this.props.id);
-
+    this.setState({
+      id
+    });
     this.props.createBox(id, {
       ...this.props,
-      id: id ? id : v4(),
+      id,
       elastic: {
         x: bounce.x === 1,
         y: bounce.y === 1
       }
     });
+    this.update = setInterval(this.getNextVelocity, timePerFrame);
   }
 
   componentDidMount() {
-    let { interactWith } = this.props;
-    setTimeout(() => this.setReboundRate(), 0.0000000000000000000001);
+    setTimeout(() => this.props.setReboundRate(this.props), 0.0000000000000000000001);
   }
 
   componentWillUnmount() {
@@ -111,11 +108,11 @@ class Box extends React.Component {
   }
 
   getNextVelocity() {
-    // console.log('THIS.PROPS.ID', this.props.interactees);
+    // console.log('THIS.PROPS.ID', this.props.boxes);
     //
     // let { drag, acceleration, gravity, bounce, height, width, reboundRate, elastic } = this.state;
     // let { collideWithContainer, container, interactWith } = this.props;
-    // let { position, velocity } = this.props.interactees[this.props.id];
+    // let { position, velocity } = this.props.boxes[this.props.id];
     //
     //
     // let nextVelocity = {
@@ -211,7 +208,7 @@ class Box extends React.Component {
     //     //     });
     //     //   }
     //     // }
-    //     // console.log('interactees', this.props.interactees);
+    //     // console.log('boxes', this.props.boxes);
     //   }
     // }
     // this.props.setPosition(this.props.id, this.state.position);
@@ -233,7 +230,7 @@ class Box extends React.Component {
   moveToNewPosition() {
     // let { width, height, bounce, elastic } = this.state;
     // let { collideWithContainer, container, interactWith } = this.props;
-    // let { position, velocity } = this.props.interactees[this.props.id];
+    // let { position, velocity } = this.props.boxes[this.props.id];
     //
     // let nextPosition = {
     //   x: position.x + velocity.x,
@@ -292,45 +289,52 @@ class Box extends React.Component {
     // console.log('NEXTPOSITION', nextPosition);
   }
   setReboundRate() {
-  //   let { velocity, drag, acceleration, gravity, bounce, position, height, width } = this.state;
-  //   let { collideWithContainer, container } = this.props;
-  //   this.update = setInterval(this.getNextVelocity, timePerFrame);
-  //   let totalAcceleration = {
-  //     x: Math.abs(acceleration.x + gravity.x),
-  //     y: Math.abs(acceleration.y + gravity.y)
-  //   }
-  //   let drop = {
-  //     width: {
-  //       inital: totalAcceleration.x < 0 ? position.x : container.width - position.x,
-  //       second: totalAcceleration.x < 0 ? position.x * bounce.x : (container.width - position.x) * bounce.x
-  //     },
-  //     height: {
-  //       inital: totalAcceleration.x < 0 ? position.y : container.height - position.y,
-  //       second: totalAcceleration.x < 0 ? position.y * bounce.y : (container.height - position.y) * bounce.y
-  //     }
-  //   }
-  //   // Yes, I realize there's a lot of code that can be removed here, but it's easier to read
-  //   // because it's all part of a physics equation that I mashed together.
-  //   // distance traveled when dropped from rest = 0.5 x gravity x time^2
-  //   // velocity = gravity x acceleration
-  //   // so totalAcceleration * Math.sqrt(drop.width.inital / (0.5 * totalAcceleration.x)) is
-  //   // really gravity x time, giving you the velocity at impact.
-  //   let impactVelocity = {
-  //     x: {
-  //       inital: totalAcceleration.x * Math.sqrt(Math.abs(drop.width.inital / (0.5 * totalAcceleration.x))),
-  //       second: totalAcceleration.x * Math.sqrt(Math.abs(drop.width.second / (0.5 * totalAcceleration.x)))
-  //     },
-  //     y: {
-  //       inital: totalAcceleration.y * Math.sqrt(Math.abs(drop.height.inital / (0.5 * totalAcceleration.y))),
-  //       second: totalAcceleration.y * Math.sqrt(Math.abs(drop.height.second / (0.5 * totalAcceleration.y)))
-  //     }
-  //   }
-  //   let reboundRate = {
-  //     x: impactVelocity.x.second / impactVelocity.x.inital || 0,
-  //     y: impactVelocity.y.second / impactVelocity.y.inital || 0
-  //   };
-  //
-  //   this.setState({reboundRate});
+    // let { velocity, acceleration, gravity, bounce, position, height, width } = this.props;
+    // let { container } = this.props;
+    // let totalAcceleration = {
+    //   x: Math.abs(acceleration.x + gravity.x),
+    //   y: Math.abs(acceleration.y + gravity.y)
+    // }
+    // let drop = {
+    //   width: {
+    //     inital: totalAcceleration.x < 0 ? position.x : container.width - position.x,
+    //     second: totalAcceleration.x < 0 ? position.x * bounce.x : (container.width - position.x) * bounce.x
+    //   },
+    //   height: {
+    //     inital: totalAcceleration.x < 0 ? position.y : container.height - position.y,
+    //     second: totalAcceleration.x < 0 ? position.y * bounce.y : (container.height - position.y) * bounce.y
+    //   }
+    // }
+    // // Yes, I realize there's a lot of code that can be removed here, but it's easier to read
+    // // because it's all part of a physics equation that I mashed together.
+    // // distance traveled when dropped from rest = 0.5 x gravity x time^2
+    // // velocity = gravity x acceleration
+    // // so totalAcceleration * Math.sqrt(drop.width.inital / (0.5 * totalAcceleration.x)) is
+    // // really gravity x time, giving you the velocity at impact.
+    // let impactVelocity = {
+    //   x: {
+    //     inital: totalAcceleration.x * Math.sqrt(Math.abs(drop.width.inital / (0.5 * totalAcceleration.x))),
+    //     second: totalAcceleration.x * Math.sqrt(Math.abs(drop.width.second / (0.5 * totalAcceleration.x)))
+    //   },
+    //   y: {
+    //     inital: totalAcceleration.y * Math.sqrt(Math.abs(drop.height.inital / (0.5 * totalAcceleration.y))),
+    //     second: totalAcceleration.y * Math.sqrt(Math.abs(drop.height.second / (0.5 * totalAcceleration.y)))
+    //   }
+    // }
+    // return reboundRate = {
+    //   x: impactVelocity.x.second / impactVelocity.x.inital || 0,
+    //   y: impactVelocity.y.second / impactVelocity.y.inital || 0
+    // };
+
+  }
+  setID(ID) {
+    console.log('THIS.STATE', this);
+    if (this.state.ID) {
+      console.log('CONDITION PASSED');
+      this.setState({
+        ID
+      });
+    }
   }
 }
 
@@ -378,21 +382,23 @@ Box.defaultProps = {
   outline: false,
   collideWithContainer: false,
   height: null,
-  width: null,
+  width: null
 };
 
 
 function mapStateToProps(state) {
   return {
-    interactees: state.interactees
+    boxes: state.boxes
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
+    createBox,
     setPosition,
     setVelocity,
-    createBox
+    setBoxSize,
+    setReboundRate
   }, dispatch);
 }
 

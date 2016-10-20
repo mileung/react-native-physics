@@ -1,7 +1,18 @@
+const CREATE_BOX = 'CREATE_BOX';
 const SET_POSITION = 'SET_POSITION';
 const SET_VELOCITY = 'SET_VELOCITY';
-const CREATE_BOX = 'CREATE_BOX';
+const SET_BOX_SIZE = 'SET_BOX_SIZE';
+const SET_REBOUND_RATE = 'SET_REBOUND_RATE';
 
+function createBox(interactee, box) {
+  return {
+    type: CREATE_BOX,
+    payload: {
+      interactee,
+      box
+    }
+  };
+}
 
 function setPosition(interactee, position) {
   return {
@@ -23,21 +34,72 @@ function setVelocity(interactee, velocity) {
   };
 }
 
-function createBox(interactee, box) {
+function setBoxSize(interactee, width, height) {
   return {
-    type: CREATE_BOX,
+    type: SET_VELOCITY,
     payload: {
       interactee,
-      box
+      width,
+      height
+    }
+  };
+}
+
+function setReboundRate({interactee, velocity, acceleration, gravity, bounce, position, height, width, container}) {
+  let totalAcceleration = {
+    x: Math.abs(acceleration.x + gravity.x),
+    y: Math.abs(acceleration.y + gravity.y)
+  }
+  let drop = {
+    width: {
+      inital: totalAcceleration.x < 0 ? position.x : container.width - position.x,
+      second: totalAcceleration.x < 0 ? position.x * bounce.x : (container.width - position.x) * bounce.x
+    },
+    height: {
+      inital: totalAcceleration.x < 0 ? position.y : container.height - position.y,
+      second: totalAcceleration.x < 0 ? position.y * bounce.y : (container.height - position.y) * bounce.y
+    }
+  }
+  // Yes, I realize there's a lot of code that can be removed here, but it's easier to read
+  // because it's all part of a physics equation that I mashed together.
+  // distance traveled when dropped from rest = 0.5 x gravity x time^2
+  // velocity = gravity x acceleration
+  // so totalAcceleration * Math.sqrt(drop.width.inital / (0.5 * totalAcceleration.x)) is
+  // really gravity x time, giving you the velocity at impact.
+  let impactVelocity = {
+    x: {
+      inital: totalAcceleration.x * Math.sqrt(Math.abs(drop.width.inital / (0.5 * totalAcceleration.x))),
+      second: totalAcceleration.x * Math.sqrt(Math.abs(drop.width.second / (0.5 * totalAcceleration.x)))
+    },
+    y: {
+      inital: totalAcceleration.y * Math.sqrt(Math.abs(drop.height.inital / (0.5 * totalAcceleration.y))),
+      second: totalAcceleration.y * Math.sqrt(Math.abs(drop.height.second / (0.5 * totalAcceleration.y)))
+    }
+  }
+  reboundRate = {
+    x: impactVelocity.x.second / impactVelocity.x.inital || 0,
+    y: impactVelocity.y.second / impactVelocity.y.inital || 0
+  };
+  console.log('REBOUNDRATE', reboundRate);
+
+  return {
+    type: SET_REBOUND_RATE,
+    payload: {
+      interactee,
+      reboundRate
     }
   };
 }
 
 export {
+  CREATE_BOX,
   SET_POSITION,
   SET_VELOCITY,
-  CREATE_BOX,
+  SET_BOX_SIZE,
+  SET_REBOUND_RATE,
+  createBox,
   setPosition,
   setVelocity,
-  createBox
+  setBoxSize,
+  setReboundRate
 };
