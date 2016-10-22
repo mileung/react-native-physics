@@ -27,6 +27,7 @@ class Box extends React.Component {
 
     let { children } = this.props;
     let { position, outline, height, width } = this.props.boxes[this.state.id];
+    console.log('THIS.PROPS.BOXES[THIS.STATE.ID]', this.props.boxes[this.state.id]);
 
     return (
       <View
@@ -108,6 +109,8 @@ class Box extends React.Component {
   }
 
   getNextVelocity() {
+    this.props.setVelocity(this.state.id, {x: 0, y: 1});
+    this.moveToNewPosition();
     // console.log('THIS.PROPS.ID', this.props.boxes);
     //
     // let { drag, acceleration, gravity, bounce, height, width, reboundRate, elastic } = this.state;
@@ -228,6 +231,13 @@ class Box extends React.Component {
   }
 
   moveToNewPosition() {
+    console.log('THIS.PROPS.BOXES[THIS.PROPS.ID];', this.props.boxes);
+    let { position, velocity } = this.props.boxes[this.state.id];
+    let nextPosition = {
+      x: position.x + velocity.x,
+      y: position.y + velocity.y
+    };
+    this.props.setPosition(this.state.id, nextPosition);
     // let { width, height, bounce, elastic } = this.state;
     // let { collideWithContainer, container, interactWith } = this.props;
     // let { position, velocity } = this.props.boxes[this.props.id];

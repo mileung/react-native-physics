@@ -80,7 +80,7 @@ function setReboundRate({interactee, velocity, acceleration, gravity, bounce, po
     x: impactVelocity.x.second / impactVelocity.x.inital || 0,
     y: impactVelocity.y.second / impactVelocity.y.inital || 0
   };
-  console.log('REBOUNDRATE', reboundRate);
+  // console.log('REBOUNDRATE', reboundRate);
 
   return {
     type: SET_REBOUND_RATE,
