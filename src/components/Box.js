@@ -27,7 +27,7 @@ class Box extends React.Component {
 
     let { children } = this.props;
     let { position, outline, height, width } = this.props.boxes[this.state.id];
-    console.log('THIS.PROPS.BOXES[THIS.STATE.ID]', this.props.boxes[this.state.id]);
+    // console.log('THIS.PROPS.BOXES[THIS.STATE.ID]', this.props.boxes[this.state.id]);
 
     return (
       <View
@@ -109,8 +109,7 @@ class Box extends React.Component {
   }
 
   getNextVelocity() {
-    this.props.setVelocity(this.state.id, {x: 0, y: 1});
-    this.moveToNewPosition();
+    this.props.setVelocity(this.state.id, {x: 0, y: 10});
     // console.log('THIS.PROPS.ID', this.props.boxes);
     //
     // let { drag, acceleration, gravity, bounce, height, width, reboundRate, elastic } = this.state;
@@ -228,75 +227,72 @@ class Box extends React.Component {
     // console.log('nextv', nextVelocity);
     // this.props.setVelocity(this.props.id, nextVelocity);
     // this.moveToNewPosition();
+
+    this.moveToNewPosition();
   }
 
   moveToNewPosition() {
-    console.log('THIS.PROPS.BOXES[THIS.PROPS.ID];', this.props.boxes);
-    let { position, velocity } = this.props.boxes[this.state.id];
+    // console.log('THIS.PROPS.BOXES[THIS.PROPS.ID];', this.props.boxes);
+    let { position, velocity, width, height, bounce, elastic, collideWithContainer, interactWith } = this.props.boxes[this.state.id];
+    // console.log('HEIGHT', height);
+
+    // let { width, height, bounce, elastic } = this.state;
+    let { container } = this.props;
+    // let { position, velocity } = this.props.boxes[this.props.id];
+    //
     let nextPosition = {
       x: position.x + velocity.x,
       y: position.y + velocity.y
-    };
+    }
+
+    if (collideWithContainer) {
+      if (!elastic.x) {
+        if (nextPosition.x < 0) {
+          nextPosition.x = 0;
+        } else if (nextPosition.x + width > container.width) {
+          nextPosition.x = container.width - width;
+        }
+      }
+      if (!elastic.y) {
+        if (nextPosition.y < 0) {
+          nextPosition.y = 0;
+        } else if (nextPosition.y + height > container.height) {
+          nextPosition.y = container.height - height;
+        }
+      }
+    }
+
+    if (false) {
+      for (let i = 0; i< interactWith.length; i++) {
+        let interactee = interactWith[i];
+        if (!elastic.y) {
+          if (position.x + width > interactee.props.position.x && position.x < interactee.props.position.x + interactee.props.width) {
+            if (velocity.y > 0 && nextPosition.y + height >= interactee.props.position.y && position.y <= interactee.props.position.y) {
+              nextPosition.y = interactee.props.position.y - height;
+            } else if (velocity.y < 0 && nextPosition.y <= interactee.props.position.y + interactee.props.height && position.y + height >= interactee.props.position.y + interactee.props.height) {
+              nextPosition.y = interactee.props.position.y + interactee.props.height;
+            }
+          }
+        }
+        if (!elastic.x) {
+          if (position.y + height > interactee.props.position.y && position.y < interactee.props.position.y + interactee.props.height) {
+            if (velocity.x > 0 && nextPosition.x + width >= interactee.props.position.x && position.x <= interactee.props.position.x) {
+              nextPosition.x = interactee.props.position.x - width;
+            } else if (velocity.x < 0 && nextPosition.x <= interactee.props.position.x + interactee.props.width && position.x + width >= interactee.props.position.x + interactee.props.width) {
+              nextPosition.x = interactee.props.position.x + interactee.props.width;
+            }
+          }
+        }
+      }
+    }
+
     this.props.setPosition(this.state.id, nextPosition);
-    // let { width, height, bounce, elastic } = this.state;
-    // let { collideWithContainer, container, interactWith } = this.props;
-    // let { position, velocity } = this.props.boxes[this.props.id];
-    //
-    // let nextPosition = {
-    //   x: position.x + velocity.x,
-    //   y: position.y + velocity.y
-    // }
-    //
-    // if (collideWithContainer) {
-    //   if (!elastic.x) {
-    //     if (nextPosition.x < 0) {
-    //       nextPosition.x = 0;
-    //     } else if (nextPosition.x + width > container.width) {
-    //       nextPosition.x = container.width - width;
-    //     }
-    //   }
-    //   if (!elastic.y) {
-    //     if (nextPosition.y < 0) {
-    //       nextPosition.y = 0;
-    //     } else if (nextPosition.y + height > container.height) {
-    //       nextPosition.y = container.height - height;
-    //     }
-    //   }
-    // }
-    //
-    // if (false) {
-    //   for (let i = 0; i< interactWith.length; i++) {
-    //     let interactee = interactWith[i];
-    //     if (!elastic.y) {
-    //       if (position.x + width > interactee.props.position.x && position.x < interactee.props.position.x + interactee.props.width) {
-    //         if (velocity.y > 0 && nextPosition.y + height >= interactee.props.position.y && position.y <= interactee.props.position.y) {
-    //           nextPosition.y = interactee.props.position.y - height;
-    //         } else if (velocity.y < 0 && nextPosition.y <= interactee.props.position.y + interactee.props.height && position.y + height >= interactee.props.position.y + interactee.props.height) {
-    //           nextPosition.y = interactee.props.position.y + interactee.props.height;
-    //         }
-    //       }
-    //     }
-    //     if (!elastic.x) {
-    //       if (position.y + height > interactee.props.position.y && position.y < interactee.props.position.y + interactee.props.height) {
-    //         if (velocity.x > 0 && nextPosition.x + width >= interactee.props.position.x && position.x <= interactee.props.position.x) {
-    //           nextPosition.x = interactee.props.position.x - width;
-    //         } else if (velocity.x < 0 && nextPosition.x <= interactee.props.position.x + interactee.props.width && position.x + width >= interactee.props.position.x + interactee.props.width) {
-    //           nextPosition.x = interactee.props.position.x + interactee.props.width;
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
-    //
     // // this.setState({
     // //   position: {
     // //     x: nextPosition.x,
     // //     y: nextPosition.y
     // //   }
     // // });
-    //
-    // this.props.setPosition(this.props.id, nextPosition);
-    // console.log('NEXTPOSITION', nextPosition);
   }
   setReboundRate() {
     // let { velocity, acceleration, gravity, bounce, position, height, width } = this.props;
@@ -338,9 +334,7 @@ class Box extends React.Component {
 
   }
   setID(ID) {
-    console.log('THIS.STATE', this);
     if (this.state.ID) {
-      console.log('CONDITION PASSED');
       this.setState({
         ID
       });

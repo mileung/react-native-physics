@@ -36,7 +36,7 @@ function setVelocity(interactee, velocity) {
 
 function setBoxSize(interactee, width, height) {
   return {
-    type: SET_VELOCITY,
+    type: SET_BOX_SIZE,
     payload: {
       interactee,
       width,
