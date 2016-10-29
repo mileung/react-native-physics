@@ -5,6 +5,7 @@ const SET_BOX_SIZE = 'SET_BOX_SIZE';
 const SET_REBOUND_RATE = 'SET_REBOUND_RATE';
 
 function createBox(interactee, box) {
+  console.log('INTERACTEE, BOX', interactee, box);
   return {
     type: CREATE_BOX,
     payload: {
@@ -45,7 +46,8 @@ function setBoxSize(interactee, width, height) {
   };
 }
 
-function setReboundRate({interactee, velocity, acceleration, gravity, bounce, position, height, width, container}) {
+function setReboundRate(interactee, container, {velocity, acceleration, gravity, bounce, position, height, width}) {
+  console.log('CONTAINER', container);
   let totalAcceleration = {
     x: Math.abs(acceleration.x + gravity.x),
     y: Math.abs(acceleration.y + gravity.y)
@@ -80,7 +82,7 @@ function setReboundRate({interactee, velocity, acceleration, gravity, bounce, po
     x: impactVelocity.x.second / impactVelocity.x.inital || 0,
     y: impactVelocity.y.second / impactVelocity.y.inital || 0
   };
-  // console.log('REBOUNDRATE', reboundRate);
+  console.log('REBOUNDRATE', reboundRate);
 
   return {
     type: SET_REBOUND_RATE,

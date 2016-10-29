@@ -32,7 +32,7 @@ export default class Main extends React.Component {
               // height={100}
               outline={true}
               position={{x: 200, y: 300}}
-              gravity={{y: -20}}
+              gravity={{y: 20}}
               bounce={{x: 0.9, y: 0.9}}
               // interactWith={["asteroid"]}
               collideWithContainer={true}
