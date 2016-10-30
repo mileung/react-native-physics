@@ -6,8 +6,9 @@ import {
 } from 'react-native';
 import {
   createBox,
-  setPosition,
-  setVelocity,
+  // setPosition,
+  // setVelocity,
+  setPositionAndVelocity,
   setBoxSize,
   setReboundRate
 } from '../actions/index';
@@ -143,7 +144,7 @@ class Box extends React.Component {
     setTimeout(() => {
       this.props.setReboundRate(this.id, this.props.container, newProps); // takes a few ms for container to pass the container props;
       this.update = setInterval(this.updateBox, timePerFrame);
-    }, 0.1);
+    }, 0.5); // this.props.container existing after 0.1s is unreliable
   }
 
   componentDidMount() {
@@ -198,7 +199,7 @@ class Box extends React.Component {
         }
       }
     }
-    this.props.setPosition(this.id, nextPosition);
+    // this.props.setPosition(this.id, nextPosition);
 
     // update velocity
     let nextVelocity = {
@@ -250,7 +251,8 @@ class Box extends React.Component {
     nextVelocity.x += elastic.x ? 0 : nextGravity.x;
     nextVelocity.y += elastic.y ? 0 : nextGravity.y;
     // console.log('nextVelocity', nextVelocity);
-    this.props.setVelocity(this.id, nextVelocity);
+    // this.props.setVelocity(this.id, nextVelocity);
+    this.props.setPositionAndVelocity(this.id, nextPosition, nextVelocity);
   }
   getNextVelocity() {
     // console.log('THIS.PROPS.ID', this.props.boxes);
@@ -535,8 +537,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     createBox,
-    setPosition,
-    setVelocity,
+    // setPosition,
+    // setVelocity,
+    setPositionAndVelocity,
     setBoxSize,
     setReboundRate
   }, dispatch);

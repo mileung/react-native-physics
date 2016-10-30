@@ -44,8 +44,8 @@ export default class Container extends React.Component {
             }
             return React.cloneElement(child, {
               container: {
-                width: this.state.width,
-                height: this.state.height
+                width: this.state.width || null,
+                height: this.state.height || null
               },
               id: child.props.id ? child.props.id : v4()
             });

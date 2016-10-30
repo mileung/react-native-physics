@@ -1,6 +1,7 @@
 const CREATE_BOX = 'CREATE_BOX';
-const SET_POSITION = 'SET_POSITION';
-const SET_VELOCITY = 'SET_VELOCITY';
+// const SET_POSITION = 'SET_POSITION';
+// const SET_VELOCITY = 'SET_VELOCITY';
+const SET_POSITION_AND_VELOCITY = 'SET_POSITION_AND_VELOCITY';
 const SET_BOX_SIZE = 'SET_BOX_SIZE';
 const SET_REBOUND_RATE = 'SET_REBOUND_RATE';
 
@@ -15,24 +16,35 @@ function createBox(interactee, box) {
   };
 }
 
-function setPosition(interactee, position) {
-  return {
-    type: SET_POSITION,
-    payload: {
-      interactee,
-      position
-    }
-  };
-}
+// function setPosition(interactee, position) {
+//   return {
+//     type: SET_POSITION,
+//     payload: {
+//       interactee,
+//       position
+//     }
+//   };
+// }
+//
+// function setVelocity(interactee, velocity) {
+//   return {
+//     type: SET_VELOCITY,
+//     payload: {
+//       interactee,
+//       velocity
+//     }
+//   };
+// }
 
-function setVelocity(interactee, velocity) {
+function setPositionAndVelocity(interactee, position, velocity) {
   return {
-    type: SET_VELOCITY,
+    type: SET_POSITION_AND_VELOCITY,
     payload: {
       interactee,
+      position,
       velocity
     }
-  };
+  }
 }
 
 function setBoxSize(interactee, width, height) {
@@ -95,13 +107,15 @@ function setReboundRate(interactee, container, {velocity, acceleration, gravity,
 
 export {
   CREATE_BOX,
-  SET_POSITION,
-  SET_VELOCITY,
+  // SET_POSITION,
+  // SET_VELOCITY,
+  SET_POSITION_AND_VELOCITY,
   SET_BOX_SIZE,
   SET_REBOUND_RATE,
   createBox,
-  setPosition,
-  setVelocity,
+  // setPosition,
+  // setVelocity,
+  setPositionAndVelocity,
   setBoxSize,
   setReboundRate
 };
