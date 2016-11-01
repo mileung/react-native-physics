@@ -4,12 +4,14 @@ import {
   // SET_POSITION,
   // SET_VELOCITY,
   SET_BOX_SIZE,
+  SET_CONTAINER_SIZE,
   SET_REBOUND_RATE,
   SET_POSITION_AND_VELOCITY
 } from '../actions/index.js';
 
 const rootReducer = combineReducers({
-  boxes: updateBoxReducer
+  boxes: updateBoxReducer,
+  container: setContainerSizeReducer
 });
 
 function updateBoxReducer(state = null, action) {
@@ -62,6 +64,19 @@ function updateBoxReducer(state = null, action) {
           reboundRate: action.payload.reboundRate
         }
       };
+    default:
+      return state;
+  }
+}
+
+function setContainerSizeReducer(state = {width: 0, height: 0}, action) {
+  switch (action.type) {
+    case SET_CONTAINER_SIZE:
+      return {
+        width: action.payload.width,
+        height: action.payload.height
+      };
+      break;
     default:
       return state;
   }

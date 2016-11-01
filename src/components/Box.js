@@ -141,10 +141,8 @@ class Box extends React.Component {
     this.props.createBox(this.id, { // DOES ANYONE KNOW HOW TO CREATE DEFAULT PROPERTIES OF OBJECT PROPS?!?!
       ...newProps
     });
-    setTimeout(() => {
-      this.props.setReboundRate(this.id, this.props.container, newProps); // takes a few ms for container to pass the container props;
-      this.update = setInterval(this.updateBox, timePerFrame);
-    }, 0.5); // this.props.container existing after 0.1s is unreliable
+    this.props.setReboundRate(this.id, this.props.container, newProps); // takes a few ms for container to pass the container props;
+    this.update = setInterval(this.updateBox, timePerFrame);
   }
 
   componentDidMount() {
@@ -513,7 +511,6 @@ Box.propTypes = {
 };
 Box.defaultProps = {
   outline: false,
-  container: {x: 0, y: 0},
   position: {x: 0, y: 0},
   gravity: {x: 0, y: 0},
   velocity: {x: 0, y: 0},
@@ -530,7 +527,8 @@ Box.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    boxes: state.boxes
+    boxes: state.boxes,
+    container: state.container
   };
 }
 
