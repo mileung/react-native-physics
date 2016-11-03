@@ -12,15 +12,6 @@ import Box from './components/Box';
 let { width, height } = Dimensions.get('window');
 
 export default class Main extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      container: {
-        width: 0,
-        height: 0
-      }
-    }
-  }
   render() {
     return (
       <TouchableWithoutFeedback onPress={() => this.reset()}>
@@ -31,9 +22,9 @@ export default class Main extends React.Component {
               // width={100}
               // height={100}
               outline={true}
-              position={{x: 200, y: 300}}
-              gravity={{y: 20}}
-              bounce={{x: 0.9, y: 0.9}}
+              position={{x: 10, y: 100}}
+              gravity={{x: 50, y: 80}}
+              bounce={{x: 0.6, y: 0.7}}
               // interactWith={["asteroid"]}
               collideWithContainer={true}
             >

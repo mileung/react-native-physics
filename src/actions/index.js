@@ -5,6 +5,7 @@ const SET_POSITION_AND_VELOCITY = 'SET_POSITION_AND_VELOCITY';
 const SET_BOX_SIZE = 'SET_BOX_SIZE';
 const SET_CONTAINER_SIZE = 'SET_CONTAINER_SIZE';
 const SET_REBOUND_RATE = 'SET_REBOUND_RATE';
+const SET_PROP = 'SET_PROP';
 
 function createBox(interactee, box) {
   // console.log('INTERACTEE, BOX', interactee, box);
@@ -55,6 +56,17 @@ function setBoxSize(interactee, width, height) {
       interactee,
       width,
       height
+    }
+  };
+}
+
+function setProp(interactee, property, value) {
+  return {
+    type: SET_PROP,
+    payload: {
+      interactee,
+      property,
+      value
     }
   };
 }
