@@ -1,11 +1,8 @@
 import { combineReducers } from 'redux';
 import {
-  CREATE_BOX,
-  // SET_POSITION,
-  // SET_VELOCITY,
+  SET_INITIAL_POSITION_AND_VELOCITY,
   SET_BOX_SIZE,
   SET_CONTAINER_SIZE,
-  SET_REBOUND_RATE,
   SET_POSITION_AND_VELOCITY
 } from '../actions/index.js';
 
@@ -26,27 +23,11 @@ function updateBoxReducer(state = null, action) {
           velocity: action.payload.velocity
         }
       };
-    case CREATE_BOX:
+    case SET_INITIAL_POSITION_AND_VELOCITY:
       return {
         ...state,
-        [action.payload.interactee]: action.payload.box
+        [action.payload.interactee]: action.payload.positionAndVelocity
       };
-    // case SET_POSITION:
-    //   return {
-    //     ...state,
-    //     [action.payload.interactee]: {
-    //       ...state[action.payload.interactee],
-    //       position: action.payload.position
-    //     }
-    //   };
-    // case SET_VELOCITY:
-    //   return {
-    //     ...state,
-    //     [action.payload.interactee]: {
-    //       ...state[action.payload.interactee],
-    //       velocity: action.payload.velocity
-    //     }
-    //   };
     case SET_BOX_SIZE:
       return {
         ...state,
@@ -54,14 +35,6 @@ function updateBoxReducer(state = null, action) {
           ...state[action.payload.interactee],
           height: action.payload.height,
           width: action.payload.width
-        }
-      };
-    case SET_REBOUND_RATE:
-      return {
-        ...state,
-        [action.payload.interactee]: {
-          ...state[action.payload.interactee],
-          reboundRate: action.payload.reboundRate
         }
       };
     default:
