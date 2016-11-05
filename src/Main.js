@@ -24,11 +24,11 @@ export default class Main extends React.Component {
               outline={true}
               position={{x: 10, y: 100}}
               gravity={{x: 1, y: 1}}
-              bounce={{x: 0.2, y: 0.4}}
+              bounce={{x: 0.3, y: 0.3}}
               // interactWith={["asteroid"]}
               collideWithContainer={true}
             >
-              <Text>Hello World</Text>
+              <Text style={{fontSize: 30}}>Hello World</Text>
             </Box>
             {/* <Box
               id="asteroid"

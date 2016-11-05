@@ -12,13 +12,12 @@ const rootReducer = combineReducers({
 });
 
 function updateBoxReducer(state = null, action) {
-  // console.log('ACTION', action);
   switch (action.type) {
     case SET_POSITION_AND_VELOCITY:
       return {
         ...state,
         [action.payload.interactee]: {
-          ...state[action.payload.interactee],
+          // ...state[action.payload.interactee], I guess redux merges instead of updates state by default?
           position: action.payload.position,
           velocity: action.payload.velocity
         }

@@ -4,7 +4,6 @@ const SET_BOX_SIZE = 'SET_BOX_SIZE';
 const SET_CONTAINER_SIZE = 'SET_CONTAINER_SIZE';
 
 function setInitialPositionAndVelocity(interactee, positionAndVelocity) {
-  console.log('POSITIONANDVELOCITY', positionAndVelocity);
   return {
     type: SET_INITIAL_POSITION_AND_VELOCITY,
     payload: {
