@@ -19,16 +19,16 @@ export default class Main extends React.Component {
           <Container style={styles.container}>
             {/*{this.state.boxes}*/}
             <Box
-              // width={100}
-              // height={100}
+              width={100}
+              height={100}
               outline={true}
-              position={{x: 10, y: 100}}
-              gravity={{x: 1, y: 1}}
-              bounce={{x: 0.3, y: 0.3}}
+              position={{y: 100}}
+              gravity={{x: 1, y: 2}}
+              bounce={{x: 1, y: 1}}
               // interactWith={["asteroid"]}
               collideWithContainer={true}
             >
-              <Text style={{fontSize: 30}}>Hello World</Text>
+              {/* <Text style={{fontSize: 30}}>Hello World</Text> */}
             </Box>
             {/* <Box
               id="asteroid"

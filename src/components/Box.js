@@ -10,8 +10,6 @@ import {
   setBoxSize
 } from '../actions/index';
 
-let timePerFrame = 1000 / 60 * 1;
-
 class Box extends React.Component {
   constructor(props) {
     super(props);
@@ -23,8 +21,8 @@ class Box extends React.Component {
       return null;
     }
 
-    let { children, outline } = this.props;
-    let { position, height, width } = this.props.boxes[this.id];
+    let { children, outline, height, width } = this.props;
+    let { position } = this.props.boxes[this.id];
 
     return (
       <View
@@ -101,6 +99,7 @@ class Box extends React.Component {
     if (collideWithContainer) {
       if ((position.x <= 0 && velocity.x < 0) || (position.x + width >= container.width && velocity.x > 0)) {
         nextVelocity.x = velocity.x * -reboundRate.x;
+        console.log('r', nextVelocity);
         this.acceleration.x = 0;
       }
       if ((position.y <= 0 && velocity.y < 0) || (position.y + height >= container.height && velocity.y > 0)) {
@@ -110,6 +109,7 @@ class Box extends React.Component {
     }
     nextVelocity.x += gravity.x;
     nextVelocity.y += gravity.y;
+    console.log('v', nextVelocity);
 
     // move to new position
     if (collideWithContainer) {
