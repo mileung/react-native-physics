@@ -18,18 +18,18 @@ export default class Main extends React.Component {
         <View style={styles.container}>
           <Container style={styles.container}>
             {/*{this.state.boxes}*/}
-            <Box
-              width={100}
-              height={100}
+            {/* <Box
+              // width={100}
+              // height={100}
               outline={true}
-              position={{y: 100}}
-              gravity={{x: 1, y: 2}}
+              position={{x: 100, y: 40}}
+              gravity={{x: 0, y: 2}}
               bounce={{x: 1, y: 1}}
               // interactWith={["asteroid"]}
               collideWithContainer={true}
             >
-              {/* <Text style={{fontSize: 30}}>Hello World</Text> */}
-            </Box>
+              <Text style={{fontSize: 30}}>Hello World</Text>
+            </Box> */}
             {/* <Box
               id="asteroid"
               width={30}
@@ -37,15 +37,22 @@ export default class Main extends React.Component {
               outline={true}
               position={{x: 200, y: 0}}
               bounce={{x: 0.9, y: 0.9}}
-              velocity={{y: 10}}
-            />
+              velocity={{y: 10, x: 0}}
+            /> */}
             <Box
               id="platform"
               width={310}
               height={10}
               outline={true}
               position={{x: 50, y: 650}}
-            /> */}
+            />
+            <Box
+              id="platform1"
+              width={310}
+              height={10}
+              outline={true}
+              position={{x: 50, y: 650}}
+            />
           </Container>
         </View>
       </TouchableWithoutFeedback>
