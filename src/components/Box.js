@@ -129,7 +129,7 @@ class Box extends React.Component {
       }
     }
 
-    if (interactWith) { // for interactWith
+    if (false) { // for collisions and overlap
       for (let i = 0; i < interactWith.length; i++) {
         let interactee = this.props.boxes[interactWith[i]];
         if (position.x + width > interactee.position.x && position.x < interactee.position.x + interactee.width) {

@@ -21,7 +21,15 @@ export default class Main extends React.Component {
     return (
       <TouchableWithoutFeedback onPress={() => this.reset()}>
         <View style={styles.container}>
-          <Container style={styles.container}>
+          <Container
+            style={styles.container}
+            collide={[
+              {
+                boxes: ['platform', 'ball'],
+                callback: () => console.log('hit!')
+              }
+            ]}
+            >
             {/*{this.state.boxes}*/}
             {/* <Box
               // width={100}
@@ -52,7 +60,6 @@ export default class Main extends React.Component {
               gravity={{x: 0, y: 1}}
               bounce={{x: 1, y: 0.9}}
               position={{x: 150, y: 30}}
-              interactWith={["platform"]}
               collideWithContainer={true}
             />
             <Box
@@ -60,7 +67,6 @@ export default class Main extends React.Component {
               width={310}
               height={40}
               outline={true}
-              interactWith={["ball"]}
               velocity={{x: 0, y: -4}}
               bounce={{x: 1, y: 0.1}}
               position={{x: 20, y: 555}}
