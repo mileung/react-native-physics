@@ -135,22 +135,23 @@ class Box extends React.Component {
         if (position.x + width > interactee.position.x && position.x < interactee.position.x + interactee.width) {
           if (velocity.y > 0 && nextPosition.y + height >= interactee.position.y && position.y <= interactee.position.y) {
             nextPosition.y = interactee.position.y - height;
-            nextVelocity.y = velocity.y * -reboundRate.y;
+            nextVelocity.y = (velocity.y + interactee.velocity.y) * -reboundRate.y;
             this.acceleration.y = 0;
           } else if (velocity.y < 0 && nextPosition.y <= interactee.position.y + interactee.height && position.y + height >= interactee.position.y + interactee.height) {
             nextPosition.y = interactee.position.y + interactee.height;
-            nextVelocity.y = velocity.y * -reboundRate.y;
+            nextVelocity.y = (velocity.y + interactee.velocity.y) * -reboundRate.y;
+            console.log('NEXTVELOCITY', this.reboundRate);
             this.acceleration.y = 0;
           }
         }
         if (position.y + height > interactee.position.y && position.y < interactee.position.y + interactee.height) {
           if (velocity.x > 0 && nextPosition.x + width >= interactee.position.x && position.x <= interactee.position.x) {
             nextPosition.x = interactee.position.x - width;
-            nextVelocity.x = velocity.x * -reboundRate.x;
+            nextVelocity.x = (velocity.x + interactee.velocity.x) * -reboundRate.x;
             this.acceleration.x = 0;
           } else if (velocity.x < 0 && nextPosition.x <= interactee.position.x + interactee.width && position.x + width >= interactee.position.x + interactee.width) {
             nextPosition.x = interactee.position.x + interactee.width;
-            nextVelocity.x = velocity.x * -reboundRate.x;
+            nextVelocity.x = (velocity.x + interactee.velocity.x) * -reboundRate.x;
             this.acceleration.x = 0;
           }
         }
@@ -194,9 +195,10 @@ class Box extends React.Component {
       }
     }
     this.reboundRate = {
-      x: impactVelocity.x.second / impactVelocity.x.inital || 0,
-      y: impactVelocity.y.second / impactVelocity.y.inital || 0
+      x: impactVelocity.x.second / impactVelocity.x.inital || bounce.x || 0,
+      y: impactVelocity.y.second / impactVelocity.y.inital || bounce.y || 0
     };
+    console.log(this.id, this.reboundRate);
   }
 }
 

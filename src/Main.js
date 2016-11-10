@@ -49,19 +49,22 @@ export default class Main extends React.Component {
               width={30}
               height={30}
               outline={true}
-              gravity={{x: 0, y: 2}}
-              bounce={{x: 1, y: 1}}
-              position={{x: 150, y: 350}}
+              gravity={{x: 0, y: 1}}
+              bounce={{x: 1, y: 0.9}}
+              position={{x: 150, y: 30}}
               interactWith={["platform"]}
               collideWithContainer={true}
             />
             <Box
               id="platform"
               width={310}
-              height={10}
+              height={40}
               outline={true}
-              velocity={{x: 0, y: -1}}
-              position={{x: 50, y: 555}}
+              interactWith={["ball"]}
+              velocity={{x: 0, y: -4}}
+              bounce={{x: 1, y: 0.1}}
+              position={{x: 20, y: 555}}
+              collideWithContainer={true}
             />
           </Container>
         </View>
