@@ -17,7 +17,7 @@ function updateBoxReducer(state = null, action) {
       return {
         ...state,
         [action.payload.interactee]: {
-          // ...state[action.payload.interactee], I guess redux merges instead of updates state by default?
+          ...state[action.payload.interactee],
           position: action.payload.position,
           velocity: action.payload.velocity
         }

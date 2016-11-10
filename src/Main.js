@@ -4,7 +4,8 @@ import {
   StyleSheet,
   Text,
   Dimensions,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  Animated
 } from 'react-native'
 import Container from './components/Container';
 import Box from './components/Box';
@@ -12,6 +13,10 @@ import Box from './components/Box';
 let { width, height } = Dimensions.get('window');
 
 export default class Main extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
   render() {
     return (
       <TouchableWithoutFeedback onPress={() => this.reset()}>
@@ -40,18 +45,23 @@ export default class Main extends React.Component {
               velocity={{y: 10, x: 0}}
             /> */}
             <Box
+              id="ball"
+              width={30}
+              height={30}
+              outline={true}
+              gravity={{x: 0, y: 2}}
+              bounce={{x: 1, y: 1}}
+              position={{x: 150, y: 350}}
+              interactWith={["platform"]}
+              collideWithContainer={true}
+            />
+            <Box
               id="platform"
               width={310}
               height={10}
               outline={true}
-              position={{x: 50, y: 650}}
-            />
-            <Box
-              id="platform1"
-              width={310}
-              height={10}
-              outline={true}
-              position={{x: 50, y: 650}}
+              velocity={{x: 0, y: -1}}
+              position={{x: 50, y: 555}}
             />
           </Container>
         </View>

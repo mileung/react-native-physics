@@ -17,23 +17,23 @@ class Box extends React.Component {
   }
 
   render() {
-    if (!this.props.boxes) {
+    if (!this.props.boxes || !this.props.boxes[this.id]) {
       return null;
     }
 
-    let { children, outline, height, width } = this.props;
+    let { children, height, width } = this.props;
     let { position } = this.props.boxes[this.id];
 
     return (
       <View
         style={{
           position: 'absolute',
-          borderWidth: outline ? 1 : 0,
-          borderColor: outline === true ? 'red' : outline ? outline : null,
+          borderWidth: this.borderWidth,
+          borderColor: this.borderColor,
           height: height,
           width: width,
-          left: position.x || 0,
-          top: position.y || 0,
+          left: position.x,
+          top: position.y,
         }}
         onLayout={e => {
           let { width, height } = e.nativeEvent.layout;
@@ -56,7 +56,9 @@ class Box extends React.Component {
     this.elastic = {
       x: bounce.x === 1,
       y: bounce.y === 1
-    },
+    };
+    this.borderWidth = outline ? 1 : 0;
+    this.borderColor = outline === true ? 'red' : outline ? outline : null;
     this.getReboundRate()
 
     // the only thing interactees will care about each other is position, velocity, and dimensions of the other box (set in onLayOut of box's View)
@@ -70,7 +72,7 @@ class Box extends React.Component {
         y: velocity.y || 0
       }
     });
-    setTimeout(() => requestAnimationFrame(this.updateBox), 500000);
+    setTimeout(() => requestAnimationFrame(this.updateBox));
   }
 
   componentWillUnmount() {
@@ -127,25 +129,29 @@ class Box extends React.Component {
       }
     }
 
-    if (false) { // for interactWith
-      for (let i = 0; i< interactWith.length; i++) {
-        let interactee = interactWith[i];
-        if (!this.elastic.x) {
-          if (position.x + width > interactee.props.position.x && position.x < interactee.props.position.x + interactee.props.width) {
-            if (velocity.y > 0 && nextPosition.y + height >= interactee.props.position.y && position.y <= interactee.props.position.y) {
-              nextPosition.y = interactee.props.position.y - height;
-            } else if (velocity.y < 0 && nextPosition.y <= interactee.props.position.y + interactee.props.height && position.y + height >= interactee.props.position.y + interactee.props.height) {
-              nextPosition.y = interactee.props.position.y + interactee.props.height;
-            }
+    if (interactWith) { // for interactWith
+      for (let i = 0; i < interactWith.length; i++) {
+        let interactee = this.props.boxes[interactWith[i]];
+        if (position.x + width > interactee.position.x && position.x < interactee.position.x + interactee.width) {
+          if (velocity.y > 0 && nextPosition.y + height >= interactee.position.y && position.y <= interactee.position.y) {
+            nextPosition.y = interactee.position.y - height;
+            nextVelocity.y = velocity.y * -reboundRate.y;
+            this.acceleration.y = 0;
+          } else if (velocity.y < 0 && nextPosition.y <= interactee.position.y + interactee.height && position.y + height >= interactee.position.y + interactee.height) {
+            nextPosition.y = interactee.position.y + interactee.height;
+            nextVelocity.y = velocity.y * -reboundRate.y;
+            this.acceleration.y = 0;
           }
         }
-        if (!this.elastic.y) {
-          if (position.y + height > interactee.props.position.y && position.y < interactee.props.position.y + interactee.props.height) {
-            if (velocity.x > 0 && nextPosition.x + width >= interactee.props.position.x && position.x <= interactee.props.position.x) {
-              nextPosition.x = interactee.props.position.x - width;
-            } else if (velocity.x < 0 && nextPosition.x <= interactee.props.position.x + interactee.props.width && position.x + width >= interactee.props.position.x + interactee.props.width) {
-              nextPosition.x = interactee.props.position.x + interactee.props.width;
-            }
+        if (position.y + height > interactee.position.y && position.y < interactee.position.y + interactee.height) {
+          if (velocity.x > 0 && nextPosition.x + width >= interactee.position.x && position.x <= interactee.position.x) {
+            nextPosition.x = interactee.position.x - width;
+            nextVelocity.x = velocity.x * -reboundRate.x;
+            this.acceleration.x = 0;
+          } else if (velocity.x < 0 && nextPosition.x <= interactee.position.x + interactee.width && position.x + width >= interactee.position.x + interactee.width) {
+            nextPosition.x = interactee.position.x + interactee.width;
+            nextVelocity.x = velocity.x * -reboundRate.x;
+            this.acceleration.x = 0;
           }
         }
       }
