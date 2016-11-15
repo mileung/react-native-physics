@@ -128,7 +128,6 @@ class Box extends React.Component {
         nextPosition.y = container.height - height;
       }
     }
-
     if (false) { // for collisions and overlap
       for (let i = 0; i < interactWith.length; i++) {
         let interactee = this.props.boxes[interactWith[i]];
@@ -198,7 +197,6 @@ class Box extends React.Component {
       x: impactVelocity.x.second / impactVelocity.x.inital || bounce.x || 0,
       y: impactVelocity.y.second / impactVelocity.y.inital || bounce.y || 0
     };
-    console.log(this.id, this.reboundRate);
   }
 }
 

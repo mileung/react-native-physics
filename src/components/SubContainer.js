@@ -28,22 +28,31 @@ class SubContainer extends React.Component {
         }}
       >
         {React.Children.map(this.props.children, child => {
+          console.log('collideDictionary', this.collideDictionary);
           if (child.type !== Box) {
             return child;
           }
           return React.cloneElement(child, {
-            id: child.props.id ? child.props.id : v4()
+            id: child.props.id ? child.props.id : v4(),
+            collideWith: [],
+            callback: () => {console.log('hello');}
           });
         })}
       </View>
     );
   }
   componentWillMount() {
-    // let { children } = this.props;
-    // this.setState({
-    //   width: this.props.style.width,
-    //   height: this.props.style.height
-    // });
+    let { collide } = this.props;
+    let collideDictionary = {};
+    console.log(this.props.collide);
+    for (let i = 0; i < collide.length; i++) {
+      let collision = collide[i];
+      for (let u = 0; u < collision.boxes.length; u ++) {
+        collideDictionary[collision.boxes[u]] = collision.boxes.filter(val => collision.boxes[u] !== val);
+      }
+    }
+    console.log('COLLIDEDICTIONARY', collideDictionary);
+    this.collideDictionary = collideDictionary;
   }
 }
 

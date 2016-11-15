@@ -36,7 +36,6 @@ function setBoxSize(interactee, width, height) {
 }
 
 function setContainerSize(width, height) {
-  // console.log('setContainerSize', width, height);
   return {
     type: SET_CONTAINER_SIZE,
     payload: {
