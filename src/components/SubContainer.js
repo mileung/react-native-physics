@@ -28,7 +28,7 @@ class SubContainer extends React.Component {
         }}
       >
         {React.Children.map(this.props.children, child => {
-          console.log('collideDictionary', this.collideDictionary);
+          // console.log('THIS.COLLISIONDICTIONARY', this.collisionDictionary);
           if (child.type !== Box) {
             return child;
           }
@@ -42,17 +42,27 @@ class SubContainer extends React.Component {
     );
   }
   componentWillMount() {
-    let { collide } = this.props;
-    let collideDictionary = {};
-    console.log(this.props.collide);
-    for (let i = 0; i < collide.length; i++) {
-      let collision = collide[i];
-      for (let u = 0; u < collision.boxes.length; u ++) {
-        collideDictionary[collision.boxes[u]] = collision.boxes.filter(val => collision.boxes[u] !== val);
+    let { collide, children } = this.props;
+    let collisionDictionary = {};
+    // for (let i = 0; i < collide.length; i++) {
+    //   let collision = collide[i];
+    //   for (let u = 0; u < collision.boxes.length; u ++) {
+    //     collideDictionary[collision.boxes[u]] = collision.boxes.filter(val => collision.boxes[u] !== val);
+    //   }
+    // }
+    for (let i = 0; i < children.length; i++) {
+      let child = children[i];
+      if (child.props.id) {
+        collisionDictionary[child.props.id] = Object.assign({}, collide).filter(collision => {
+          return collision.boxes.indexOf(child.props.id) !== -1;
+        }).map(collision => {
+          collision.boxes = collision.boxes.filter(box => box !== child.props.id);
+          return collision;
+        });
       }
     }
-    console.log('COLLIDEDICTIONARY', collideDictionary);
-    this.collideDictionary = collideDictionary;
+    this.collisionDictionary = collisionDictionary;
+    console.log('COLLISIONDICTIONARY', collisionDictionary);
   }
 }
 
