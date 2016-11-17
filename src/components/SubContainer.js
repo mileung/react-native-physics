@@ -28,14 +28,12 @@ class SubContainer extends React.Component {
         }}
       >
         {React.Children.map(this.props.children, child => {
-          // console.log('THIS.COLLISIONDICTIONARY', this.collisionDictionary);
           if (child.type !== Box) {
             return child;
           }
           return React.cloneElement(child, {
             id: child.props.id ? child.props.id : v4(),
-            collideWith: [],
-            callback: () => {console.log('hello');}
+            collide: child.props.id ? this.collisionDictionary[child.props.id] : null
           });
         })}
       </View>
@@ -44,16 +42,10 @@ class SubContainer extends React.Component {
   componentWillMount() {
     let { collide, children } = this.props;
     let collisionDictionary = {};
-    // for (let i = 0; i < collide.length; i++) {
-    //   let collision = collide[i];
-    //   for (let u = 0; u < collision.boxes.length; u ++) {
-    //     collideDictionary[collision.boxes[u]] = collision.boxes.filter(val => collision.boxes[u] !== val);
-    //   }
-    // }
     for (let i = 0; i < children.length; i++) {
       let child = children[i];
       if (child.props.id) {
-        collisionDictionary[child.props.id] = Object.assign({}, collide).filter(collision => {
+        collisionDictionary[child.props.id] = JSON.parse(JSON.stringify(collide)).filter(collision => {
           return collision.boxes.indexOf(child.props.id) !== -1;
         }).map(collision => {
           collision.boxes = collision.boxes.filter(box => box !== child.props.id);
@@ -62,7 +54,6 @@ class SubContainer extends React.Component {
       }
     }
     this.collisionDictionary = collisionDictionary;
-    console.log('COLLISIONDICTIONARY', collisionDictionary);
   }
 }
 

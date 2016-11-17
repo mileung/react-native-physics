@@ -47,7 +47,6 @@ class Box extends React.Component {
 
   componentWillMount() {
     let { id, outline, collideWithContainer, bounce, position, velocity, acceleration, drag, gravity, anchor } = this.props;
-
     // Render never shows the value of id, acceleration, elastic, or reound rate, so doesn't make sense to setState with these props and causes another rerender.  Plus, setState is asynchronous.
     if (!this.id) {
       this.id = this.props.id;
@@ -60,6 +59,7 @@ class Box extends React.Component {
     this.borderWidth = outline ? 1 : 0;
     this.borderColor = outline === true ? 'red' : outline ? outline : null;
     this.getReboundRate()
+    console.log('COLLIDE', this.id, this.props.collide);
 
     // the only thing interactees will care about each other is position, velocity, and dimensions of the other box (set in onLayOut of box's View)
     this.props.setInitialPositionAndVelocity(this.id, {
@@ -84,7 +84,7 @@ class Box extends React.Component {
     // get next velocity
     let { elastic, reboundRate, acceleration } = this;
     let { position, velocity, width, height } = this.props.boxes[this.id];
-    let { container, bounce, outline, drag, gravity, collideWithContainer, interactWith } = this.props;
+    let { container, bounce, outline, drag, gravity, collideWithContainer, collide } = this.props;
     let nextPosition = {
       x: position.x + velocity.x,
       y: position.y + velocity.y
