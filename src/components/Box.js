@@ -103,11 +103,11 @@ class Box extends React.Component {
 
     if (collideWithContainer) {
       if ((position.x <= 0 && velocity.x < 0) || (position.x + width >= container.width && velocity.x > 0)) {
-        nextVelocity.x = velocity.x * -reboundRate.x;
+        nextVelocity.x = velocity.x * -reboundRate.x + gravity.x * reboundRate.x;
         this.acceleration.x = 0;
       }
       if ((position.y <= 0 && velocity.y < 0) || (position.y + height >= container.height && velocity.y > 0)) {
-        nextVelocity.y = velocity.y * -reboundRate.y;
+        nextVelocity.y = velocity.y * -reboundRate.y + gravity.y * reboundRate.y;
         this.acceleration.y = 0;
       }
     }
