@@ -10,6 +10,9 @@ import {
   setBoxSize
 } from '../actions/index';
 
+const timePerFrame = 100;
+const nextFrame = Date.now() + timePerFrame;
+
 class Box extends React.Component {
   constructor(props) {
     super(props);
@@ -80,6 +83,12 @@ class Box extends React.Component {
   }
 
   updateBox() {
+    if (Date.now() < nextFrame) {
+      return requestAnimationFrame(this.updateBox);
+    } else {
+      nextFrame = Date.now() + timePerFrame;
+    }
+
     // console.log(this.id, this.props.boxes);
     // get next velocity
     let { elastic, reboundRate, acceleration } = this;
@@ -103,11 +112,11 @@ class Box extends React.Component {
 
     if (collideWithContainer) {
       if ((position.x <= 0 && velocity.x < 0) || (position.x + width >= container.width && velocity.x > 0)) {
-        nextVelocity.x = velocity.x * -reboundRate.x + gravity.x * reboundRate.x;
+        nextVelocity.x = velocity.x * -bounce.x;
         this.acceleration.x = 0;
       }
       if ((position.y <= 0 && velocity.y < 0) || (position.y + height >= container.height && velocity.y > 0)) {
-        nextVelocity.y = velocity.y * -reboundRate.y + gravity.y * reboundRate.y;
+        nextVelocity.y = velocity.y * -bounce.y;
         this.acceleration.y = 0;
       }
     }
@@ -128,6 +137,7 @@ class Box extends React.Component {
         nextPosition.y = container.height - height;
       }
     }
+
     if (false) { // for collisions and overlap
       for (let i = 0; i < interactWith.length; i++) {
         let interactee = this.props.boxes[interactWith[i]];
@@ -197,6 +207,7 @@ class Box extends React.Component {
       x: impactVelocity.x.second / impactVelocity.x.inital || bounce.x || 0,
       y: impactVelocity.y.second / impactVelocity.y.inital || bounce.y || 0
     };
+    console.log('THIS.REBOUNDRATE', this.reboundRate);
   }
 }
 

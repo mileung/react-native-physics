@@ -36,8 +36,8 @@ export default class Main extends React.Component {
               width={30}
               height={30}
               outline={true}
-              gravity={{x: 0, y: 11}}
-              bounce={{x: 1, y: 0.9}}
+              gravity={{x: 0, y: 31}}
+              bounce={{x: 0.6, y: 0.6}}
               position={{x: 150, y: 130}}
               collideWithContainer={true}
             />
@@ -113,6 +113,7 @@ export default class Main extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: 'black'
   }
 });
