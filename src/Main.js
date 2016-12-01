@@ -37,7 +37,7 @@ export default class Main extends React.Component {
               height={30}
               outline={true}
               gravity={{x: 0, y: 31}}
-              bounce={{x: 0.6, y: 0.6}}
+              bounce={{x: 0.6, y: 0.9}}
               position={{x: 150, y: 130}}
               collideWithContainer={true}
             />
@@ -91,11 +91,11 @@ export default class Main extends React.Component {
             height={30}
             outline={true}
             gravity={{x: 0, y: 1}}
-            bounce={{x: 1, y: 0.9}}
+            bounce={{x: 1, y: 1}}
             position={{x: 150, y: 30}}
             collideWithContainer={true}
           />
-          <Box
+          {/* <Box
             id="platform"
             width={310}
             height={40}
@@ -104,7 +104,7 @@ export default class Main extends React.Component {
             bounce={{x: 1, y: 0.1}}
             position={{x: 20, y: 555}}
             collideWithContainer={true}
-          />
+          /> */}
         </Container>
       )
     }, () => console.log('state after', this.state));
