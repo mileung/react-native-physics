@@ -36,6 +36,7 @@ export default class Main extends React.Component {
               width={30}
               height={30}
               outline={true}
+              mass={2}
               gravity={{x: 0, y: 31}}
               bounce={{x: 0.6, y: 0.9}}
               position={{x: 150, y: 130}}

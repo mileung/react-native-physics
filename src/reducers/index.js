@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 import {
-  SET_INITIAL_POSITION_AND_VELOCITY,
   SET_BOX_SIZE,
   SET_CONTAINER_SIZE,
   SET_POSITION_AND_VELOCITY
@@ -11,7 +10,7 @@ const rootReducer = combineReducers({
   container: setContainerSizeReducer
 });
 
-function updateBoxReducer(state = null, action) {
+function updateBoxReducer(state = {}, action) {
   switch (action.type) {
     case SET_POSITION_AND_VELOCITY:
       return {
@@ -21,11 +20,6 @@ function updateBoxReducer(state = null, action) {
           position: action.payload.position,
           velocity: action.payload.velocity
         }
-      };
-    case SET_INITIAL_POSITION_AND_VELOCITY:
-      return {
-        ...state,
-        [action.payload.interactee]: action.payload.positionAndVelocity
       };
     case SET_BOX_SIZE:
       return {

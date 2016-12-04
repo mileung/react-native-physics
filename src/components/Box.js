@@ -5,7 +5,6 @@ import {
   View
 } from 'react-native';
 import {
-  setInitialPositionAndVelocity,
   setPositionAndVelocity,
   setBoxSize
 } from '../actions/index';
@@ -38,10 +37,7 @@ class Box extends React.Component {
           left: position.x,
           top: position.y,
         }}
-        onLayout={e => {
-          let { width, height } = e.nativeEvent.layout;
-          this.props.setBoxSize(this.id, width, height);
-        }}
+        onLayout={e => this.props.setBoxSize(this.id, e.nativeEvent.layout)}
       >
         {children}
       </View>
@@ -50,27 +46,25 @@ class Box extends React.Component {
 
   componentWillMount() {
     let { id, outline, collideWithContainer, bounce, position, velocity, acceleration, drag, gravity, anchor } = this.props;
-    // Render never shows the value of id, acceleration, or reound rate, so doesn't make sense to setState with these props and causes another rerender.  Plus, setState is asynchronous.
     if (!this.id) {
       this.id = this.props.id;
     }
     this.acceleration = acceleration,
     this.borderWidth = outline ? 1 : 0;
     this.borderColor = outline === true ? 'red' : outline ? outline : null;
-    console.log('COLLIDE', this.id, this.props.collide);
 
     // the only thing interactees will care about each other is position, velocity, and dimensions of the other box (set in onLayOut of box's View)
-    this.props.setInitialPositionAndVelocity(this.id, {
-      position: {
+    this.props.setPositionAndVelocity(this.id,
+      {
         x: position.x || 0,
         y: position.y || 0
       },
-      velocity: {
+      {
         x: velocity.x || 0,
         y: velocity.y || 0
       }
-    });
-    setTimeout(() => requestAnimationFrame(this.updateBox));
+    );
+    requestAnimationFrame(this.updateBox)
   }
 
   componentWillUnmount() {
@@ -100,6 +94,10 @@ class Box extends React.Component {
       x: acceleration.x + (drag.x === 0 ? 0 : velocity.x > 0 ? -drag.x : velocity.x < 0 ? drag.x : 0),
       y: acceleration.y + (drag.y === 0 ? 0 : velocity.y > 0 ? -drag.y : velocity.y < 0 ? drag.y : 0)
     }
+    let displacement = {
+      x: 0,
+      y: 0
+    };
 
     nextVelocity.x += nextAcceleration.x;
     nextVelocity.y += nextAcceleration.y;
@@ -113,6 +111,7 @@ class Box extends React.Component {
       if (nextPosition.y < 0) {
         nextPosition.y = 0;
       } else if (nextPosition.y + height > container.height) {
+        displacement.y = nextPosition.y + height - container.height;
         nextPosition.y = container.height - height;
       }
 
@@ -203,6 +202,7 @@ Box.defaultProps = {
   drag: {x: 0, y: 0},
   anchor: {x: 0, y: 0},
   bounce: {x: 0, y: 0},
+  mass: 1,
   outline: false,
   collideWithContainer: false,
   height: null,
@@ -219,7 +219,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    setInitialPositionAndVelocity,
     setPositionAndVelocity,
     setBoxSize,
   }, dispatch);
