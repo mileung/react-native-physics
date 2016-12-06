@@ -5,10 +5,14 @@ import rootReducer from '../reducers/index.js';
 import { Provider, connect } from 'react-redux';
 import { v4 } from 'uuid';
 import Box from './Box';
-import { setContainerSize } from '../actions/index';
+import { setContainerSize, setPositionAndVelocity } from '../actions/index';
 
 
 class SubContainer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.updateBoxes = this.updateBoxes.bind(this);
+  }
   render() {
     let { style, outline } = this.props;
     return (
@@ -33,33 +37,55 @@ class SubContainer extends React.Component {
           }
           return React.cloneElement(child, {
             id: child.props.id ? child.props.id : v4(),
-            collide: child.props.id ? this.collisionDictionary[child.props.id] : null
+            // collide: child.props.id ? this.collisionDictionary[child.props.id] : null
           });
         })}
       </View>
     );
   }
-  componentWillMount() {
+  componentDidMount() {
+    this.boxes = {};
     let { collide, children } = this.props;
     let collisionDictionary = {};
-    for (let i = 0; i < children.length; i++) {
-      let child = children[i];
-      if (child.props.id) {
-        collisionDictionary[child.props.id] = JSON.parse(JSON.stringify(collide)).filter(collision => {
-          return collision.boxes.indexOf(child.props.id) !== -1;
-        }).map(collision => {
-          collision.boxes = collision.boxes.filter(box => box !== child.props.id);
-          return collision;
-        });
-      }
+    if (!Array.isArray(children)) {
+      children = [children];
     }
-    this.collisionDictionary = collisionDictionary;
-    // requestAnimationFrame(this.updateBoxes)
+    for (let child of children) {
+      if (child.type.displayName === 'Connect(Box)') {
+        console.log('asd', child.props.id);
+        let id;
+        if (child.props.id) {
+          id = child.props.id
+        }
+        this.boxes[id] = child
+      }
+      // if (child.props.id) {
+      //   collisionDictionary[child.props.id] = JSON.parse(JSON.stringify(collide)).filter(collision => {
+      //     return collision.boxes.indexOf(child.props.id) !== -1;
+      //   }).map(collision => {
+      //     collision.boxes = collision.boxes.filter(box => box !== child.props.id);
+      //     return collision;
+      //   });
+      // }
+    }
+    // this.collisionDictionary = collisionDictionary;
+    requestAnimationFrame(this.updateBoxes)
   }
   componentWillUnmount() {
-    // cancelAnimationFrame(this.updateBoxes);
+    cancelAnimationFrame(this.updateBoxes);
   }
   updateBoxes() {
+    console.log('updating boxes');
+    for (let id in this.boxes) {
+      let box = this.boxes[id];
+      let nextPosition = box.props.position;
+      nextPosition.y++;
+      console.log('NEXTPOSITION.Y', nextPosition.y);
+      this.props.setPositionAndVelocity(id, nextPosition, {});
+    }
+    requestAnimationFrame(this.updateBoxes)
+  }
+  updateBox() {
     if (Date.now() < nextFrame) {
       return requestAnimationFrame(this.updateBox);
     } else {
@@ -151,6 +177,7 @@ class SubContainer extends React.Component {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
+    setPositionAndVelocity,
     setContainerSize
   }, dispatch);
 }

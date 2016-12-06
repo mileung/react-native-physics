@@ -1,6 +1,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { v4 } from 'uuid';
 import {
   View
 } from 'react-native';
@@ -14,12 +15,12 @@ const nextFrame = Date.now() + timePerFrame;
 
 class Box extends React.Component {
   render() {
-    if (!this.props.boxes || !this.props.boxes[this.id]) {
+    if (!this.props.boxes || !this.props.boxes[this.props.id]) {
       return null;
     }
 
     let { children, height, width } = this.props;
-    let { position } = this.props.boxes[this.id];
+    let { position } = this.props.boxes[this.props.id];
 
     return (
       <View
@@ -32,7 +33,7 @@ class Box extends React.Component {
           left: position.x,
           top: position.y,
         }}
-        onLayout={e => this.props.setBoxSize(this.id, e.nativeEvent.layout)}
+        onLayout={e => this.props.setBoxSize(this.props.id, e.nativeEvent.layout)}
       >
         {children}
       </View>
@@ -41,15 +42,16 @@ class Box extends React.Component {
 
   componentWillMount() {
     let { id, outline, collideWithContainer, bounce, position, velocity, acceleration, drag, gravity, anchor } = this.props;
-    if (!this.id) {
-      this.id = this.props.id;
-    }
+    console.log('ID', id);
+    // if (!this.props.id) {
+    //   this.props.id = this.props.id;
+    // }
     this.acceleration = acceleration,
     this.borderWidth = outline ? 1 : 0;
     this.borderColor = outline === true ? 'red' : outline ? outline : null;
     //
     // // the only thing interactees will care about each other is position, velocity, and dimensions of the other box (set in onLayOut of box's View)
-    this.props.setPositionAndVelocity(this.id,
+    this.props.setPositionAndVelocity(this.props.id,
       {
         x: position.x || 0,
         y: position.y || 0

@@ -73,43 +73,43 @@ export default class Main extends React.Component {
     }, this.createBoxes);
   }
 
-  createBoxes() {
-    console.log('state before', this.state);
-    this.setState({
-      boxes: (
-        <Container
-          style={styles.container}
-          collide={[
-            {
-              boxes: ['platform', 'ball'],
-              callback: () => console.log('hit!')
-            }
-          ]}
-          >
-          <Box
-            id="ball"
-            width={30}
-            height={30}
-            outline={true}
-            gravity={{x: 0, y: 1}}
-            bounce={{x: 1, y: 1}}
-            position={{x: 150, y: 30}}
-            collideWithContainer={true}
-          />
-          {/* <Box
-            id="platform"
-            width={310}
-            height={40}
-            outline={true}
-            gravity={{x: 0, y: -1}}
-            bounce={{x: 1, y: 0.1}}
-            position={{x: 20, y: 555}}
-            collideWithContainer={true}
-          /> */}
-        </Container>
-      )
-    }, () => console.log('state after', this.state));
-  }
+  // createBoxes() {
+  //   console.log('state before', this.state);
+  //   this.setState({
+  //     boxes: (
+  //       <Container
+  //         style={styles.container}
+  //         collide={[
+  //           {
+  //             boxes: ['platform', 'ball'],
+  //             callback: () => console.log('hit!')
+  //           }
+  //         ]}
+  //         >
+  //         <Box
+  //           id="ball"
+  //           width={30}
+  //           height={30}
+  //           outline={true}
+  //           gravity={{x: 0, y: 1}}
+  //           bounce={{x: 1, y: 1}}
+  //           position={{x: 150, y: 30}}
+  //           collideWithContainer={true}
+  //         />
+  //         {/* <Box
+  //           id="platform"
+  //           width={310}
+  //           height={40}
+  //           outline={true}
+  //           gravity={{x: 0, y: -1}}
+  //           bounce={{x: 1, y: 0.1}}
+  //           position={{x: 20, y: 555}}
+  //           collideWithContainer={true}
+  //         /> */}
+  //       </Container>
+  //     )
+  //   }, () => console.log('state after', this.state));
+  // }
 }
 
 const styles = StyleSheet.create({
