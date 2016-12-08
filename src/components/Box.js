@@ -15,7 +15,7 @@ const nextFrame = Date.now() + timePerFrame;
 
 class Box extends React.Component {
   render() {
-    if (!this.props.boxes || !this.props.boxes[this.props.id]) {
+    if (!this.props.boxes[this.props.id]) {
       return null;
     }
 
@@ -62,6 +62,9 @@ class Box extends React.Component {
       }
     );
     // requestAnimationFrame(this.updateBoxes)
+  }
+
+  componentDidMount() {
   }
 }
 
@@ -117,7 +120,7 @@ Box.defaultProps = {
 function mapStateToProps(state) {
   return {
     boxes: state.boxes,
-    container: state.container
+    // container: state.container
   };
 }
 

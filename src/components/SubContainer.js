@@ -11,6 +11,7 @@ import { setContainerSize, setPositionAndVelocity } from '../actions/index';
 class SubContainer extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {}
     this.updateBoxes = this.updateBoxes.bind(this);
   }
   render() {
@@ -28,7 +29,8 @@ class SubContainer extends React.Component {
         ]}
         onLayout={e => {
           let { width, height } = e.nativeEvent.layout;
-          this.props.setContainerSize(width, height);
+          // this.props.setContainerSize(width, height);
+          this.setState({width, height});
         }}
       >
         {React.Children.map(this.props.children, child => {
@@ -37,6 +39,10 @@ class SubContainer extends React.Component {
           }
           return React.cloneElement(child, {
             id: child.props.id ? child.props.id : v4(),
+            container: {
+              width: this.state.width,
+              height: this.state.height
+            }
             // collide: child.props.id ? this.collisionDictionary[child.props.id] : null
           });
         })}
@@ -75,16 +81,39 @@ class SubContainer extends React.Component {
     cancelAnimationFrame(this.updateBoxes);
   }
   updateBoxes() {
-    console.log('updating boxes');
     for (let id in this.boxes) {
       let box = this.boxes[id];
       let nextPosition = box.props.position;
-      nextPosition.y++;
-      console.log('NEXTPOSITION.Y', nextPosition.y);
-      this.props.setPositionAndVelocity(id, nextPosition, {});
+      let { position, velocity, width, height } = this.props.boxes[id];
+      let { acceleration, bounce, drag, gravity, collideWithContainer, collide } = box.props;
+      nextPosition.y += velocity.y;
+      // console.log('NEXTPOSITION.Y', nextPosition.y);
+      if (collideWithContainer) {
+        if (nextPosition.x < 0) {
+          nextPosition.x = 0;
+        } else if (nextPosition.x + width > this.state.width) {
+          nextPosition.x = this.state.width - width;
+        }
+        if (nextPosition.y < 0) {
+          nextPosition.y = 0;
+        } else if (nextPosition.y + height > this.state.height) {
+          nextPosition.y = this.state.height - height;
+        }
+
+        if ((position.x <= 0 && velocity.x < 0) || (position.x + width >= this.state.width && velocity.x > 0)) {
+          // nextVelocity.x *= -bounce.x;
+          // this.boxes[id].props.acceleration.x = 0;
+        }
+        if ((position.y <= 0 && velocity.y < 0) || (position.y + height >= this.state.height && velocity.y > 0)) {
+          // nextVelocity.y *= -bounce.y;
+          // this.boxes[id].props.acceleration.y = 0;
+        }
+      }
+      this.props.setPositionAndVelocity(id, nextPosition, {x: 0, y: 15});
     }
     requestAnimationFrame(this.updateBoxes)
   }
+
   updateBox() {
     if (Date.now() < nextFrame) {
       return requestAnimationFrame(this.updateBox);
@@ -116,28 +145,28 @@ class SubContainer extends React.Component {
     nextVelocity.x += nextAcceleration.x;
     nextVelocity.y += nextAcceleration.y;
 
-    if (collideWithContainer) {
-      if (nextPosition.x < 0) {
-        nextPosition.x = 0;
-      } else if (nextPosition.x + width > container.width) {
-        nextPosition.x = container.width - width;
-      }
-      if (nextPosition.y < 0) {
-        nextPosition.y = 0;
-      } else if (nextPosition.y + height > container.height) {
-        displacement.y = nextPosition.y + height - container.height;
-        nextPosition.y = container.height - height;
-      }
-
-      if ((position.x <= 0 && velocity.x < 0) || (position.x + width >= container.width && velocity.x > 0)) {
-        nextVelocity.x *= -bounce.x;
-        this.acceleration.x = 0;
-      }
-      if ((position.y <= 0 && velocity.y < 0) || (position.y + height >= container.height && velocity.y > 0)) {
-        nextVelocity.y *= -bounce.y;
-        this.acceleration.y = 0;
-      }
-    }
+    // if (collideWithContainer) {
+    //   if (nextPosition.x < 0) {
+    //     nextPosition.x = 0;
+    //   } else if (nextPosition.x + width > container.width) {
+    //     nextPosition.x = container.width - width;
+    //   }
+    //   if (nextPosition.y < 0) {
+    //     nextPosition.y = 0;
+    //   } else if (nextPosition.y + height > container.height) {
+    //     displacement.y = nextPosition.y + height - container.height;
+    //     nextPosition.y = container.height - height;
+    //   }
+    //
+    //   if ((position.x <= 0 && velocity.x < 0) || (position.x + width >= container.width && velocity.x > 0)) {
+    //     nextVelocity.x *= -bounce.x;
+    //     this.acceleration.x = 0;
+    //   }
+    //   if ((position.y <= 0 && velocity.y < 0) || (position.y + height >= container.height && velocity.y > 0)) {
+    //     nextVelocity.y *= -bounce.y;
+    //     this.acceleration.y = 0;
+    //   }
+    // }
 
     nextVelocity.x += gravity.x;
     nextVelocity.y += gravity.y;
@@ -175,6 +204,12 @@ class SubContainer extends React.Component {
   }
 }
 
+function mapStateToProps(state) {
+  return {
+    boxes: state.boxes
+  };
+}
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     setPositionAndVelocity,
@@ -182,4 +217,4 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-export default connect(null, mapDispatchToProps)(SubContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(SubContainer);
