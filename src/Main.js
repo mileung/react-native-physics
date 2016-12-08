@@ -24,34 +24,37 @@ export default class Main extends React.Component {
           {/* {this.state.boxes} */}
           <Container
             style={styles.container}
-            collide={[
+            collisions={[
               {
-                boxes: ['platform', 'ball'],
+                boxes: ['ball1', 'ball2'],
                 callback: () => console.log('hit!')
               }
             ]}
             >
             <Box
-              id="ball"
+              id="ball1"
               width={30}
               height={30}
               outline={true}
               mass={2}
-              gravity={{x: 0, y: 31}}
-              bounce={{x: 0.6, y: 0.9}}
-              position={{x: 150, y: 130}}
+              // velocity={{x: 10, y: 1}}
+              gravity={{x: 0, y: 1}}
+              bounce={{x: 0.6, y: 0.5}}
+              position={{x: 150, y: 10}}
               collideWithContainer={true}
             />
-            {/* <Box
-              id="platform"
-              width={310}
-              height={40}
+            <Box
+              id="ball2"
+              width={30}
+              height={30}
               outline={true}
+              mass={2}
+              // velocity={{x: 10, y: 1}}
               gravity={{x: 0, y: -1}}
-              bounce={{x: 1, y: 0.1}}
-              position={{x: 20, y: 555}}
+              bounce={{x: 0.6, y: 0.5}}
+              position={{x: 150, y: 570}}
               collideWithContainer={true}
-            /> */}
+            />
           </Container>
         </View>
       </TouchableWithoutFeedback>
