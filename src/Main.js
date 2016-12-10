@@ -47,7 +47,7 @@ export default class Main extends React.Component {
               id="ball2"
               width={30}
               height={30}
-              outline={true}
+              outline={'green'}
               mass={2}
               // velocity={{x: 10, y: 1}}
               gravity={{x: 0, y: -1}}

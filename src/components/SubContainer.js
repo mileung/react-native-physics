@@ -102,6 +102,7 @@ class SubContainer extends React.Component {
     cancelAnimationFrame(this.updateBoxes);
   }
   updateBoxes() {
+    console.log('updating');
     for (let id in this.boxes) {
       let box = this.boxes[id];
       let { position, velocity, width, height } = this.props.boxes[id];
@@ -155,11 +156,13 @@ class SubContainer extends React.Component {
           if (box1.velocity.y > 0 && box1.position.y + box1.height >= box2.position.y && box1.position.y <= box2.position.y) {
             // nextPosition.y = box2.position.y - height;
             // nextVelocity.y = (velocity.y + box2.velocity.y) * -bounce.y;
-            console.log('overlap');
+            this.props.setPositionAndVelocity(combo[0], box1.position, {x: box1.velocity.x, y: box1.velocity.y * -this.boxes[combo[0]].props.bounce.y});
+            this.props.setPositionAndVelocity(combo[1], box2.position, {x: box2.velocity.x, y: box2.velocity.y * -this.boxes[combo[1]].props.bounce.y});
           } else if (box1.velocity.y < 0 && box1.position.y <= box2.position.y + box2.height && box1.position.y + box1.height >= box2.position.y + box2.height) {
             // nextPosition.y = box2.position.y + box2.height;
             // nextVelocity.y = (velocity.y + box2.velocity.y) * -bounce.y;
-            console.log('overlap');
+            this.props.setPositionAndVelocity(combo[0], box1.position, {x: box1.velocity.x, y: box1.velocity.y * -this.boxes[combo[0]].props.bounce.y});
+            this.props.setPositionAndVelocity(combo[1], box2.position, {x: box2.velocity.x, y: box2.velocity.y * -this.boxes[combo[1]].props.bounce.y});
           }
         }
         // if (position.y + height > interactee.position.y && position.y < interactee.position.y + interactee.height) {
