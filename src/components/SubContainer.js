@@ -149,7 +149,30 @@ class SubContainer extends React.Component {
       let collision = this.collisions[i];
       for (let i in collision.collisionCombos) {
         let combo = collision.collisionCombos[i];
-        console.log('COMBO', combo);
+        let box1 = this.props.boxes[combo[0]];
+        let box2 = this.props.boxes[combo[1]];
+        if (box1.position.x + box1.width > box2.position.x && box1.position.x < box2.position.x + box2.width) {
+          if (box1.velocity.y > 0 && box1.position.y + box1.height >= box2.position.y && box1.position.y <= box2.position.y) {
+            // nextPosition.y = box2.position.y - height;
+            // nextVelocity.y = (velocity.y + box2.velocity.y) * -bounce.y;
+            console.log('overlap');
+          } else if (box1.velocity.y < 0 && box1.position.y <= box2.position.y + box2.height && box1.position.y + box1.height >= box2.position.y + box2.height) {
+            // nextPosition.y = box2.position.y + box2.height;
+            // nextVelocity.y = (velocity.y + box2.velocity.y) * -bounce.y;
+            console.log('overlap');
+          }
+        }
+        // if (position.y + height > interactee.position.y && position.y < interactee.position.y + interactee.height) {
+        //   if (velocity.x > 0 && nextPosition.x + width >= interactee.position.x && position.x <= interactee.position.x) {
+        //     nextPosition.x = interactee.position.x - width;
+        //     nextVelocity.x = (velocity.x + interactee.velocity.x) * -bounce.x;
+        //     this.acceleration.x = 0;
+        //   } else if (velocity.x < 0 && nextPosition.x <= interactee.position.x + interactee.width && position.x + width >= interactee.position.x + interactee.width) {
+        //     nextPosition.x = interactee.position.x + interactee.width;
+        //     nextVelocity.x = (velocity.x + interactee.velocity.x) * -bounce.x;
+        //     this.acceleration.x = 0;
+        //   }
+        // }
       }
     }
     requestAnimationFrame(this.updateBoxes)
