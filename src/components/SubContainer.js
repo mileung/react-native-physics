@@ -5,7 +5,7 @@ import rootReducer from '../reducers/index.js';
 import { Provider, connect } from 'react-redux';
 import { v4 } from 'uuid';
 import Box from './Box';
-import { setContainerSize, setPositionAndVelocity } from '../actions/index';
+import { setContainerSize, setPositionAndVelocity, collide } from '../actions/index';
 
 
 class SubContainer extends React.Component {
@@ -155,24 +155,26 @@ class SubContainer extends React.Component {
         let box1 = this.props.boxes[combo[0]];
         let box2 = this.props.boxes[combo[1]];
         if (box1.position.x + box1.width > box2.position.x && box1.position.x < box2.position.x + box2.width) {
-          if (box1.velocity.y > 0 && box1.position.y + box1.height >= box2.position.y && box1.position.y <= box2.position.y) {
-            this.props.setPositionAndVelocity(combo[0], box1.position, {x: box1.velocity.x, y: box1.velocity.y * -this.boxes[combo[0]].props.bounce.y});
-            this.props.setPositionAndVelocity(combo[1], box2.position, {x: box2.velocity.x, y: box2.velocity.y * -this.boxes[combo[1]].props.bounce.y});
-            callback();
-          } else if (box1.velocity.y < 0 && box1.position.y <= box2.position.y + box2.height && box1.position.y + box1.height >= box2.position.y + box2.height) {
-            this.props.setPositionAndVelocity(combo[0], box1.position, {x: box1.velocity.x, y: box1.velocity.y * -this.boxes[combo[0]].props.bounce.y});
-            this.props.setPositionAndVelocity(combo[1], box2.position, {x: box2.velocity.x, y: box2.velocity.y * -this.boxes[combo[1]].props.bounce.y});
+          if (
+            (box1.velocity.y > 0 && box1.position.y + box1.height >= box2.position.y && box1.position.y <= box2.position.y) ||
+            (box1.velocity.y < 0 && box1.position.y <= box2.position.y + box2.height && box1.position.y + box1.height >= box2.position.y + box2.height)
+              ) {
+            this.props.collide(
+              combo[0], box1.position, {x: box1.velocity.x, y: box1.velocity.y * -this.boxes[combo[0]].props.bounce.y},
+              combo[1], box2.position, {x: box2.velocity.x, y: box2.velocity.y * -this.boxes[combo[1]].props.bounce.y}
+            );
             callback();
           }
         }
         if (box1.position.y + box1.height > box2.position.y && box1.position.y < box2.position.y + box2.height) {
-          if (box1.velocity.x > 0 && box1.position.x + box1.height >= box2.position.x && box1.position.x <= box2.position.x) {
-            this.props.setPositionAndVelocity(combo[0], box1.position, {y: box1.velocity.y, x: box1.velocity.x * -this.boxes[combo[0]].props.bounce.x});
-            this.props.setPositionAndVelocity(combo[1], box2.position, {y: box2.velocity.y, x: box2.velocity.x * -this.boxes[combo[1]].props.bounce.x});
-            callback();
-          } else if (box1.velocity.x < 0 && box1.position.x <= box2.position.x + box2.width && box1.position.x + box1.width >= box2.position.x + box2.width) {
-            this.props.setPositionAndVelocity(combo[0], box1.position, {y: box1.velocity.y, x: box1.velocity.x * -this.boxes[combo[0]].props.bounce.x});
-            this.props.setPositionAndVelocity(combo[1], box2.position, {y: box2.velocity.y, x: box2.velocity.x * -this.boxes[combo[1]].props.bounce.x});
+          if (
+            (box1.velocity.x > 0 && box1.position.x + box1.height >= box2.position.x && box1.position.x <= box2.position.x) ||
+            (box1.velocity.x < 0 && box1.position.x <= box2.position.x + box2.width && box1.position.x + box1.width >= box2.position.x + box2.width)
+              ) {
+            this.props.collide(
+              combo[0], box1.position, {x: box1.velocity.x * -this.boxes[combo[0]].props.bounce.x, y: box1.velocity.y},
+              combo[1], box2.position, {x: box2.velocity.x * -this.boxes[combo[1]].props.bounce.x, y: box2.velocity.y}
+            );
             callback();
           }
         }
@@ -280,7 +282,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     setPositionAndVelocity,
-    setContainerSize
+    setContainerSize,
+    collide
   }, dispatch);
 }
 

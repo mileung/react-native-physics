@@ -2,7 +2,8 @@ import { combineReducers } from 'redux';
 import {
   SET_BOX_SIZE,
   SET_CONTAINER_SIZE,
-  SET_POSITION_AND_VELOCITY
+  SET_POSITION_AND_VELOCITY,
+  COLLIDE
 } from '../actions/index.js';
 
 const rootReducer = combineReducers({
@@ -19,6 +20,20 @@ function updateBoxReducer(state = {}, action) {
           ...state[action.payload.interactee],
           position: action.payload.position,
           velocity: action.payload.velocity
+        }
+      };
+    case COLLIDE:
+      return {
+        ...state,
+        [action.payload.id1]: {
+          ...state[action.payload.id1],
+          position: action.payload.position1,
+          velocity: action.payload.velocity1
+        },
+        [action.payload.id2]: {
+          ...state[action.payload.id2],
+          position: action.payload.position2,
+          velocity: action.payload.velocity2
         }
       };
     case SET_BOX_SIZE:
