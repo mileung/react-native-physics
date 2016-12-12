@@ -156,8 +156,8 @@ class SubContainer extends React.Component {
         let box2 = this.props.boxes[combo[1]];
         if (box1.position.x + box1.width > box2.position.x && box1.position.x < box2.position.x + box2.width) {
           if (
-            (box1.velocity.y > 0 && box1.position.y + box1.height >= box2.position.y && box1.position.y <= box2.position.y) ||
-            (box1.velocity.y < 0 && box1.position.y <= box2.position.y + box2.height && box1.position.y + box1.height >= box2.position.y + box2.height)
+            (box1.position.y + box1.height >= box2.position.y && box1.position.y <= box2.position.y) ||
+            (box1.position.y <= box2.position.y + box2.height && box1.position.y + box1.height >= box2.position.y + box2.height)
               ) {
             this.props.collide(
               combo[0], box1.position, {x: box1.velocity.x, y: box1.velocity.y * -this.boxes[combo[0]].props.bounce.y},
@@ -168,8 +168,8 @@ class SubContainer extends React.Component {
         }
         if (box1.position.y + box1.height > box2.position.y && box1.position.y < box2.position.y + box2.height) {
           if (
-            (box1.velocity.x > 0 && box1.position.x + box1.height >= box2.position.x && box1.position.x <= box2.position.x) ||
-            (box1.velocity.x < 0 && box1.position.x <= box2.position.x + box2.width && box1.position.x + box1.width >= box2.position.x + box2.width)
+            (box1.position.x + box1.height >= box2.position.x && box1.position.x <= box2.position.x) ||
+            (box1.position.x <= box2.position.x + box2.width && box1.position.x + box1.width >= box2.position.x + box2.width)
               ) {
             this.props.collide(
               combo[0], box1.position, {x: box1.velocity.x * -this.boxes[combo[0]].props.bounce.x, y: box1.velocity.y},
