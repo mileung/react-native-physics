@@ -6,14 +6,15 @@ import SubContainer from './SubContainer';
 
 let store = createStore(rootReducer)
 
-export default Container = ({ style, width, height, collisions, children }) => {
+export default Container = ({ style, width, height, collide, overlap, children }) => {
   return (
     <Provider store={store}>
       <SubContainer
         style={style}
         width={width}
         height={height}
-        collisions={collisions}
+        collide={collide}
+        overlap={overlap}
       >
         {children}
       </SubContainer>

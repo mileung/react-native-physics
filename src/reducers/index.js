@@ -3,7 +3,7 @@ import {
   SET_BOX_SIZE,
   SET_CONTAINER_SIZE,
   SET_POSITION_AND_VELOCITY,
-  COLLIDE
+  COLLIDE_BOXES
 } from '../actions/index.js';
 
 const rootReducer = combineReducers({
@@ -22,7 +22,7 @@ function updateBoxReducer(state = {}, action) {
           velocity: action.payload.velocity
         }
       };
-    case COLLIDE:
+    case COLLIDE_BOXES:
       return {
         ...state,
         [action.payload.id1]: {

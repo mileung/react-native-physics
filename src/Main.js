@@ -24,17 +24,23 @@ export default class Main extends React.Component {
           {/* {this.state.boxes} */}
           <Container
             style={styles.container}
-            collisions={[
+            // collide={[
+            //   {
+            //     boxes: ['ball1', 'ball2', 'ball3'],
+            //     callback: () => console.log('ouch!')
+            //   }
+            // ]}
+            overlap={[
               {
-                boxes: ['ball1', 'ball2', 'ball3', 'ball4'],
-                callback: () => console.log('ouch!')
+                boxes: ['ball1', 'ball2'],
+                callback: () => console.log('overlapping!', Math.random())
               }
             ]}
             >
             <Box
               id="ball1"
               width={50}
-              height={50}
+              height={250}
               outline={true}
               mass={2}
               velocity={{x: 20 * Math.random() + 5, y: 20 * Math.random() + 5}}
@@ -45,7 +51,7 @@ export default class Main extends React.Component {
             />
             <Box
               id="ball2"
-              width={50}
+              width={150}
               height={50}
               outline={'green'}
               mass={2}
@@ -55,7 +61,7 @@ export default class Main extends React.Component {
               position={{x: 300, y: 20}}
               collideWithContainer={true}
             />
-            <Box
+            {/* <Box
               id="ball3"
               width={50}
               height={50}
@@ -78,7 +84,7 @@ export default class Main extends React.Component {
               bounce={{x: 1, y: 1}}
               position={{x: 0, y: 0}}
               collideWithContainer={true}
-            />
+            /> */}
           </Container>
         </View>
       </TouchableWithoutFeedback>
