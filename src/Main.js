@@ -24,41 +24,53 @@ export default class Main extends React.Component {
           {/* {this.state.boxes} */}
           <Container
             style={styles.container}
-            // collide={[
-            //   {
-            //     boxes: ['ball1', 'ball2', 'ball3'],
-            //     callback: () => console.log('ouch!')
-            //   }
-            // ]}
+            collide={[
+              {
+                boxes: ['red', 'yellow'],
+                callback: (box1, box2) => console.log('collide!', box1, box2)
+              }
+            ]}
             overlap={[
               {
-                boxes: ['ball1', 'ball2'],
-                callback: () => console.log('overlapping!', Math.random())
+                boxes: ['red', 'green'],
+                callback: (box1, box2) => console.log('overlapping!', box1, box2)
               }
             ]}
             >
             <Box
-              id="ball1"
+              id="green"
+              width={100}
+              height={50}
+              outline={'green'}
+              mass={2}
+              velocity={{x: 1, y: 0}}
+              // gravity={{x: -1, y: 0}}
+              bounce={{x: 1, y: 1}}
+              position={{x: 300, y: 220}}
+              collideWithContainer={true}
+            />
+            <Box
+              id="yellow"
+              width={100}
+              height={50}
+              outline={'yellow'}
+              mass={2}
+              velocity={{x: 1, y: 0}}
+              // gravity={{x: -1, y: 0}}
+              bounce={{x: 1, y: 1}}
+              position={{x: 300, y: 420}}
+              collideWithContainer={true}
+            />
+            <Box
+              id="red"
               width={50}
               height={250}
               outline={true}
               mass={2}
-              velocity={{x: 20 * Math.random() + 5, y: 20 * Math.random() + 5}}
+              velocity={{x: 0, y: 0}}
               // gravity={{x: 1, y: 0}}
               bounce={{x: 1, y: 1}}
-              position={{x: 10, y: 10}}
-              collideWithContainer={true}
-            />
-            <Box
-              id="ball2"
-              width={150}
-              height={50}
-              outline={'green'}
-              mass={2}
-              velocity={{x: 20 * Math.random() + 5, y: 20 * Math.random() + 5}}
-              // gravity={{x: -1, y: 0}}
-              bounce={{x: 1, y: 1}}
-              position={{x: 300, y: 20}}
+              position={{x: 180, y: 200}}
               collideWithContainer={true}
             />
             {/* <Box

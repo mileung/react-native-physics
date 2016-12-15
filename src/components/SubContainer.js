@@ -153,19 +153,18 @@ class SubContainer extends React.Component {
             //   combo[0], box1.position, {x: box1.velocity.x, y: box1.velocity.y * -this.boxes[combo[0]].props.bounce.y},
             //   combo[1], box2.position, {x: box2.velocity.x, y: box2.velocity.y * -this.boxes[combo[1]].props.bounce.y}
             // );
-            callback();
+            callback(combo[0], combo[1]);
           }
-        }
-        if (box1.position.y + box1.height > box2.position.y && box1.position.y < box2.position.y + box2.height) {
+        } else if (box1.position.y + box1.height > box2.position.y && box1.position.y < box2.position.y + box2.height) {
           if (
-            (box1.position.x + box1.height >= box2.position.x && box1.position.x <= box2.position.x) ||
+            (box1.position.x + box1.width >= box2.position.x && box1.position.x <= box2.position.x) ||
             (box1.position.x <= box2.position.x + box2.width && box1.position.x + box1.width >= box2.position.x + box2.width)
               ) {
             // this.props.collideBoxes(
             //   combo[0], box1.position, {x: box1.velocity.x * -this.boxes[combo[0]].props.bounce.x, y: box1.velocity.y},
             //   combo[1], box2.position, {x: box2.velocity.x * -this.boxes[combo[1]].props.bounce.x, y: box2.velocity.y}
             // );
-            callback();
+            callback(combo[0], combo[1]);
           }
         }
       }
