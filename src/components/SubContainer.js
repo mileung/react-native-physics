@@ -49,19 +49,31 @@ class SubContainer extends React.Component {
     );
   }
   componentWillMount() {
+    // for (let i in this.props.collide) {
+    //   let collision = this.props.collide[i];
+    //   let collisionCombos = [];
+    // 	for (let i = 0; i < collision.boxes.length - 1; i++) {
+    // 		for (let u = i + 1; u < collision.boxes.length; u++) {
+    // 			collisionCombos.push({
+    //         boxes: [collision.boxes[i], collision.boxes[u]],
+    //         callback: () => {
+    //           collision.callback();
+    //           this.props.collideBoxes(id1, position1, velocity1, id2, position2, velocity2);
+    //         }}
+    //       });
+    // 		}
+    // 	}
+    // }
     this.overlappings = [];
-    console.log('THIS.PROPS.OVERLAP', this.props.overlap);
-
     for (let i in this.props.overlap) {
       let overlap = this.props.overlap[i];
-      let overlapCombos = [];
     	for (let i = 0; i < overlap.boxes.length - 1; i++) {
     		for (let u = i + 1; u < overlap.boxes.length; u++) {
-    			overlapCombos.push([overlap.boxes[i], overlap.boxes[u]]);
+          this.overlappings.push({boxes: [overlap.boxes[i], overlap.boxes[u]], callback: overlap.callback});
     		}
     	}
-      this.overlappings.push({overlapCombos, callback: overlap.callback})
     }
+    console.log('THIS.OVERLAPPINGS', this.overlappings);
   }
   componentDidMount() {
     this.boxes = {};
@@ -139,33 +151,29 @@ class SubContainer extends React.Component {
 
     for (let i in this.overlappings) {
       let overlap = this.overlappings[i];
-      let callback = overlap.callback;
-      for (let i in overlap.overlapCombos) {
-        let combo = overlap.overlapCombos[i];
-        let box1 = this.props.boxes[combo[0]];
-        let box2 = this.props.boxes[combo[1]];
-        if (box1.position.x + box1.width > box2.position.x && box1.position.x < box2.position.x + box2.width) {
-          if (
-            (box1.position.y + box1.height >= box2.position.y && box1.position.y <= box2.position.y) ||
-            (box1.position.y <= box2.position.y + box2.height && box1.position.y + box1.height >= box2.position.y + box2.height)
-              ) {
-            // this.props.collideBoxes(
-            //   combo[0], box1.position, {x: box1.velocity.x, y: box1.velocity.y * -this.boxes[combo[0]].props.bounce.y},
-            //   combo[1], box2.position, {x: box2.velocity.x, y: box2.velocity.y * -this.boxes[combo[1]].props.bounce.y}
-            // );
-            callback(combo[0], combo[1]);
-          }
-        } else if (box1.position.y + box1.height > box2.position.y && box1.position.y < box2.position.y + box2.height) {
-          if (
-            (box1.position.x + box1.width >= box2.position.x && box1.position.x <= box2.position.x) ||
-            (box1.position.x <= box2.position.x + box2.width && box1.position.x + box1.width >= box2.position.x + box2.width)
-              ) {
-            // this.props.collideBoxes(
-            //   combo[0], box1.position, {x: box1.velocity.x * -this.boxes[combo[0]].props.bounce.x, y: box1.velocity.y},
-            //   combo[1], box2.position, {x: box2.velocity.x * -this.boxes[combo[1]].props.bounce.x, y: box2.velocity.y}
-            // );
-            callback(combo[0], combo[1]);
-          }
+      let box1 = this.props.boxes[overlap.boxes[0]];
+      let box2 = this.props.boxes[overlap.boxes[1]];
+      if (box1.position.x + box1.width > box2.position.x && box1.position.x < box2.position.x + box2.width) {
+        if (
+          (box1.position.y + box1.height >= box2.position.y && box1.position.y <= box2.position.y) ||
+          (box1.position.y <= box2.position.y + box2.height && box1.position.y + box1.height >= box2.position.y + box2.height)
+            ) {
+          // this.props.collideBoxes(
+          //   overlap.boxes[0], box1.position, {x: box1.velocity.x, y: box1.velocity.y * -this.boxes[overlap.boxes[0]].props.bounce.y},
+          //   overlap.boxes[1], box2.position, {x: box2.velocity.x, y: box2.velocity.y * -this.boxes[overlap.boxes[1]].props.bounce.y}
+          // );
+          overlap.callback(overlap.boxes[0], overlap.boxes[1]);
+        }
+      } else if (box1.position.y + box1.height > box2.position.y && box1.position.y < box2.position.y + box2.height) {
+        if (
+          (box1.position.x + box1.width >= box2.position.x && box1.position.x <= box2.position.x) ||
+          (box1.position.x <= box2.position.x + box2.width && box1.position.x + box1.width >= box2.position.x + box2.width)
+            ) {
+          // this.props.collideBoxes(
+          //   overlap.boxes[0], box1.position, {x: box1.velocity.x * -this.boxes[overlap.boxes[0]].props.bounce.x, y: box1.velocity.y},
+          //   overlap.boxes[1], box2.position, {x: box2.velocity.x * -this.boxes[overlap.boxes[1]].props.bounce.x, y: box2.velocity.y}
+          // );
+          overlap.callback(overlap.boxes[0], overlap.boxes[1]);
         }
       }
     }
