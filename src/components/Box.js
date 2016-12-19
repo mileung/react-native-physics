@@ -10,9 +10,6 @@ import {
   setBoxSize
 } from '../actions/index';
 
-const timePerFrame = 30;
-const nextFrame = Date.now() + timePerFrame;
-
 class Box extends React.Component {
   render() {
     if (!this.props.boxes[this.props.id]) {

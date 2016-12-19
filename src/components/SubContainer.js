@@ -7,6 +7,8 @@ import { v4 } from 'uuid';
 import Box from './Box';
 import { setContainerSize, setPositionAndVelocity, collideBoxes } from '../actions/index';
 
+const timePerFrame = 30;
+let nextFrame = Date.now() + timePerFrame;
 
 class SubContainer extends React.Component {
   constructor(props) {
@@ -49,21 +51,6 @@ class SubContainer extends React.Component {
     );
   }
   componentWillMount() {
-    // for (let i in this.props.collide) {
-    //   let collision = this.props.collide[i];
-    //   let collisionCombos = [];
-    // 	for (let i = 0; i < collision.boxes.length - 1; i++) {
-    // 		for (let u = i + 1; u < collision.boxes.length; u++) {
-    // 			collisionCombos.push({
-    //         boxes: [collision.boxes[i], collision.boxes[u]],
-            // callback: () => {
-            //   collision.callback();
-            //   this.props.collideBoxes(id1, position1, velocity1, id2, position2, velocity2);
-            // }}
-    //       });
-    // 		}
-    // 	}
-    // }
     this.interactions = [];
 
     for (let i in this.props.collide) {
@@ -74,32 +61,22 @@ class SubContainer extends React.Component {
           box2 = collision.boxes[u];
           this.interactions.push({
             boxes: [collision.boxes[i], collision.boxes[u]],
-            callback: () => {
-              // velocity1 = {
-              //   x: ,
-              //   y:
-              // };
-              // velocity2 = {
-              //   x: ,
-              //   y:
-              // };
-              collision.callback(box1, box2);
-              // this.props.collideBoxes(box1, this.props.boxes[box1].position, this.props.boxes[box1].velocity, box2, this.props.boxes[box2].position, this.props.boxes[box2].velocity);
+            collide: (id1, position1, velocity1, id2, position2, velocity2) => {
+              collision.callback(id1, id2);
+              this.props.collideBoxes(id1, position1, velocity1, id2, position2, velocity2);
             }
           });
         }
       }
     }
-
     for (let i in this.props.overlap) {
       let overlap = this.props.overlap[i];
     	for (let i = 0; i < overlap.boxes.length - 1; i++) {
     		for (let u = i + 1; u < overlap.boxes.length; u++) {
-          this.interactions.push({boxes: [overlap.boxes[i], overlap.boxes[u]], callback: overlap.callback});
+          this.interactions.push({boxes: [overlap.boxes[i], overlap.boxes[u]], overlap: overlap.callback});
     		}
     	}
     }
-    console.log('THIS.OVERLAPPINGS', this.interactions);
   }
   componentDidMount() {
     this.boxes = {};
@@ -124,13 +101,19 @@ class SubContainer extends React.Component {
       gravity: child.props.gravity || {x: 0, y: 0},
       acceleration: child.props.acceleration || {x: 0, y: 0},
       drag: child.props.drag || {x: 0, y: 0},
-      mass: child.props.mass || 1
+      mass: child.props.mass || 1,
+      bounce: child.props.bounce || {x: 0, y: 0}
     });
   }
   componentWillUnmount() {
     cancelAnimationFrame(this.updateBoxes);
   }
   updateBoxes() {
+    if (Date.now() < nextFrame) {
+      return requestAnimationFrame(this.updateBoxes);
+    } else {
+      nextFrame = Date.now() + timePerFrame;
+    }
     // console.log('updating');
     for (let id in this.boxes) {
       let box = this.boxes[id];
@@ -177,33 +160,51 @@ class SubContainer extends React.Component {
 
     for (let i in this.interactions) {
       let interaction = this.interactions[i];
-      let box1 = this.props.boxes[interaction.boxes[0]];
-      let box2 = this.props.boxes[interaction.boxes[1]];
+      let callback = interaction.collide || interaction.overlap;
+      let args = [];
+      let id1 = interaction.boxes[0];
+      let id2 = interaction.boxes[1];
+      let box1 = this.props.boxes[id1];
+      let box2 = this.props.boxes[id2];
       if (box1.position.x + box1.width > box2.position.x && box1.position.x < box2.position.x + box2.width) {
         if (
           (box1.position.y + box1.height >= box2.position.y && box1.position.y <= box2.position.y) ||
           (box1.position.y <= box2.position.y + box2.height && box1.position.y + box1.height >= box2.position.y + box2.height)
             ) {
-          interaction.callback(interaction.boxes[0], interaction.boxes[1]);
+          if (interaction.collide) {
+            let velocity1 = {
+              x: box1.velocity.x,
+              y: box1.velocity.y * -this.boxes[id1].bounce.y
+            };
+            let velocity2 = {
+              x: box2.velocity.x,
+              y: box2.velocity.y * -this.boxes[id2].bounce.y
+            };
+            args = [id1, box1.position, velocity1, id2, box2.position, velocity2];
+          }
+          callback(...args);
         }
       } else if (box1.position.y + box1.height > box2.position.y && box1.position.y < box2.position.y + box2.height) {
         if (
           (box1.position.x + box1.width >= box2.position.x && box1.position.x <= box2.position.x) ||
           (box1.position.x <= box2.position.x + box2.width && box1.position.x + box1.width >= box2.position.x + box2.width)
             ) {
-          interaction.callback(interaction.boxes[0], interaction.boxes[1]);
+          if (interaction.collide) {
+            let velocity1 = {
+              x: box1.velocity.x * -this.boxes[id1].props.bounce.x,
+              y: box1.velocity.y
+            };
+            let velocity2 = {
+              x: box2.velocity.x * -this.boxes[id2].props.bounce.x,
+              y: box2.velocity.y
+            };
+            args = [id1, box1.position, velocity1, id2, box2.position, velocity2];
+          }
+          callback(...args);
         }
       }
     }
     requestAnimationFrame(this.updateBoxes)
-  }
-
-  updateBox() {
-    if (Date.now() < nextFrame) {
-      return requestAnimationFrame(this.updateBox);
-    } else {
-      nextFrame = Date.now() + timePerFrame;
-    }
   }
 }
 
