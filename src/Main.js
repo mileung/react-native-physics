@@ -27,13 +27,13 @@ export default class Main extends React.Component {
             collide={[
               {
                 boxes: ['red', 'yellow'],
-                callback: (box1, box2) => console.log('collide!', box1, box2)
+                callback: (box1, box2) => console.log('collide!', box1.id, box2.id)
               }
             ]}
             overlap={[
               {
                 boxes: ['red', 'green'],
-                callback: (box1, box2) => console.log('overlapping!', box1, box2)
+                callback: (box1, box2) => console.log('overlap!', box1.id, box2.id)
               }
             ]}
             >
@@ -43,10 +43,10 @@ export default class Main extends React.Component {
               height={50}
               outline={'green'}
               mass={2}
-              velocity={{x: 1, y: 0}}
+              velocity={{x: 8, y: 0}}
               // gravity={{x: -1, y: 0}}
               bounce={{x: 1, y: 1}}
-              position={{x: 300, y: 220}}
+              position={{x: 0, y: 220}}
               collideWithContainer={true}
             />
             <Box
@@ -55,10 +55,10 @@ export default class Main extends React.Component {
               height={50}
               outline={'yellow'}
               mass={2}
-              velocity={{x: 1, y: 0}}
+              velocity={{x: 8, y: 0}}
               // gravity={{x: -1, y: 0}}
               bounce={{x: 1, y: 1}}
-              position={{x: 300, y: 420}}
+              position={{x: 0, y: 420}}
               collideWithContainer={true}
             />
             <Box

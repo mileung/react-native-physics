@@ -61,9 +61,9 @@ class SubContainer extends React.Component {
           box2 = collision.boxes[u];
           this.interactions.push({
             boxes: [collision.boxes[i], collision.boxes[u]],
-            collide: (id1, position1, velocity1, id2, position2, velocity2) => {
-              collision.callback(id1, id2);
-              this.props.collideBoxes(id1, position1, velocity1, id2, position2, velocity2);
+            collide: (box1, box2) => {
+              collision.callback(box1, box2);
+              this.props.collideBoxes(box1.id, box1.position, box1.velocity, box2.id, box2.position, box2.velocity);
             }
           });
         }
@@ -73,7 +73,12 @@ class SubContainer extends React.Component {
       let overlap = this.props.overlap[i];
     	for (let i = 0; i < overlap.boxes.length - 1; i++) {
     		for (let u = i + 1; u < overlap.boxes.length; u++) {
-          this.interactions.push({boxes: [overlap.boxes[i], overlap.boxes[u]], overlap: overlap.callback});
+          this.interactions.push({
+            boxes: [overlap.boxes[i], overlap.boxes[u]],
+            overlap: (box1, box2) => {
+              overlap.callback(box1, box2);
+            }
+          });
     		}
     	}
     }
@@ -130,6 +135,7 @@ class SubContainer extends React.Component {
       nextVelocity.y += nextAcceleration.y;
       nextPosition.x += velocity.x;
       nextPosition.y += velocity.y;
+
       if (collideWithContainer) {
         if (nextPosition.x < 0) {
           nextPosition.x = 0;
@@ -166,22 +172,27 @@ class SubContainer extends React.Component {
       let id2 = interaction.boxes[1];
       let box1 = this.props.boxes[id1];
       let box2 = this.props.boxes[id2];
+      let velocity1 = {
+        x: box1.velocity.x,
+        y: box1.velocity.y * -this.boxes[id1].props.bounce.y
+      };
+      let velocity2 = {
+        x: box2.velocity.x,
+        y: box2.velocity.y * -this.boxes[id2].props.bounce.y
+      };
       if (box1.position.x + box1.width > box2.position.x && box1.position.x < box2.position.x + box2.width) {
         if (
           (box1.position.y + box1.height >= box2.position.y && box1.position.y <= box2.position.y) ||
           (box1.position.y <= box2.position.y + box2.height && box1.position.y + box1.height >= box2.position.y + box2.height)
             ) {
           if (interaction.collide) {
-            let velocity1 = {
-              x: box1.velocity.x,
-              y: box1.velocity.y * -this.boxes[id1].bounce.y
-            };
-            let velocity2 = {
-              x: box2.velocity.x,
-              y: box2.velocity.y * -this.boxes[id2].bounce.y
-            };
-            args = [id1, box1.position, velocity1, id2, box2.position, velocity2];
+            velocity1.y = box1.velocity.y * -this.boxes[id1].props.bounce.y;
+            velocity2.y = box2.velocity.y * -this.boxes[id2].props.bounce.y;
           }
+          args = [
+            { id: id1, position: box1.position, velocity: velocity1 },
+            {id: id2, position: box2.position, velocity: velocity2}
+          ];
           callback(...args);
         }
       } else if (box1.position.y + box1.height > box2.position.y && box1.position.y < box2.position.y + box2.height) {
@@ -190,16 +201,13 @@ class SubContainer extends React.Component {
           (box1.position.x <= box2.position.x + box2.width && box1.position.x + box1.width >= box2.position.x + box2.width)
             ) {
           if (interaction.collide) {
-            let velocity1 = {
-              x: box1.velocity.x * -this.boxes[id1].props.bounce.x,
-              y: box1.velocity.y
-            };
-            let velocity2 = {
-              x: box2.velocity.x * -this.boxes[id2].props.bounce.x,
-              y: box2.velocity.y
-            };
-            args = [id1, box1.position, velocity1, id2, box2.position, velocity2];
+            velocity1.x = box1.velocity.x * -this.boxes[id1].props.bounce.x;
+            velocity2.x = box2.velocity.x * -this.boxes[id2].props.bounce.x;
           }
+          args = [
+            { id: id1, position: box1.position, velocity: velocity1 },
+            {id: id2, position: box2.position, velocity: velocity2}
+          ];
           callback(...args);
         }
       }
