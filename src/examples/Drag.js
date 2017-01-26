@@ -3,7 +3,7 @@ import { Text } from 'react-native';
 import Box from '../Box';
 import Container from '../Container';
 
-export default class Gravity extends React.Component {
+export default class Drag extends React.Component {
   render() {
     return (
       <Container

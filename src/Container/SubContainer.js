@@ -17,7 +17,7 @@ class SubContainer extends React.Component {
   }
 
   componentWillMount() {
-    this.interactions = [];
+    this.interactions = []; // array of objects. objects has shape of { boxes: [box1, box2], callback: () => {} }
 
     for (let i in this.props.collide) {
       let collision = this.props.collide[i];
@@ -82,6 +82,11 @@ class SubContainer extends React.Component {
   }
 
   componentDidMount() {
+    // this.boxes vs this.props.boxes
+    // this.boxes stores values that are only relevent to a box itself and no other boxes
+    // (i.e. gravity, acceleration, drag, bounce).
+    // this.props.boxes (redux) stores values that other colliding/overlapping boxes need to be aware of
+    // (i.e. velocity, position, and size)
     this.boxes = {};
     let { collide, children, delay } = this.props;
     let overlapDictionary = {};
@@ -114,12 +119,11 @@ class SubContainer extends React.Component {
       gravity: child.props.gravity || {x: 0, y: 0},
       acceleration: child.props.acceleration || {x: 0, y: 0},
       drag: child.props.drag || {x: 0, y: 0},
-      mass: child.props.mass || 1,
       bounce: child.props.bounce || {x: 0, y: 0}
     });
   }
 
-  updateBoxes() {
+  updateBoxes() { // this is where the magic happens; needs a lot of work
     if (Date.now() < this.nextFrame) {
       return requestAnimationFrame(this.updateBoxes);
     } else {

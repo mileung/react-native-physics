@@ -6,19 +6,13 @@ import SubContainer from './SubContainer';
 
 let store = createStore(rootReducer)
 
-export default Container = ({ style, width, height, collide, overlap, children, fps, delay }) => {
+export default Container = props => {
+  // PropTypes are in SubContainer
+  // can't get redux state in class that has Provider, so needed SubContainer
   return (
     <Provider store={store}>
-      <SubContainer
-        style={style}
-        width={width}
-        height={height}
-        collide={collide}
-        overlap={overlap}
-        fps={fps}
-        delay={delay}
-        >
-        {children}
+      <SubContainer {...props}>
+        {props.children}
       </SubContainer>
     </Provider>
   );

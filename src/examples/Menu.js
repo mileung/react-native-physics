@@ -13,6 +13,7 @@ export default class Menu extends React.Component {
       <View style={{ flex: 1, backgroundColor: '#fff', padding: 15 }}>
         <StatusBar hidden={true} />
         {this.button('Velocity')}
+        {this.button('Drag')}
         {this.button('Acceleration')}
         {this.button('Gravity')}
         {this.button('Collision')}

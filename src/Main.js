@@ -8,6 +8,7 @@ import {
 
 import Menu from './examples/Menu';
 import Velocity from './examples/Velocity';
+import Drag from './examples/Drag';
 import Acceleration from './examples/Acceleration';
 import Gravity from './examples/Gravity';
 import Collision from './examples/Collision';
@@ -17,6 +18,7 @@ import Random from './examples/Random';
 const ROUTES = {
   Menu,
   Velocity,
+  Drag,
   Acceleration,
   Gravity,
   Collision,

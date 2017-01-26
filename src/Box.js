@@ -12,13 +12,12 @@ import {
 
 class Box extends React.Component {
   componentWillMount() {
-    let { id, outline, collideWithContainer, bounce, position, velocity, acceleration, drag, gravity, anchor } = this.props;
-    console.log('ID', id);
+    let { id, outline, position, velocity, acceleration } = this.props;
     this.acceleration = acceleration,
     this.borderWidth = outline ? 1 : 0;
     this.borderColor = outline === true ? 'red' : outline ? outline : null;
-    //
-    // // the only thing interactees will care about each other is position, velocity, and dimensions of the other box (set in onLayOut of box's View)
+
+    // // the only thing boxes will care about each other is position, velocity, and dimensions of the other box (set in onLayOut of box's View)
     this.props.setPositionAndVelocity(this.props.id,
       {
         x: position.x || 0,
@@ -58,8 +57,6 @@ class Box extends React.Component {
 }
 
 Box.propTypes = {
-  physics: React.PropTypes.bool,
-  onCollide: React.PropTypes.func,
   position: React.PropTypes.shape({
     x: React.PropTypes.number,
     y: React.PropTypes.number
@@ -80,10 +77,6 @@ Box.propTypes = {
     x: React.PropTypes.number,
     y: React.PropTypes.number
   }),
-  anchor: React.PropTypes.shape({
-    x: React.PropTypes.number,
-    y: React.PropTypes.number
-  }),
   collideWithContainer: React.PropTypes.bool,
   height: React.PropTypes.number,
   width: React.PropTypes.number,
@@ -99,10 +92,9 @@ Box.defaultProps = {
   velocity: {x: 0, y: 0},
   acceleration: {x: 0, y: 0},
   drag: {x: 0, y: 0},
-  anchor: {x: 0, y: 0},
+  anchor: {x: 0, y: 0}, // not implemented
   bounce: {x: 0, y: 0},
-  mass: 1,
-  outline: false,
+  mass: 1, // not implemented
   collideWithContainer: false,
   height: null,
   width: null
