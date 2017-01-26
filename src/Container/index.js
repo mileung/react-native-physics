@@ -1,12 +1,12 @@
 import React from 'react';
 import { createStore } from 'redux';
-import rootReducer from '../reducers/index.js';
+import rootReducer from '../reducers';
 import { Provider } from 'react-redux';
 import SubContainer from './SubContainer';
 
 let store = createStore(rootReducer)
 
-export default Container = ({ style, width, height, collide, overlap, children }) => {
+export default Container = ({ style, width, height, collide, overlap, children, fps, delay }) => {
   return (
     <Provider store={store}>
       <SubContainer
@@ -15,7 +15,9 @@ export default Container = ({ style, width, height, collide, overlap, children }
         height={height}
         collide={collide}
         overlap={overlap}
-      >
+        fps={fps}
+        delay={delay}
+        >
         {children}
       </SubContainer>
     </Provider>

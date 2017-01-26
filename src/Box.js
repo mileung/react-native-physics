@@ -8,9 +8,28 @@ import {
 import {
   setPositionAndVelocity,
   setBoxSize
-} from '../actions/index';
+} from './actions';
 
 class Box extends React.Component {
+  componentWillMount() {
+    let { id, outline, collideWithContainer, bounce, position, velocity, acceleration, drag, gravity, anchor } = this.props;
+    console.log('ID', id);
+    this.acceleration = acceleration,
+    this.borderWidth = outline ? 1 : 0;
+    this.borderColor = outline === true ? 'red' : outline ? outline : null;
+    //
+    // // the only thing interactees will care about each other is position, velocity, and dimensions of the other box (set in onLayOut of box's View)
+    this.props.setPositionAndVelocity(this.props.id,
+      {
+        x: position.x || 0,
+        y: position.y || 0
+      },
+      {
+        x: velocity.x || 0,
+        y: velocity.y || 0
+      }
+    );
+  }
   render() {
     if (!this.props.boxes[this.props.id]) {
       return null;
@@ -31,37 +50,10 @@ class Box extends React.Component {
           top: position.y,
         }}
         onLayout={e => this.props.setBoxSize(this.props.id, e.nativeEvent.layout)}
-      >
+        >
         {children}
       </View>
     );
-  }
-
-  componentWillMount() {
-    let { id, outline, collideWithContainer, bounce, position, velocity, acceleration, drag, gravity, anchor } = this.props;
-    console.log('ID', id);
-    // if (!this.props.id) {
-    //   this.props.id = this.props.id;
-    // }
-    this.acceleration = acceleration,
-    this.borderWidth = outline ? 1 : 0;
-    this.borderColor = outline === true ? 'red' : outline ? outline : null;
-    //
-    // // the only thing interactees will care about each other is position, velocity, and dimensions of the other box (set in onLayOut of box's View)
-    this.props.setPositionAndVelocity(this.props.id,
-      {
-        x: position.x || 0,
-        y: position.y || 0
-      },
-      {
-        x: velocity.x || 0,
-        y: velocity.y || 0
-      }
-    );
-    // requestAnimationFrame(this.updateBoxes)
-  }
-
-  componentDidMount() {
   }
 }
 
@@ -95,7 +87,10 @@ Box.propTypes = {
   collideWithContainer: React.PropTypes.bool,
   height: React.PropTypes.number,
   width: React.PropTypes.number,
-  // interactWith: React.PropTypes.array
+  id: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.number
+  ]).isRequired
 };
 Box.defaultProps = {
   outline: false,
@@ -114,11 +109,8 @@ Box.defaultProps = {
 };
 
 
-function mapStateToProps(state) {
-  return {
-    boxes: state.boxes,
-    // container: state.container
-  };
+function mapStateToProps({ boxes }) {
+  return { boxes };
 }
 
 function mapDispatchToProps(dispatch) {

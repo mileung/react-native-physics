@@ -1,55 +1,21 @@
 import React from 'react';
 import { View } from 'react-native';
 import { createStore, bindActionCreators } from 'redux';
-import rootReducer from '../reducers/index.js';
+import rootReducer from '../reducers';
 import { Provider, connect } from 'react-redux';
 import { v4 } from 'uuid';
-import Box from './Box';
-import { setContainerSize, setPositionAndVelocity, collideBoxes } from '../actions/index';
-
-const timePerFrame = 30;
-let nextFrame = Date.now() + timePerFrame;
+import Box from '../Box';
+import { setContainerSize, setPositionAndVelocity, collideBoxes, reset } from '../actions';
 
 class SubContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {}
     this.updateBoxes = this.updateBoxes.bind(this);
+    this.timePerFrame = 1000 / this.props.fps;
+    this.nextFrame = Date.now() + this.timePerFrame;
   }
-  render() {
-    let { style, outline } = this.props;
-    return (
-      <View
-        style={[
-          style,
-          {
-            width: this.props.width || null,
-            height: this.props.height || null,
-            borderWidth: outline ? 1 : 0,
-            borderColor: outline === true ? 'red' : outline ? outline : null,
-          }
-        ]}
-        onLayout={e => {
-          let { width, height } = e.nativeEvent.layout;
-          // this.props.setContainerSize(width, height);
-          this.setState({width, height});
-        }}
-      >
-        {React.Children.map(this.props.children, child => {
-          if (child.type !== Box) {
-            return child;
-          }
-          return React.cloneElement(child, {
-            id: child.props.id ? child.props.id : v4(),
-            container: {
-              width: this.state.width,
-              height: this.state.height
-            }
-          });
-        })}
-      </View>
-    );
-  }
+
   componentWillMount() {
     this.interactions = [];
 
@@ -83,24 +49,66 @@ class SubContainer extends React.Component {
     	}
     }
   }
+
+  render() {
+    let { style, outline, width, height } = this.props;
+    return (
+      <View
+        style={[
+          style,
+          {
+            width: width || null,
+            height: height || null,
+            borderWidth: outline ? 1 : 0,
+            borderColor: outline === true ? 'red' : outline ? outline : null,
+          }
+        ]}
+        onLayout={e => this.setState({ ...e.nativeEvent.layout })}
+        >
+        {React.Children.map(this.props.children, child => {
+          if (child.type !== Box) {
+            return child;
+          }
+          return React.cloneElement(child, {
+            id: child.props.id,
+            container: {
+              width: this.state.width,
+              height: this.state.height
+            }
+          });
+        })}
+      </View>
+    );
+  }
+
   componentDidMount() {
     this.boxes = {};
-    let { collide, children } = this.props;
+    let { collide, children, delay } = this.props;
     let overlapDictionary = {};
-    if (!Array.isArray(children)) {
-      children = [children];
-    }
-    for (let child of children) {
-      if (child.type.displayName === 'Connect(Box)') {
-        let id;
-        if (child.props.id) {
-          id = child.props.id
+    if (children) {
+      if (!Array.isArray(children)) {
+        children = [children];
+      }
+      for (let child of children) {
+        if (child.type.displayName === 'Connect(Box)') {
+          let id;
+          if (child.props.id) {
+            id = child.props.id
+          }
+          this.boxes[id] = this.addMissingProps(child);
         }
-        this.boxes[id] = this.addMissingProps(child);
       }
     }
-    requestAnimationFrame(this.updateBoxes)
+    setTimeout(() => requestAnimationFrame(this.updateBoxes), delay);
   }
+
+  componentWillUnmount() {
+    this.boxes = {};
+    this.interactions = [];
+    this.props.reset();
+    cancelAnimationFrame(this.updateBoxes);
+  }
+
   addMissingProps(child) {
     return React.cloneElement(child, {
       gravity: child.props.gravity || {x: 0, y: 0},
@@ -110,16 +118,14 @@ class SubContainer extends React.Component {
       bounce: child.props.bounce || {x: 0, y: 0}
     });
   }
-  componentWillUnmount() {
-    cancelAnimationFrame(this.updateBoxes);
-  }
+
   updateBoxes() {
-    if (Date.now() < nextFrame) {
+    if (Date.now() < this.nextFrame) {
       return requestAnimationFrame(this.updateBoxes);
     } else {
-      nextFrame = Date.now() + timePerFrame;
+      this.nextFrame = Date.now() + this.timePerFrame;
     }
-    // console.log('updating');
+
     for (let id in this.boxes) {
       let box = this.boxes[id];
       let { position, velocity, width, height } = this.props.boxes[id];
@@ -150,11 +156,11 @@ class SubContainer extends React.Component {
 
         if ((position.x <= 0 && velocity.x < 0) || (position.x + width >= this.state.width && velocity.x > 0)) {
           nextVelocity.x *= -bounce.x;
-          // this.boxes[id].props.acceleration.x = 0;
+          this.boxes[id].props.acceleration.x = 0;
         }
         if ((position.y <= 0 && velocity.y < 0) || (position.y + height >= this.state.height && velocity.y > 0)) {
           nextVelocity.y *= -bounce.y;
-          // this.boxes[id].props.acceleration.y = 0;
+          this.boxes[id].props.acceleration.y = 0;
         }
       }
       nextVelocity.x += gravity.x;
@@ -216,6 +222,26 @@ class SubContainer extends React.Component {
   }
 }
 
+SubContainer.propTypes = {
+  height: React.PropTypes.number,
+  width: React.PropTypes.number,
+  fps: React.PropTypes.number,
+  delay: React.PropTypes.number,
+  collide: React.PropTypes.arrayOf(React.PropTypes.object),
+  overlap: React.PropTypes.arrayOf(React.PropTypes.object),
+  // and style: object or StylSheet.create({})
+};
+
+Box.defaultProps = {
+  height: null,
+  width: null,
+  fps: 60,
+  delay: 0,
+  collide: null,
+  overlap: null,
+  style: null
+};
+
 function mapStateToProps(state) {
   return {
     boxes: state.boxes
@@ -226,7 +252,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     setPositionAndVelocity,
     setContainerSize,
-    collideBoxes
+    collideBoxes,
+    reset
   }, dispatch);
 }
 

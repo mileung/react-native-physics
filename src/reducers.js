@@ -3,8 +3,9 @@ import {
   SET_BOX_SIZE,
   SET_CONTAINER_SIZE,
   SET_POSITION_AND_VELOCITY,
-  COLLIDE_BOXES
-} from '../actions/index.js';
+  COLLIDE_BOXES,
+  RESET
+} from './actions';
 
 const rootReducer = combineReducers({
   boxes: updateBoxReducer,
@@ -45,6 +46,9 @@ function updateBoxReducer(state = {}, action) {
           width: action.payload.width
         }
       };
+      case RESET:
+        return {
+        };
     default:
       return state;
   }
@@ -57,7 +61,8 @@ function setContainerSizeReducer(state = {width: 0, height: 0}, action) {
         width: action.payload.width,
         height: action.payload.height
       };
-      break;
+      // case RESET:
+      //   return {width: 0, height: 0};
     default:
       return state;
   }
