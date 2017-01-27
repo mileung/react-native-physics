@@ -11,13 +11,13 @@ export default class Drag extends React.Component {
         delay={500}
         >
         <Box
-          position={{ x: 20, y: 50 }}
-          velocity={{ x: 14, y: 5 }}
-          bounce={{ x: 1, y: 1 }}
+          position={{ x: 120, y: 50 }}
+          velocity={{ x: 20, y: 30 }}
+          drag={{ x: 2, y: 1 }}
           collideWithContainer={true}
           id="a"
           >
-          <Text style={{ fontSize: 35 }}>Hello World</Text>
+          <Text style={{ fontSize: 35 }}>STOP</Text>
         </Box>
       </Container>
     );
