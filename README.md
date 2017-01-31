@@ -3,6 +3,7 @@
 A physics library for React Native (in progress)
 
 ![](https://media.giphy.com/media/l3q2BzY2X9gmPPCta/giphy.gif)
+
 [youtube video that shows all the examples](https://www.youtube.com/watch?v=i3Bjl5walow)
 ### Installation
 
