@@ -11,13 +11,13 @@ export default class Gravity extends React.Component {
         >
         <Box
           outline={true}
-          position={{ x: 120, y: 0 }}
-          acceleration={{ x: 0, y: 0.5 }}
-          bounce={{ x: 0, y: 0.3 }}
-          collideWithContainer={true}
+          position={{ x: 120 }}
+          acceleration={{ y: 0.5 }}
+          bounce={{ y: 0.3 }}
           id="a"
           width={100}
           height={100}
+          collideWithContainer={true}
         />
       </Container>
     );

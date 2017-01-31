@@ -21,9 +21,9 @@ export default class Gravity extends React.Component {
             position={{ x: Math.random() * 200, y: Math.random() * 200 }}
             velocity={{ x: Math.random() * 40, y: Math.random() * 40 }}
             bounce={{ x: Math.random(), y: Math.random() }}
-            collideWithContainer={true}
             width={Math.random() * 50 + 50}
             height={Math.random() * 50 + 50}
+            collideWithContainer={true}
           />
         );
       })

@@ -21,9 +21,9 @@ export default class Main extends React.Component {
             width={150}
             height={50}
             outline="blue"
-            gravity={{x: 0, y: 1}}
-            bounce={{x: 1, y: 0.3}}
-            position={{x: 100, y: 0}}
+            gravity={{ y: 1 }}
+            bounce={{ x: 1, y: 0.3 }}
+            position={{ x: 100 }}
             collideWithContainer={true}
           />
           <Box
@@ -31,9 +31,9 @@ export default class Main extends React.Component {
             width={150}
             height={50}
             outline={true}
-            gravity={{x: 0, y: -2}}
-            bounce={{x: 0, y: 0.8}}
-            position={{x: 100, y: 500}}
+            gravity={{ y: -2 }}
+            bounce={{ y: 0.8 }}
+            position={{ x: 100, y: 500 }}
             collideWithContainer={true}
           />
         </Container>

@@ -39,14 +39,14 @@ render() {
 
 ### Props
 Container
-```javascript
-height: React.PropTypes.number,
-width: React.PropTypes.number,
-fps: React.PropTypes.number,
-delay: React.PropTypes.number,
-collide: React.PropTypes.arrayOf(React.PropTypes.object),
-overlap: React.PropTypes.arrayOf(React.PropTypes.object)
-```
+| Property | type             | default | required |
+|----------|------------------|---------|----------|
+| height   | number           | null    | false    |
+| width    | number           | null    | false    |
+| fps      | number           | 60      | false    |
+| delay    | number           | 0       | false    |
+| collide  | array of objects | null    | false    |
+| overlap  | array of objects | null    | false    |
 Note: collide and overlap array objects must follow this protocol
 ```javascript
 {
@@ -56,35 +56,20 @@ Note: collide and overlap array objects must follow this protocol
 ```
 
 Box
-```javascript
-position: React.PropTypes.shape({
-    x: React.PropTypes.number,
-    y: React.PropTypes.number
-  }),
-  gravity: React.PropTypes.shape({
-    x: React.PropTypes.number,
-    y: React.PropTypes.number
-  }),
-  velocity: React.PropTypes.shape({
-    x: React.PropTypes.number,
-    y: React.PropTypes.number
-  }),
-  acceleration: React.PropTypes.shape({
-    x: React.PropTypes.number,
-    y: React.PropTypes.number
-  }),
-  drag: React.PropTypes.shape({
-    x: React.PropTypes.number,
-    y: React.PropTypes.number
-  }),
-  collideWithContainer: React.PropTypes.bool,
-  height: React.PropTypes.number,
-  width: React.PropTypes.number,
-  id: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number
-  ]).isRequired
-```
+| Property             | type              | default         | required |
+|----------------------|-------------------|-----------------|----------|
+| position             | object            | { x: 0,  y: 0 } | false    |
+| gravity              | object            | { x: 0, y: 0 }  | false    |
+| velocity             | object            | { x: 0, y: 0 }  | false    |
+| acceleration         | object            | { x: 0, y: 0 }  | false    |
+| drag                 | object            | { x: 0, y: 0 }  | false    |
+| height               | number            | null            | false    |
+| width                | number            | null            | false    |
+| outline              | boolean or string | null            | false    |
+| collideWithContainer | boolean           | false           | false    |
+| id                   | string or number  | null            | true     |
+
+Note: If outline is set to `true`, the outline will be red.  If set to a string, it must be a valid color (i.e. `'blue'`, `'#abc'`, `'#88dd66'`, `'rgb(...)'`, `'rgba(...)'`)
 
 ### Contributing
 Please do so.  School and other projects have shifted my focus away from this one.

@@ -113,11 +113,24 @@ class SubContainer extends React.Component {
   }
 
   addMissingProps(child) {
+    let { gravity, acceleration, drag, bounce } = child.props;
     return React.cloneElement(child, {
-      gravity: child.props.gravity || {x: 0, y: 0},
-      acceleration: child.props.acceleration || {x: 0, y: 0},
-      drag: child.props.drag || {x: 0, y: 0},
-      bounce: child.props.bounce || {x: 0, y: 0}
+      gravity: gravity ? {
+        x: gravity.x || 0,
+        y: gravity.y || 0
+      } : {x: 0, y: 0},
+      acceleration: acceleration ? {
+        x: acceleration.x || 0,
+        y: acceleration.y || 0
+      } : {x: 0, y: 0},
+      drag: drag ? {
+        x: drag.x || 0,
+        y: drag.y || 0
+      } : {x: 0, y: 0},
+      bounce: bounce ? {
+        x: bounce.x || 0,
+        y: bounce.y || 0
+      } : {x: 0, y: 0}
     });
   }
 

@@ -84,7 +84,8 @@ Box.propTypes = {
     React.PropTypes.number
   ]).isRequired
 };
-Box.defaultProps = {
+
+Box.defaultProps = { // SubContainer overrides these
   outline: false,
   position: {x: 0, y: 0},
   gravity: {x: 0, y: 0},
@@ -96,7 +97,8 @@ Box.defaultProps = {
   mass: 1, // not implemented
   collideWithContainer: false,
   height: null,
-  width: null
+  width: null,
+  id: null
 };
 
 
