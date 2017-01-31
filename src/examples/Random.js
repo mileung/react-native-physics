@@ -1,5 +1,4 @@
 import React from 'react';
-import { v4 } from 'uuid';
 import Box from '../Box';
 import Container from '../Container';
 

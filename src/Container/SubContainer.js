@@ -1,9 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { createStore, bindActionCreators } from 'redux';
-import rootReducer from '../reducers';
-import { Provider, connect } from 'react-redux';
-import { v4 } from 'uuid';
+import { connect } from 'react-redux';
 import Box from '../Box';
 import { setContainerSize, setPositionAndVelocity, collideBoxes, reset } from '../actions';
 
