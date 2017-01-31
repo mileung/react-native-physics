@@ -11,8 +11,8 @@ export default class Gravity extends React.Component {
         delay={500}
         >
         <Box
-          position={{ x: 20, y: 50 }}
-          velocity={{ x: 14, y: 5 }}
+          position={{ x: 20, y: 150 }}
+          velocity={{ x: 5, y: -7 }}
           bounce={{ x: 1, y: 1 }}
           collideWithContainer={true}
           id="a"

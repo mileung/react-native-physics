@@ -13,7 +13,7 @@ export default class Gravity extends React.Component {
 
   componentWillMount() {
     this.setState({
-      boxes: Array(Math.round(Math.random() * 10 + 5)).fill(1).map((val, index) => {
+      boxes: Array(Math.round(Math.random() * 3 + 2)).fill(1).map((val, index) => {
         return (
           <Box
             key={index + ''}

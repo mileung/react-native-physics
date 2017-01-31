@@ -1,15 +1,5 @@
 import React from 'react';
-import {
-  AppRegistry,
-} from 'react-native';
-import Main from './src/Main';
+import { AppRegistry } from 'react-native';
+import Example from './src/Example';
 
-class RNPhysics extends React.Component {
-  render() {
-    return (
-      <Main />
-    );
-  }
-}
-
-AppRegistry.registerComponent('RNPhysics', () => RNPhysics);
+AppRegistry.registerComponent('RNPhysics', () => Example);

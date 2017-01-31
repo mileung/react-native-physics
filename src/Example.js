@@ -28,7 +28,7 @@ const ROUTES = {
 
 // let { width, height } = Dimensions.get('window');
 
-export default class Main extends React.Component {
+export default class Example extends React.Component {
   render() {
     return (
       <Navigator
