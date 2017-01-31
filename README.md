@@ -1,6 +1,6 @@
 # react-native-physics
 
-A physics library for React Native
+A physics library for React Native (in progress)
 
 ![](https://media.giphy.com/media/26xBwGyAcyRNvtPgI/giphy.gif)
 
