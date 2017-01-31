@@ -1,7 +1,9 @@
 import React from 'react';
 import { Text } from 'react-native';
-import Box from '../Box';
-import Container from '../Container';
+// import Container from '../Container';
+// import Box from '../Box';
+
+import { Container, Box } from '../../index.js';
 
 export default class Drag extends React.Component {
   render() {

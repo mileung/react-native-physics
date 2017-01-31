@@ -1,7 +1,7 @@
-var Container = require('./src/Container');
-var Box = require('./src/Box');
+import Container from './src/Container';
+import Box from './src/Box';
 
-module.exports = {
-  Container: Container,
-  Box: Container
+export {
+  Container,
+  Box
 };
