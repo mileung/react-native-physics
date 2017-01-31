@@ -2,8 +2,8 @@
 
 A physics library for React Native (in progress)
 
-![](https://media.giphy.com/media/26xBwGyAcyRNvtPgI/giphy.gif)
-
+![](https://media.giphy.com/media/l3q2BzY2X9gmPPCta/giphy.gif)
+[youtube video that shows all the examples](https://www.youtube.com/watch?v=i3Bjl5walow)
 ### Installation
 
 `npm install --save react-native-physics`
@@ -37,8 +37,11 @@ render() {
   }
 ```
 
+To run the example in this repository, git clone, npm install, and react-native run-ios (or run-android).
+
 ### Props
 Container
+
 | Property | type             | default | required |
 |----------|------------------|---------|----------|
 | height   | number           | null    | false    |
@@ -47,7 +50,9 @@ Container
 | delay    | number           | 0       | false    |
 | collide  | array of objects | null    | false    |
 | overlap  | array of objects | null    | false    |
+
 Note: collide and overlap array objects must follow this protocol
+
 ```javascript
 {
   boxes: [/* strings of box IDs */],
@@ -56,6 +61,7 @@ Note: collide and overlap array objects must follow this protocol
 ```
 
 Box
+
 | Property             | type              | default         | required |
 |----------------------|-------------------|-----------------|----------|
 | position             | object            | { x: 0,  y: 0 } | false    |
