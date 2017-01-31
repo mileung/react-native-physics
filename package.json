@@ -1,19 +1,20 @@
 {
   "name": "react-native-physics",
   "version": "0.0.1",
-  "private": true,
+  "private": false,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
     "react-redux": "^4.4.5",
-    "redux": "^3.6.0"
+    "redux": "^3.6.0",
+    "uuid": "^2.0.3"
   },
-  "description": "A physics library for React Native",
+  "description": "A physics library for React Native (in progress)",
   "main": "index.js",
   "devDependencies": {
     "react": "^15.4.2",
-    "react-native": "^0.40.0",
+    "react-native": "^0.40.0"
   },
   "repository": {
     "type": "git",
