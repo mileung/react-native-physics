@@ -9,15 +9,14 @@ A physics library for React Native (in progress)
 
 `npm install --save react-native-physics`
 
-### Importation
+### Usage
+`Container` lays out just like a `View` and holds the state of each child box.
 
-`import { Container, Box } from 'react-native-physics';`
-
-### Usagation
-`Container` lays out just like a `View`. `Container` holds the state of each box.  Put `Box`es inside the `Container`.
-
-### Examplelation
+### Example
 ```javascript
+
+import { Container, Box } from 'react-native-physics';
+//...
 render() {
     return (
       <Container
@@ -78,6 +77,6 @@ Box
 
 Note: If outline is set to `true`, the outline will be red.  If set to a string, it must be a valid color (i.e. `'blue'`, `'#abc'`, `'#88dd66'`, `'rgb(...)'`, `'rgba(...)'`)
 
-### Contributing
+### Contribute
 Please do so.  School and other projects have shifted my focus away from this one.
 Note: The developer experience was intended to be similar to [Phaser](http://phaser.io/) and the logic of physics is loosely based on [this article](https://www.ibm.com/developerworks/library/wa-build2dphysicsengine/).
