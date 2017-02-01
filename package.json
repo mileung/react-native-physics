@@ -1,6 +1,6 @@
 {
   "name": "react-native-physics",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": false,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start"
