@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { createStore, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Box from '../Box';
-import { setContainerSize, setPositionAndVelocity, collideBoxes, reset } from '../actions';
+import { setPositionAndVelocity, collideBoxes, reset } from '../actions';
 
 class SubContainer extends React.Component {
   constructor(props) {
@@ -266,7 +266,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     setPositionAndVelocity,
-    setContainerSize,
     collideBoxes,
     reset
   }, dispatch);

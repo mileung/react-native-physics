@@ -1,15 +1,13 @@
 import { combineReducers } from 'redux';
 import {
   SET_BOX_SIZE,
-  SET_CONTAINER_SIZE,
   SET_POSITION_AND_VELOCITY,
   COLLIDE_BOXES,
   RESET
 } from './actions';
 
 const rootReducer = combineReducers({
-  boxes: updateBoxReducer,
-  container: setContainerSizeReducer
+  boxes: updateBoxReducer
 });
 
 function updateBoxReducer(state = {}, action) {
@@ -49,20 +47,6 @@ function updateBoxReducer(state = {}, action) {
       case RESET:
         return {
         };
-    default:
-      return state;
-  }
-}
-
-function setContainerSizeReducer(state = {width: 0, height: 0}, action) {
-  switch (action.type) {
-    case SET_CONTAINER_SIZE:
-      return {
-        width: action.payload.width,
-        height: action.payload.height
-      };
-      // case RESET:
-      //   return {width: 0, height: 0};
     default:
       return state;
   }
