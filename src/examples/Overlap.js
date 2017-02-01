@@ -1,7 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native';
-import Container from '../Container';
-import Box from '../Box';
+import { Container, Box } from '../../index.js';
 
 export default class Main extends React.Component {
   constructor(props) {

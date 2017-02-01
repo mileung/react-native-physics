@@ -1,7 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native';
-import Box from '../Box';
-import Container from '../Container';
+import { Container, Box } from '../../index.js';
 
 export default class Gravity extends React.Component {
   render() {
