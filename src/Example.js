@@ -1,6 +1,6 @@
 import React from 'react';
+import { Navigator } from 'react-native-deprecated-custom-components';
 import {
-  Navigator,
   TouchableWithoutFeedback,
   Text,
   View

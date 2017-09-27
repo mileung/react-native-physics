@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import { createStore, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -6,10 +7,29 @@ import Box from '../Box';
 import { setPositionAndVelocity, collideBoxes, reset } from '../actions';
 
 class SubContainer extends React.Component {
+  static propTypes = {
+    height: PropTypes.number,
+    width: PropTypes.number,
+    fps: PropTypes.number,
+    delay: PropTypes.number,
+    collide: PropTypes.arrayOf(PropTypes.object),
+    overlap: PropTypes.arrayOf(PropTypes.object),
+    // and style: object or StylSheet.create({})
+  }
+
+  static defaultProps = {
+    height: null,
+    width: null,
+    fps: 60,
+    delay: 0,
+    collide: null,
+    overlap: null,
+    style: null
+  }
+
   constructor(props) {
     super(props);
     this.state = {}
-    this.updateBoxes = this.updateBoxes.bind(this);
     this.timePerFrame = 1000 / this.props.fps;
     this.nextFrame = Date.now() + this.timePerFrame;
   }
@@ -134,7 +154,7 @@ class SubContainer extends React.Component {
     });
   }
 
-  updateBoxes() { // this is where the magic happens; needs a lot of work
+  updateBoxes = () => { // this is where the magic happens; needs a lot of work
     if (Date.now() < this.nextFrame) {
       return requestAnimationFrame(this.updateBoxes);
     } else {
@@ -236,26 +256,6 @@ class SubContainer extends React.Component {
     requestAnimationFrame(this.updateBoxes)
   }
 }
-
-SubContainer.propTypes = {
-  height: React.PropTypes.number,
-  width: React.PropTypes.number,
-  fps: React.PropTypes.number,
-  delay: React.PropTypes.number,
-  collide: React.PropTypes.arrayOf(React.PropTypes.object),
-  overlap: React.PropTypes.arrayOf(React.PropTypes.object),
-  // and style: object or StylSheet.create({})
-};
-
-Box.defaultProps = {
-  height: null,
-  width: null,
-  fps: 60,
-  delay: 0,
-  collide: null,
-  overlap: null,
-  style: null
-};
 
 function mapStateToProps(state) {
   return {

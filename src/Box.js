@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
@@ -10,6 +11,52 @@ import {
 } from './actions';
 
 class Box extends React.Component {
+  static propTypes = {
+    position: PropTypes.shape({
+      x: PropTypes.number,
+      y: PropTypes.number
+    }),
+    gravity: PropTypes.shape({
+      x: PropTypes.number,
+      y: PropTypes.number
+    }),
+    velocity: PropTypes.shape({
+      x: PropTypes.number,
+      y: PropTypes.number
+    }),
+    acceleration: PropTypes.shape({
+      x: PropTypes.number,
+      y: PropTypes.number
+    }),
+    drag: PropTypes.shape({
+      x: PropTypes.number,
+      y: PropTypes.number
+    }),
+    collideWithContainer: PropTypes.bool,
+    height: PropTypes.number,
+    width: PropTypes.number,
+    id: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]).isRequired
+  }
+
+  static defaultProps = { // SubContainer overrides these
+    outline: false,
+    position: {x: 0, y: 0},
+    gravity: {x: 0, y: 0},
+    velocity: {x: 0, y: 0},
+    acceleration: {x: 0, y: 0},
+    drag: {x: 0, y: 0},
+    anchor: {x: 0, y: 0}, // not implemented
+    bounce: {x: 0, y: 0},
+    mass: 1, // not implemented
+    collideWithContainer: false,
+    height: null,
+    width: null,
+    id: null
+  }
+
   componentWillMount() {
     let { id, outline, position, velocity, acceleration } = this.props;
     this.acceleration = acceleration,
@@ -54,53 +101,6 @@ class Box extends React.Component {
     );
   }
 }
-
-Box.propTypes = {
-  position: React.PropTypes.shape({
-    x: React.PropTypes.number,
-    y: React.PropTypes.number
-  }),
-  gravity: React.PropTypes.shape({
-    x: React.PropTypes.number,
-    y: React.PropTypes.number
-  }),
-  velocity: React.PropTypes.shape({
-    x: React.PropTypes.number,
-    y: React.PropTypes.number
-  }),
-  acceleration: React.PropTypes.shape({
-    x: React.PropTypes.number,
-    y: React.PropTypes.number
-  }),
-  drag: React.PropTypes.shape({
-    x: React.PropTypes.number,
-    y: React.PropTypes.number
-  }),
-  collideWithContainer: React.PropTypes.bool,
-  height: React.PropTypes.number,
-  width: React.PropTypes.number,
-  id: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number
-  ]).isRequired
-};
-
-Box.defaultProps = { // SubContainer overrides these
-  outline: false,
-  position: {x: 0, y: 0},
-  gravity: {x: 0, y: 0},
-  velocity: {x: 0, y: 0},
-  acceleration: {x: 0, y: 0},
-  drag: {x: 0, y: 0},
-  anchor: {x: 0, y: 0}, // not implemented
-  bounce: {x: 0, y: 0},
-  mass: 1, // not implemented
-  collideWithContainer: false,
-  height: null,
-  width: null,
-  id: null
-};
-
 
 function mapStateToProps({ boxes }) {
   return { boxes };
