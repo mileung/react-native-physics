@@ -4,19 +4,22 @@ A physics library for React Native (in progress)
 
 ![](https://media.giphy.com/media/l3q2BzY2X9gmPPCta/giphy.gif)
 
-[youtube video that shows all the examples](https://www.youtube.com/watch?v=i3Bjl5walow)
+[A youtube video that shows all the examples](https://www.youtube.com/watch?v=i3Bjl5walow)
 ### Installation
 
-`npm install --save react-native-physics`
+```
+npm install --save react-native-physics
+```
 
-### Importation
+### Usage
 
-`import { Container, Box } from 'react-native-physics';`
+```
+import { Container, Box } from 'react-native-physics';
+```
 
-### Usagation
 `Container` lays out just like a `View`. `Container` holds the state of each box.  Put `Box`es inside the `Container`.
 
-### Examplelation
+### Example
 ```javascript
 render() {
     return (
@@ -38,7 +41,7 @@ render() {
   }
 ```
 
-To run the example in this repository, git clone, npm install, and react-native run-ios (or run-android).
+To run the example in this repository, `git clone`, `npm install`, and `react-native run-ios` (or ` react-native run-android`).
 
 ### Props
 Container
